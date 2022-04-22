@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>[신문물] 임시 비밀번호 발급</title>
+</head>
+<body>
+	<div
+		style="font-family: ' Apple SD Gothic Neo ', ' sans-serif ' !important; width: 400px; height: 440px; border-top: 4px solid #EA5455; border-bottom: 4px solid #EA5455; margin: 100px auto; padding: 30px 0; box-sizing: border-box;">
+		<h1
+			style="margin: 0; padding: 0 5px; font-size: 28px; font-weight: 400;">
+			<span style="font-size: 25px; margin: 0 0 10px 5px; text-align: center;\"><b>신문물</b>
+			</span><br /> <span style="color: #EA5455\">임시 비밀번호 발급</span> 안내입니다.
+		</h1>
+
+		<p
+			style="font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;">
+			아래 <b>임시 비밀번호</b>를 사용해<br/> 로그인을 진행할 수 있습니다.<br/>
+		</p>
+			<span style="display: inline-block; width: 210px; height: 45px; margin: 30px 5px 40px; background: #EA5455; line-height: 45px; vertical-align: middle; font-size: 16px;
+				color: #FFF; text-decoration: none; text-align: center;" th:text="${pwd}">
+			</span>
+	</div>
+</body>
+</html>
