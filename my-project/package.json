@@ -12,6 +12,8 @@
     "@react-navigation/bottom-tabs": "^6.3.1",
     "@react-navigation/native": "^6.0.10",
     "expo": "~44.0.2",
+    "expo-asset": "~8.4.6",
+    "expo-font": "~10.0.4",
     "expo-splash-screen": "~0.14.1",
     "expo-status-bar": "~1.2.0",
     "metro": "^0.70.2",
