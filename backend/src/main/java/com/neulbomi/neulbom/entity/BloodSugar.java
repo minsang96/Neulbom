@@ -13,28 +13,30 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Entity(name = "user")
+@Entity(name = "default")
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 파라미터가 없는 기본 생성자를 생성한다. 접근 권한을 설정하여 어느 곳에서나 객체를 생성할 수 있는 상황을 막는다.
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
-public class User {
-
+public class BloodSugar {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // PK, Auto_Increment로 설정해서 직접 할당 방식이 아니라, 자동으로 생성되도록 하기 위한
 														// 어노테이션
+	@Column(name = "bs_seq")
+	private long bsSeq;
+
 	@Column(name = "user_seq")
 	private int userSeq;
 
-	@Column(name = "user_type")
-	private String userType;
+	@Column(name = "bs_time")
+	private String bsTime;
 
-	@Column(name = "user_email")
-	private String userEmail;
+	@Column(name = "bs_level")
+	private int bsLevel;
 
-	@Column(name = "user_pwd")
-	private String userPwd;
+	@Column(name = "bs_date")
+	private String bsDate;
 
 	@Column(name = "del_yn")
 	private String delYn;
