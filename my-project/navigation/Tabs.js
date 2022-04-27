@@ -1,6 +1,6 @@
 import react from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Main from "../screens/main/Main";
+import Main from "../screens/mainpage/Main";
 import Calendar from "../screens/calendar/Calendar";
 import Chat from "../screens/chat/Chat";
 import Mypage from "../screens/mypage/Mypage";
