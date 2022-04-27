@@ -1,9 +1,10 @@
 import react from "react";
 import { View, Text } from "react-native";
+import UserMypage from "./userMypage/UserMypage";
 
 const Mypage = () => (
   <View>
-    <Text>Mypage</Text>
+    <UserMypage></UserMypage>
   </View>
 );
 

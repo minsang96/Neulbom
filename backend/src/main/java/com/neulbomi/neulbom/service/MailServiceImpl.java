@@ -2,7 +2,6 @@ package com.neulbomi.neulbom.service;
 
 import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -11,6 +10,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.neulbomi.neulbom.dto.EmailDto;
+import com.neulbomi.neulbom.exception.NotExistsImgException;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,33 +54,35 @@ public class MailServiceImpl implements MailService {
 
 		try {
 			mailSender.send(messagePreparator);
-			log.info("이메일 인증 링크를 보냈습니다.");
+			log.info("이메일 인증 번호 메일을 보냈습니다.");
 		} catch (MailException e) {
 			log.error(String.valueOf(e));
 			e.printStackTrace();
-//            throw new CustomException("메일을 여기로 보내는 중 에러 발생 :  " + email.getRecipient());
 		}
 	}
-	
-//	@Async
-//	@Override
-//	public void sendPwdMail(EmailDto email) {
-//		MimeMessagePreparator messagePreparator = mimeMessage -> {
-//			MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-//			messageHelper.setFrom("neulbomi@nuelbom.com");
-//			messageHelper.setTo(email.getRecipient());
-//			messageHelper.setSubject(email.getSubject());
-//			messageHelper.setText(email.getBody(), true);
-//		};
-//
-//		try {
-//			mailSender.send(messagePreparator);
-//			log.info("이메일 인증 링크를 보냈습니다.");
-//		} catch (MailException e) {
-//			log.error(String.valueOf(e));
-//			e.printStackTrace();
-////            throw new CustomException("메일을 여기로 보내는 중 에러 발생 :  " + email.getRecipient());
-//		}
-//	}
+
+	// 전문가 자격 인증 요청 메일 전송
+	@Async
+	@Override
+	public void sendExpertCertMail(EmailDto email) {
+		if (email.getCertImg() == null) throw new NotExistsImgException();
+		
+		MimeMessagePreparator messagePreparator = mimeMessage -> {
+			MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+			messageHelper.setFrom("neulbomi@nuelbom.com");
+			messageHelper.setTo("freessafy104@gmail.com"); // 관리자 계정에 보내기
+			messageHelper.setSubject(email.getSubject());
+			messageHelper.setText(email.getBody(), true);
+			messageHelper.addAttachment(email.getCertImg().getOriginalFilename(), email.getCertImg());
+		};
+		
+		try {
+			mailSender.send(messagePreparator);
+			log.info("전문가 자격 요청 메일을 보냈습니다.");
+		} catch (MailException e) {
+			log.error(String.valueOf(e));
+			e.printStackTrace();
+		}
+	}
 
 }

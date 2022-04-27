@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>[늘봄] 이메일 인증</title>
+</head>
+<body>
+	<div
+		style="font-family: ' Apple SD Gothic Neo ', ' sans-serif ' !important; width: 400px; height: 340px; border-top: 4px solid #09BC8A; border-bottom: 4px solid #09BC8A; margin: 100px auto; padding: 30px 0; box-sizing: border-box;">
+		<h1
+			style="margin: 0; padding: 0 5px; font-size: 28px; font-weight: 400;">
+			<span
+				style="font-size: 25px; margin: 0 0 10px 5px; text-align: center;\"><b>늘봄</b>
+			</span><br /> <span style="color: #09BC8A\">전문가 자격 인증</span> 요청
+		</h1>
+
+		<p
+			style="font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;">
+			안녕하세요.<br /> <b><span th:text="${expertName}"></span></b>님께서 자격 확인을
+			요청했습니다. <br />
+		</p>
+		<span
+			style="display: inline-block; width: 400px; height: 45px; margin: 30px 5px 40px; background: #09BC8A; line-height: 45px; vertical-align: middle; font-size: 16px; color: #FFF; text-decoration: none; text-align: center;">
+			<b><span th:text="${expertName}"></span></b>님의 이메일 : <b><span
+				th:text="${expertEmail}"> </span> </b>
+		</span>
+	</div>
+</body>
+</html>
