@@ -23,7 +23,7 @@ const Alcohol = (props) => {
       }}
     >
       <View style={styles.modalView}>
-        <Text style={styles.titleText}>혈압</Text>
+        <Text style={styles.titleText}>음주 기록</Text>
         <Ionicons
           name="close"
           size={24}
@@ -35,20 +35,9 @@ const Alcohol = (props) => {
           }}
         />
 
-        <Text style={styles.subtitleText}>측정 날짜</Text>
-        <Text style={styles.subtitleText}>측정 시간</Text>
-        <Text style={styles.subtitleText}>측정 시점 선택</Text>
-        <Text style={styles.subtitleText}>최고 혈압</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="최고 혈압을 입력하세요"
-        ></TextInput>
-        <Text style={styles.subtitleText}>최저 혈압</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="최저 혈압을 입력하세요"
-        ></TextInput>
-        <ButtonCompo buttonName="혈압 등록하기"></ButtonCompo>
+        <Text style={styles.subtitleText}>음주 날짜</Text>
+        <Text style={styles.subtitleText}>음주 시간</Text>
+        <ButtonCompo buttonName="음주 등록하기"></ButtonCompo>
       </View>
     </Modal>
   );
