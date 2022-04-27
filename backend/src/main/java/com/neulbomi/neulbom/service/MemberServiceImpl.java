@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.neulbomi.neulbom.dto.MemberSingInDto;
 import com.neulbomi.neulbom.entity.Member;
 import com.neulbomi.neulbom.entity.User;
+import com.neulbomi.neulbom.exception.ExistsUserEmailException;
 import com.neulbomi.neulbom.exception.NotExistsUserException;
 import com.neulbomi.neulbom.repository.MemberRepository;
 import com.neulbomi.neulbom.repository.UserRepository;
@@ -27,6 +28,7 @@ public class MemberServiceImpl implements MemberService {
 	
 	@Override
 	public void signIn(MemberSingInDto memberSignInDto) {
+		if(userRepository.findByDelYnAndUserEmail("n", memberSignInDto.getUserEmail()).isPresent()) throw new ExistsUserEmailException();
 		userRepository.save(User.builder()
 				.userType(memberSignInDto.getUserType())
 				.userEmail(memberSignInDto.getUserEmail())
