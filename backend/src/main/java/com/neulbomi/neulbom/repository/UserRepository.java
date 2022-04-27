@@ -7,5 +7,5 @@ import com.neulbomi.neulbom.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-
+	public User findByUserEmail(String userEmail);
 }
