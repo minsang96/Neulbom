@@ -1,5 +1,8 @@
 package com.neulbomi.neulbom.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import com.neulbomi.neulbom.entity.Career;
 import com.neulbomi.neulbom.entity.Expert;
 import com.neulbomi.neulbom.entity.User;
 import com.neulbomi.neulbom.exception.ExistsUserEmailException;
+import com.neulbomi.neulbom.exception.NotExistsExpertException;
 import com.neulbomi.neulbom.exception.NotExistsUserException;
 import com.neulbomi.neulbom.repository.CareerRepository;
 import com.neulbomi.neulbom.repository.ExpertRepository;
@@ -87,10 +91,48 @@ public class ExpertServiceImpl implements ExpertService {
 	}
 
 	@Override
-	public Expert getUserByEmail(int userSeq) {
+	public Expert getExpertByUserSeq(int userSeq) {
 		Optional<Expert> expert = expertRepository.findByDelYnAndUserSeq("n", userSeq);
 		if(!expert.isPresent()) return null;
 		return expert.get();
 	}
 
+	@Override
+	public Map<String, Object> getExpertInfoDetail(int userSeq) {
+		// 전문가 찾기
+		Expert expert = expertRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsExpertException());
+		
+		Map<String, Object> result = new HashMap<>();
+		result.put("userSeq", expert.getUserSeq());
+		result.put("expertName", expert.getExpertName());
+		result.put("expertImg", expert.getExpertImg());
+		result.put("expertDesc", expert.getExpertDesc());
+		result.put("expertCert", expert.getExpertCert());
+		
+		ArrayList<Career> careers = careerRepository.findByDelYnAndUserSeq("n", userSeq);
+		ArrayList<Map<String, Object>> careerList = new ArrayList<Map<String,Object>>();
+		for (Career career : careers) {
+			Map<String, Object> obj = new HashMap<>();
+			obj.put("careerSeq", career.getCareerSeq());
+			obj.put("careerContent", career.getCareerContent());
+			careerList.add(obj);
+		}
+		result.put("expertCareer",  careerList);
+ 
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> getExpertInfoDefault(int userSeq) {
+		// 전문가 찾기
+		Expert expert = expertRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsExpertException());
+		
+		Map<String, Object> result = new HashMap<>();
+		result.put("userSeq", expert.getUserSeq());
+		result.put("expertName", expert.getExpertName());
+		result.put("expertImg", expert.getExpertImg());
+		result.put("expertDesc", expert.getExpertDesc());
+ 
+		return result;
+	}
 }

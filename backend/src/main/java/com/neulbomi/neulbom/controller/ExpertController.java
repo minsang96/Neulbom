@@ -19,6 +19,7 @@ import com.neulbomi.neulbom.dto.ExpertJoinDto;
 import com.neulbomi.neulbom.entity.Expert;
 import com.neulbomi.neulbom.entity.User;
 import com.neulbomi.neulbom.exception.ExistsUserEmailException;
+import com.neulbomi.neulbom.exception.NotExistsExpertException;
 import com.neulbomi.neulbom.exception.NotExistsImgException;
 import com.neulbomi.neulbom.exception.NotExistsUserException;
 import com.neulbomi.neulbom.repository.ExpertRepository;
@@ -108,7 +109,7 @@ public class ExpertController {
 		User user = userService.getUserByEmail(email);
 		if(user == null) return ResponseEntity.status(409).body(BaseResponseBody.of(409, "User 테이블에서 계정 정보를 조회할 수 없습니다."));
 			
-		Expert expert = expertService.getUserByEmail(user.getUserSeq());
+		Expert expert = expertService.getExpertByUserSeq(user.getUserSeq());
 		if(expert == null) return ResponseEntity.status(409).body(BaseResponseBody.of(409, "Expert 테이블에서 사용자 정보를 조회할 수 없습니다."));
 		
 		try {
@@ -121,5 +122,41 @@ public class ExpertController {
 		}
 		
 		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "전문가 자격 인증 요청 메일 전송 성공"));
+	}
+	
+	@GetMapping("/detail")
+	@ApiOperation(value = "전문가 상세 정보 조회", notes = "전문가의 전체 정보를 조회한다. (일반회원 입장 - 전문가 상세보기)", response = BaseResponseBody.class)
+	@ApiResponses(
+			{ @ApiResponse(code = 200, message = "전문가의 전체 정보 조회 성공"),
+			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
+			  @ApiResponse(code = 500, message = "서버 오류")
+			})
+	public ResponseEntity<? extends BaseResponseBody> expertInfoDetail(@RequestParam int userSeq) {
+		Map<String, Object> result = null;
+		try {
+			result = expertService.getExpertInfoDetail(userSeq);
+		} catch (NotExistsExpertException e) {
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "Expert 테이블에서 전문가 정보를 조회할 수 없습니다."));
+		}
+		
+		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "전문가의 전체 정보 조회 성공", result));
+	}
+	
+	@GetMapping("/chat")
+	@ApiOperation(value = "전문가 기본 정보 조회", notes = "전문가의 기본 정보를 조회한다. (일반회원 입장 - 채팅방 화면)", response = BaseResponseBody.class)
+	@ApiResponses(
+			{ @ApiResponse(code = 200, message = "전문가의 기본 정보 조회 성공"),
+			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
+			  @ApiResponse(code = 500, message = "서버 오류")
+			})
+	public ResponseEntity<? extends BaseResponseBody> expertInfoDefault(@RequestParam int userSeq) {
+		Map<String, Object> result = null;
+		try {
+			result = expertService.getExpertInfoDefault(userSeq);
+		} catch (NotExistsExpertException e) {
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "Expert 테이블에서 전문가 정보를 조회할 수 없습니다."));
+		}
+		
+		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "전문가의 기본 정보 조회 성공", result));
 	}
 }

@@ -1,20 +1,13 @@
 package com.neulbomi.neulbom.service;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Random;
 
-import javax.mail.internet.MimeUtility;
-
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.neulbomi.neulbom.dto.EmailDto;
 import com.neulbomi.neulbom.exception.NotExistsImgException;
