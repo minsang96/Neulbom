@@ -1,5 +1,7 @@
 package com.neulbomi.neulbom.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +16,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User getUserByEmail(String userEmail) {
-		User user = userRepository.findByUserEmail(userEmail);
-		return user;
+		Optional<User> user = userRepository.findByDelYnAndUserEmail("n", userEmail);
+		if(!user.isPresent()) return null;
+		return user.get();
 	}
 
 }

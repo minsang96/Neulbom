@@ -18,9 +18,11 @@ public class MailContentBuilder {
 		return templateEngine.process("mailTemplate", context);
 	}
 
-	public String passBuild(String pwd) {
+	// 전문가 자격 인증 메일
+	public String expertCertBuild(String expertName, String expertEmail) {
 		Context context = new Context();
-		context.setVariable("pwd", pwd);
-		return templateEngine.process("mailTemplatePwd", context);
+		context.setVariable("expertName", expertName);
+		context.setVariable("expertEmail", expertEmail);
+		return templateEngine.process("mailTemplateExpertCert", context);
 	}
 }

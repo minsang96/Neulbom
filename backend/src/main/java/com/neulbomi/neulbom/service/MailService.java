@@ -7,6 +7,6 @@ public interface MailService {
 	public String generateKey();
 	// 이메일 인증 메일 전송
 	public void sendCertMail(EmailDto email);
-	// 임시 비밀번호 메일 전송
-//	public void sendPwdMail(EmailDto email);
+	// 전문가 자격 인증(자격증 사진) 메일 전송
+	public void sendExpertCertMail(EmailDto email);
 }

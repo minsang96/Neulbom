@@ -8,6 +8,7 @@ import javax.persistence.Id;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @AllArgsConstructor
+@Builder
 public class Expert {
 
 	@Id
@@ -46,7 +48,7 @@ public class Expert {
 	private String enabledYn;
 
 	@Column(name = "del_yn")
-	private String delYn;
+	private String delYn = "n";
 
 	@Column(name = "reg_email")
 	private String regEmail;
@@ -59,5 +61,20 @@ public class Expert {
 
 	@Column(name = "mod_dt")
 	private String modDt;
+
+	@Builder
+	public Expert(int userSeq, String expertName, String expertImg, String expertDesc, String enabledYn,
+			String regEmail, String regDt, String modEmail, String modDt) {
+		super();
+		this.userSeq = userSeq;
+		this.expertName = expertName;
+		this.expertImg = expertImg;
+		this.expertDesc = expertDesc;
+		this.enabledYn = enabledYn;
+		this.regEmail = regEmail;
+		this.regDt = regDt;
+		this.modEmail = modEmail;
+		this.modDt = modDt;
+	}
 
 }
