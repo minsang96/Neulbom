@@ -1,5 +1,6 @@
 package com.neulbomi.neulbom.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.neulbomi.neulbom.dto.EmailDto;
 import com.neulbomi.neulbom.dto.MemberDto;
 import com.neulbomi.neulbom.dto.MemberModifyDto;
 import com.neulbomi.neulbom.exception.ExistsUserEmailException;
@@ -18,7 +20,9 @@ import com.neulbomi.neulbom.exception.NotExistsSettingException;
 import com.neulbomi.neulbom.exception.NotExistsUserException;
 import com.neulbomi.neulbom.response.AdvancedResponseBody;
 import com.neulbomi.neulbom.response.BaseResponseBody;
+import com.neulbomi.neulbom.service.MailService;
 import com.neulbomi.neulbom.service.MemberService;
+import com.neulbomi.neulbom.util.MailContentBuilder;
 import com.neulbomi.neulbom.util.TimeUtils;
 
 import io.swagger.annotations.Api;
@@ -34,6 +38,12 @@ public class MemberController {
 	
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private MailService mailService;
+	
+	@Autowired
+	private MailContentBuilder mailContentBuilder;
 	
 	@PostMapping("/join")
 	@ApiOperation(value = "일반회원 회원가입", notes = "사용자가 입력한 일반 회원정보를 등록한다.", response = BaseResponseBody.class)
@@ -142,5 +152,24 @@ public class MemberController {
 		catch(NotExistsUserException e) {
 			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "계정 정보를 조회할 수 없습니다."));
 		}
+	}
+	
+	@GetMapping("/email/certified")
+	@ApiOperation(value = "이메일 인증 코드 생성", notes = "이메일 인증코드를 생성하고, 사용자가 입력한 이메일로 이메일 인증코드를 보낸다.", response = BaseResponseBody.class)
+	@ApiResponses(
+			{ @ApiResponse(code = 200, message = "이메일 인증 코드 생성 성공"),
+			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
+			  @ApiResponse(code = 500, message = "서버 오류")
+			})
+	public ResponseEntity<? extends BaseResponseBody> emailCertify(@RequestParam String email) {
+		Map<String, String> result = new HashMap<>();
+		
+		String certKey = mailService.generateKey();
+		String message = mailContentBuilder.certBuild(certKey);
+		mailService.sendCertMail(new EmailDto(email, "[늘봄] 이메일 인증", message));
+		
+		result.put("certKey", certKey);
+		
+		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "인증 코드 발급 성공", certKey));
 	}
 }
