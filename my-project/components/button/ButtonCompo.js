@@ -1,15 +1,29 @@
 import React from "react";
-import { Button, View, Alert, StyleSheet } from "react-native";
+import {
+  Button,
+  View,
+  Alert,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 
-const ButtonCompo = () => {
+// 사용 예시 screen/calendar/calendarTab/CalendarTab
+const ButtonCompo = (props) => {
   return (
-    <View>
-      <Button
-        title="press me"
-        color="#09BC8A"
-        onPress={() => Alert.alert("Simple Button pressed")}
-      />
-    </View>
+    <TouchableOpacity
+      style={{
+        backgroundColor: "#09BC8A",
+        padding: 10,
+        marginVertical: 10,
+        marginHorizontal: 25,
+        alignItems: "center",
+        borderRadius: 10,
+      }}
+      onPress={props.onPressButton}
+    >
+      <Text style={{ color: "white", fontSize: 20 }}>{props.buttonName}</Text>
+    </TouchableOpacity>
   );
 };
 
