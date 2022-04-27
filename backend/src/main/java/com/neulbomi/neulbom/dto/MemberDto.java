@@ -14,7 +14,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class MemberSingInDto {
+public class MemberDto {
 	private String userType;
 	private String userEmail;
 	private String userPwd;
@@ -25,4 +25,5 @@ public class MemberSingInDto {
 	private int memberYear;
 	private String memberGender;
 	private String memberDesc;
+	private String[] setting;
 }
