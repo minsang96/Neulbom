@@ -8,6 +8,7 @@ import javax.persistence.Id;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,7 +35,7 @@ public class Setting {
 	private String code;
 
 	@Column(name = "del_yn")
-	private String delYn;
+	private String delYn = "n";
 
 	@Column(name = "reg_email")
 	private String regEmail;
@@ -47,5 +48,15 @@ public class Setting {
 
 	@Column(name = "mod_dt")
 	private String modDt;
+	
+	@Builder
+	public Setting(int userSeq, String code, String regEmail, String regDt, String modEmail, String modDt) {
+		this.userSeq = userSeq;
+		this.code = code;
+		this.regEmail = regEmail;
+		this.regDt = regDt;
+		this.modEmail = modEmail;
+		this.modDt = modDt;
+	}
 
 }
