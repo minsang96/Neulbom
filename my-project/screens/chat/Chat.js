@@ -6,7 +6,7 @@ import ConsultantList from './consultantList/ConsultantList'
 
 const Tab = createMaterialTopTabNavigator();
 
-function MyTabs() {
+const Chat = () => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -14,6 +14,7 @@ function MyTabs() {
         tabBarActiveTintColor: '#09BC8A',
         tabBarInactiveTintColor: '#a7a7a7',
         tabBarIndicatorStyle: { backgroundColor: '#09BC8A' },
+        swipeEnabled: true
       }}
     >
       <Tab.Screen name="전문가 목록" component={ConsultantList} />
@@ -21,10 +22,5 @@ function MyTabs() {
     </Tab.Navigator>
   );
 }
-const Chat = () => (
-  MyTabs()
-);
 
 export default Chat;
-
-

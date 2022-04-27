@@ -20,6 +20,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @AllArgsConstructor
+@Builder
 public class User {
 
 	@Id
@@ -38,7 +39,7 @@ public class User {
 	private String userPwd;
 
 	@Column(name = "del_yn")
-	private String delYn = "n";
+	private String delYn ="n";
 
 	@Column(name = "reg_email")
 	private String regEmail;
@@ -51,16 +52,19 @@ public class User {
 
 	@Column(name = "mod_dt")
 	private String modDt;
-	
+
+	// 회원가입
 	@Builder
-	public User(String userType, String userEmail, String userPwd, String regEmail, String regDt, String modEmail, String modDt) {
+	public User(String userType, String userEmail, String userPwd, String regDt, String regEmail,
+			String modDt, String modEmail) {
+		super();
 		this.userType = userType;
 		this.userEmail = userEmail;
 		this.userPwd = userPwd;
-		this.regEmail = regEmail;
 		this.regDt = regDt;
-		this.modEmail = modEmail;
+		this.regEmail = regEmail;
 		this.modDt = modDt;
+		this.modEmail = modEmail;
 	}
 
 }
