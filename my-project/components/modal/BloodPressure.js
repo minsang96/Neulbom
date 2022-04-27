@@ -23,7 +23,7 @@ const BloodPressure = (props) => {
       }}
     >
       <View style={styles.modalView}>
-        <Text style={styles.titleText}>혈압</Text>
+        <Text style={styles.titleText}>혈압 기록</Text>
         <Ionicons
           name="close"
           size={24}

@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Button,
-  View,
-  Alert,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { Text, StyleSheet, TouchableOpacity } from "react-native";
 
 // 사용 예시 screen/calendar/calendarTab/CalendarTab
 const ButtonCompo = (props) => {
