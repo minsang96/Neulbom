@@ -72,55 +72,24 @@ public class MailServiceImpl implements MailService {
 	@Async
 	@Override
 	public void sendExpertCertMail(EmailDto email) {
-		if (email.getCertImg() == null)
-			throw new NotExistsImgException();
-
+		if (email.getCertImg() == null) throw new NotExistsImgException();
+		
+		MimeMessagePreparator messagePreparator = mimeMessage -> {
+			MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+			messageHelper.setFrom("neulbomi@nuelbom.com");
+			messageHelper.setTo("freessafy104@gmail.com"); // 관리자 계정에 보내기
+			messageHelper.setSubject(email.getSubject());
+			messageHelper.setText(email.getBody(), true);
+			messageHelper.addAttachment(email.getCertImg().getOriginalFilename(), email.getCertImg());
+		};
+		
 		try {
-			MimeMessagePreparator messagePreparator = mimeMessage -> {
-				MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-				messageHelper.setFrom("neulbomi@nuelbom.com");
-				messageHelper.setTo("freessafy104@gmail.com"); // 관리자 계정에 보내기
-				messageHelper.setSubject(email.getSubject());
-				messageHelper.setText(email.getBody(), true);
-
-				// 사진 첨부
-				File certImg = MultiPartFileToFile(email.getCertImg());
-				FileSystemResource fileSystemResource = new FileSystemResource(certImg);
-				messageHelper.addAttachment(
-						MimeUtility.encodeText(email.getCertImg().getOriginalFilename(), "UTF-8", "B"),
-						fileSystemResource);
-			};
-
 			mailSender.send(messagePreparator);
-
 			log.info("전문가 자격 요청 메일을 보냈습니다.");
-
 		} catch (MailException e) {
 			log.error(String.valueOf(e));
 			e.printStackTrace();
 		}
-
-		try {
-			File file = MultiPartFileToFile(email.getCertImg());
-			if (file.exists()) file.delete();
-		} catch (IOException e) {
-			log.error(String.valueOf(e));
-			e.printStackTrace();
-		}
-	}
-
-	// MultiPartFile to File
-	public File MultiPartFileToFile(MultipartFile mpFile) throws IllegalStateException, IOException {
-		// 파일 원본 이름으로 생성
-		File file = new File(mpFile.getOriginalFilename());
-		file.createNewFile();
-
-		// 파일 생성
-		FileOutputStream fos = new FileOutputStream(file);
-		fos.write(mpFile.getBytes());
-		fos.close();
-
-		return file;
 	}
 
 }
