@@ -7,5 +7,5 @@ import com.neulbomi.neulbom.entity.Member;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Integer> {
-
+	
 }
