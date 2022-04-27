@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.neulbomi.neulbom.dto.MemberDto;
+import com.neulbomi.neulbom.dto.MemberModifyDto;
 import com.neulbomi.neulbom.entity.Member;
 import com.neulbomi.neulbom.entity.Setting;
 import com.neulbomi.neulbom.entity.User;
@@ -32,33 +33,35 @@ public class MemberServiceImpl implements MemberService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
+	private String[] settings = {"bloodPressure", "bloodSugar"};
+	
 	@Override
 	public void signIn(MemberDto memberDto) {
-		if(userRepository.findByDelYnAndUserEmail("n", memberDto.getUserEmail()).isPresent()) throw new ExistsUserEmailException();
+		if(userRepository.findByDelYnAndUserEmail("n", memberDto.getEmail()).isPresent()) throw new ExistsUserEmailException();
 		userRepository.save(User.builder()
-				.userType(memberDto.getUserType())
-				.userEmail(memberDto.getUserEmail())
-				.userPwd(passwordEncoder.encode(memberDto.getUserPwd()))
-				.regEmail(memberDto.getUserEmail())
+				.userType(memberDto.getType())
+				.userEmail(memberDto.getEmail())
+				.userPwd(passwordEncoder.encode(memberDto.getPwd()))
+				.regEmail(memberDto.getEmail())
 				.regDt(TimeUtils.curTime())
-				.modEmail(memberDto.getUserEmail())
+				.modEmail(memberDto.getEmail())
 				.modDt(TimeUtils.curTime()).build());
 		
-		User user = userRepository.findByDelYnAndUserEmail("n", memberDto.getUserEmail()).orElseThrow(()-> new NotExistsUserException());
+		User user = userRepository.findByDelYnAndUserEmail("n", memberDto.getEmail()).orElseThrow(()-> new NotExistsUserException());
 
 		memberRepository.save(Member.builder()
 				.userSeq(user.getUserSeq())
-				.memberNickname(memberDto.getMemberNickname())
-				.memberImg(memberDto.getMemberImg())
-				.memberHeight(memberDto.getMemberHeight())
-				.memberWeight(memberDto.getMemberWeight())
-				.memberYear(memberDto.getMemberYear())
-				.memberGender(memberDto.getMemberGender())
-				.memberDesc(memberDto.getMemberDesc())
-				.memberKcal(NutrientUtils.getTotalKcal(memberDto.getMemberGender(), (double)memberDto.getMemberHeight()/100))
-				.regEmail(memberDto.getUserEmail())
+				.memberNickname(memberDto.getNickname())
+				.memberImg(memberDto.getImg())
+				.memberHeight(memberDto.getHeight())
+				.memberWeight(memberDto.getWeight())
+				.memberYear(memberDto.getYear())
+				.memberGender(memberDto.getGender())
+				.memberDesc(memberDto.getDesc())
+				.memberKcal(NutrientUtils.getTotalKcal(memberDto.getGender(), memberDto.getHeight()))
+				.regEmail(memberDto.getEmail())
 				.regDt(TimeUtils.curTime())
-				.modEmail(memberDto.getUserEmail())
+				.modEmail(memberDto.getEmail())
 				.modDt(TimeUtils.curTime()).build());
 		
 		for(String code : memberDto.getSetting()) {
@@ -66,11 +69,62 @@ public class MemberServiceImpl implements MemberService {
 			settingRepository.save(Setting.builder()
 					.userSeq(user.getUserSeq())
 					.code(code)
-					.regEmail(memberDto.getUserEmail())
+					.regEmail(memberDto.getEmail())
 					.regDt(TimeUtils.curTime())
-					.modEmail(memberDto.getUserEmail())
+					.modEmail(memberDto.getEmail())
 					.modDt(TimeUtils.curTime()).build());
 		}
+		
+	}
+
+	@Override
+	public void modify(MemberModifyDto memberModifyDto) {
+		Member member = memberRepository.findByDelYnAndUserSeq("n", memberModifyDto.getUserSeq()).orElseThrow(() -> new NotExistsUserException());
+		
+		if(!memberModifyDto.getImg().equals(member.getMemberImg())) member.setMemberImg(memberModifyDto.getImg());
+		if(memberModifyDto.getHeight()!=member.getMemberHeight()) {
+			member.setMemberHeight(memberModifyDto.getHeight());
+			member.setMemberKcal(NutrientUtils.getTotalKcal(member.getMemberGender(), member.getMemberHeight()));
+		}
+		if(memberModifyDto.getWeight()!=member.getMemberWeight()) member.setMemberWeight(memberModifyDto.getWeight());
+		if(!memberModifyDto.getDesc().equals(member.getMemberDesc())) member.setMemberDesc(memberModifyDto.getDesc());
+		
+		member.setModDt(TimeUtils.curTime());
+		memberRepository.save(member);
+		
+		for(String code : settings) {
+			boolean flag = false;
+			for(String memberCode : memberModifyDto.getSetting()) {
+				if(memberCode.equals(code)) {
+					flag = true;
+					break;
+				}
+			}
+			if(flag) {
+				if(!settingRepository.findByDelYnAndUserSeqAndCode("n", memberModifyDto.getUserSeq(), code).isPresent()) {
+					settingRepository.save(Setting.builder()
+							.userSeq(memberModifyDto.getUserSeq())
+							.code(code)
+							.regEmail(member.getRegEmail())
+							.regDt(TimeUtils.curTime())
+							.modEmail(member.getRegEmail())
+							.modDt(TimeUtils.curTime()).build());
+				}
+			}
+			else {
+				if(settingRepository.findByDelYnAndUserSeqAndCode("n", memberModifyDto.getUserSeq(), code).isPresent()) {
+					Setting setting = settingRepository.findByDelYnAndUserSeqAndCode("n", memberModifyDto.getUserSeq(), code)
+							.orElseThrow(() -> new NotExistsSettingException());
+					
+					setting.setModDt(TimeUtils.curTime());
+					setting.setDelYn("y");
+					
+					settingRepository.save(setting);
+				}
+			}
+		}
+		
+		
 		
 	}
 
