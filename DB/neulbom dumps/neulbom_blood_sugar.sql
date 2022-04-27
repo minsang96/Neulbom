@@ -48,7 +48,7 @@ CREATE TABLE `blood_sugar` (
 
 LOCK TABLES `blood_sugar` WRITE;
 /*!40000 ALTER TABLE `blood_sugar` DISABLE KEYS */;
-INSERT INTO `blood_sugar` VALUES (1,'beforeBreakfast',2,100,'2022-04-25 05:54:25','n','ssafy@gmail.com','2022-04-25 05:54:25','ssafy@gmail.com','2022-04-25 05:54:25'),(2,'afterBreakfast',2,130,'2022-04-25 05:54:26','n','ssafy@gmail.com','2022-04-25 05:54:26','ssafy@gmail.com','2022-04-25 05:54:26');
+INSERT INTO `blood_sugar` VALUES (1,'beforeBreakfast',2,100,'2022-04-26 01:43:28','n','ssafy@gmail.com','2022-04-26 01:43:28','ssafy@gmail.com','2022-04-26 01:43:28'),(2,'afterBreakfast',2,130,'2022-04-26 01:43:28','n','ssafy@gmail.com','2022-04-26 01:43:28','ssafy@gmail.com','2022-04-26 01:43:28');
 /*!40000 ALTER TABLE `blood_sugar` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -61,4 +61,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-25 15:05:10
+-- Dump completed on 2022-04-26 17:58:57

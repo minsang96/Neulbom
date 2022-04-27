@@ -17,7 +17,6 @@ CREATE TABLE `user` (
   UNIQUE KEY `user_seq_UNIQUE` (`user_seq`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-
 -- expert table
 CREATE TABLE `expert` (
   `expert_seq` int NOT NULL AUTO_INCREMENT,
@@ -97,23 +96,23 @@ CREATE TABLE `common_code` (
 -- food table
 CREATE TABLE `food` (
   `food_seq` bigint NOT NULL AUTO_INCREMENT,
-  `food_code` int NOT NULL,
-  `food_name` varchar(30) NOT NULL,
-  `food_ amount` int NOT NULL,
-  `food_kcal` decimal(7,2) NOT NULL,
-  `food_ carbohydrate` decimal(7,2) NOT NULL,
-  `food_ sugars` decimal(7,2) NOT NULL,
-  `food_fat` decimal(7,2) NOT NULL,
-  `food_protein` decimal(7,2) NOT NULL,
-  `food_ calcium` decimal(7,2) NOT NULL,
-  `food_ phosphorus` decimal(7,2) NOT NULL,
-  `food_natrium` decimal(7,2) NOT NULL,
-  `food_kalium` decimal(7,2) NOT NULL,
-  `food_magnesium` decimal(7,2) NOT NULL,
-  `food_iron` decimal(7,2) NOT NULL,
-  `food_zinc` decimal(7,2) NOT NULL,
-  `food_cholesterol` decimal(7,2) NOT NULL,
-  `food_transfat` decimal(7,2) NOT NULL,
+  `food_code` varchar(8) NOT NULL,
+  `food_name` varchar(150) NOT NULL,
+  `food_amount` int NOT NULL,
+  `food_kcal` decimal(7,2) DEFAULT NULL,
+  `food_carbohydrate` decimal(7,2) DEFAULT NULL,
+  `food_sugars` decimal(7,2) DEFAULT NULL,
+  `food_fat` decimal(7,2) DEFAULT NULL,
+  `food_protein` decimal(7,2) DEFAULT NULL,
+  `food_calcium` decimal(7,2) DEFAULT NULL,
+  `food_phosphorus` decimal(7,2) DEFAULT NULL,
+  `food_natrium` decimal(7,2) DEFAULT NULL,
+  `food_kalium` decimal(7,2) DEFAULT NULL,
+  `food_magnesium` decimal(7,2) DEFAULT NULL,
+  `food_iron` decimal(7,2) DEFAULT NULL,
+  `food_zinc` decimal(7,2) DEFAULT NULL,
+  `food_cholesterol` decimal(7,2) DEFAULT NULL,
+  `food_transfat` decimal(7,2) DEFAULT NULL,
   `del_yn` varchar(1) NOT NULL DEFAULT 'n',
   `reg_email` varchar(30) NOT NULL,
   `reg_dt` varchar(20) NOT NULL,
@@ -122,14 +121,14 @@ CREATE TABLE `food` (
   PRIMARY KEY (`food_seq`),
   UNIQUE KEY `food_seq_UNIQUE` (`food_seq`),
   UNIQUE KEY `food_code_UNIQUE` (`food_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=139178 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- diet table
 CREATE TABLE `diet` (
   `diet_seq` bigint NOT NULL AUTO_INCREMENT,
   `user_seq` int NOT NULL,
   `diet_time` varchar(45) NOT NULL,
-  `food_code` int NOT NULL,
+  `food_code` varchar(8) NOT NULL,
   `diet_img` varchar(100) NOT NULL,
   `diet_amount` int NOT NULL,
   `del_yn` varchar(1) NOT NULL DEFAULT 'n',
@@ -141,11 +140,11 @@ CREATE TABLE `diet` (
   UNIQUE KEY `diet_seq_UNIQUE` (`diet_seq`),
   KEY `diet_member_fk_idx` (`user_seq`),
   KEY `diet_common_code_fk_idx` (`diet_time`),
-  KEY `diet_food_fk_idx` (`food_code`),
+  KEY `diet_food_kf_idx` (`food_code`),
   CONSTRAINT `diet_common_code_fk` FOREIGN KEY (`diet_time`) REFERENCES `common_code` (`code`),
-  CONSTRAINT `diet_food_fk` FOREIGN KEY (`food_code`) REFERENCES `food` (`food_code`),
+  CONSTRAINT `diet_food_kf` FOREIGN KEY (`food_code`) REFERENCES `food` (`food_code`),
   CONSTRAINT `diet_member_fk` FOREIGN KEY (`user_seq`) REFERENCES `member` (`user_seq`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- blood_pressure table
 CREATE TABLE `blood_pressure` (

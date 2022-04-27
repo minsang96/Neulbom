@@ -47,7 +47,7 @@ CREATE TABLE `other` (
 
 LOCK TABLES `other` WRITE;
 /*!40000 ALTER TABLE `other` DISABLE KEYS */;
-INSERT INTO `other` VALUES (1,'exercise',1,'2022-04-25 05:34:57','n','blue8957@gmail.com','2022-04-25 05:34:57','blue8957@gmail.com','2022-04-25 05:34:57'),(2,'coffee',1,'2022-04-25 05:34:58','n','blue8957@gmail.com','2022-04-25 05:34:58','blue8957@gmail.com','2022-04-25 05:34:58'),(3,'exercise',2,'2022-04-25 05:54:27','n','ssafy@gmail.com','2022-04-25 05:54:27','ssafy@gmail.com','2022-04-25 05:54:27'),(4,'coffee',2,'2022-04-25 05:54:28','n','ssafy@gmail.com','2022-04-25 05:54:28','ssafy@gmail.com','2022-04-25 05:54:28');
+INSERT INTO `other` VALUES (1,'exercise',1,'2022-04-26 01:43:28','n','blue8957@gmail.com','2022-04-26 01:43:28','blue8957@gmail.com','2022-04-26 01:43:28'),(2,'coffee',1,'2022-04-26 01:43:28','n','blue8957@gmail.com','2022-04-26 01:43:28','blue8957@gmail.com','2022-04-26 01:43:28'),(3,'exercise',2,'2022-04-26 01:43:28','n','ssafy@gmail.com','2022-04-26 01:43:28','ssafy@gmail.com','2022-04-26 01:43:28'),(4,'coffee',2,'2022-04-26 01:43:28','n','ssafy@gmail.com','2022-04-26 01:43:28','ssafy@gmail.com','2022-04-26 01:43:28');
 /*!40000 ALTER TABLE `other` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -60,4 +60,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-25 15:05:08
+-- Dump completed on 2022-04-26 17:58:57

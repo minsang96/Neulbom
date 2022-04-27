@@ -26,7 +26,7 @@ CREATE TABLE `diet` (
   `diet_seq` bigint NOT NULL AUTO_INCREMENT,
   `user_seq` int NOT NULL,
   `diet_time` varchar(45) NOT NULL,
-  `food_code` int NOT NULL,
+  `food_code` varchar(8) NOT NULL,
   `diet_img` varchar(100) NOT NULL,
   `diet_amount` int NOT NULL,
   `del_yn` varchar(1) NOT NULL DEFAULT 'n',
@@ -38,11 +38,11 @@ CREATE TABLE `diet` (
   UNIQUE KEY `diet_seq_UNIQUE` (`diet_seq`),
   KEY `diet_member_fk_idx` (`user_seq`),
   KEY `diet_common_code_fk_idx` (`diet_time`),
-  KEY `diet_food_fk_idx` (`food_code`),
+  KEY `diet_food_kf_idx` (`food_code`),
   CONSTRAINT `diet_common_code_fk` FOREIGN KEY (`diet_time`) REFERENCES `common_code` (`code`),
-  CONSTRAINT `diet_food_fk` FOREIGN KEY (`food_code`) REFERENCES `food` (`food_code`),
+  CONSTRAINT `diet_food_kf` FOREIGN KEY (`food_code`) REFERENCES `food` (`food_code`),
   CONSTRAINT `diet_member_fk` FOREIGN KEY (`user_seq`) REFERENCES `member` (`user_seq`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -51,7 +51,7 @@ CREATE TABLE `diet` (
 
 LOCK TABLES `diet` WRITE;
 /*!40000 ALTER TABLE `diet` DISABLE KEYS */;
-INSERT INTO `diet` VALUES (1,1,'breakfast',1014001,'김볶',500,'n','blue8957@gmail.com','2022-04-25 05:51:54','blue8957@gmail.com','2022-04-25 05:51:54'),(4,2,'lunch',1016011,'초밥사진',250,'n','ssafy@gmail.com','2022-04-25 05:54:29','ssafy@gmail.com','2022-04-25 05:54:29');
+INSERT INTO `diet` VALUES (1,1,'breakfast','1014001','김볶',500,'n','blue8957@gmail.com','2022-04-26 01:43:28','blue8957@gmail.com','2022-04-26 01:43:28'),(2,2,'lunch','1016011','초밥사진',250,'n','ssafy@gmail.com','2022-04-26 01:43:28','ssafy@gmail.com','2022-04-26 01:43:28');
 /*!40000 ALTER TABLE `diet` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -64,4 +64,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-25 15:05:09
+-- Dump completed on 2022-04-26 17:58:57

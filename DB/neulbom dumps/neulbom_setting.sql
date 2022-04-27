@@ -46,7 +46,7 @@ CREATE TABLE `setting` (
 
 LOCK TABLES `setting` WRITE;
 /*!40000 ALTER TABLE `setting` DISABLE KEYS */;
-INSERT INTO `setting` VALUES (1,1,'bloodPressure','n','blue8957@gmail.com','2022-04-25 05:29:14','blue8957@gmail.com','2022-04-25 05:29:14'),(2,2,'bloodSugar','n','ssafy@gmail.com','2022-04-25 05:53:43','ssafy@gmail.com','2022-04-25 05:53:43');
+INSERT INTO `setting` VALUES (1,1,'bloodPressure','n','blue8957@gmail.com','2022-04-26 01:43:28','blue8957@gmail.com','2022-04-26 01:43:28'),(2,2,'bloodSugar','n','ssafy@gmail.com','2022-04-26 01:43:28','ssafy@gmail.com','2022-04-26 01:43:28');
 /*!40000 ALTER TABLE `setting` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -59,4 +59,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-25 15:05:08
+-- Dump completed on 2022-04-26 17:58:55

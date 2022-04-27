@@ -48,7 +48,7 @@ CREATE TABLE `expert` (
 
 LOCK TABLES `expert` WRITE;
 /*!40000 ALTER TABLE `expert` DISABLE KEYS */;
-INSERT INTO `expert` VALUES (1,3,'박전문가','tkwls','경력 많은 의사','의사 자격증','y','n','expert@gmail.com','2022-04-25 05:56:40','expert@gmail.com','2022-04-25 05:56:40'),(2,4,'김선생님','kim','경력 많은 보건소 선생님','보건 자격증','y','n','expert2@gmail.com','2022-04-25 06:02:24','expert2@gmail.com','2022-04-25 06:02:24');
+INSERT INTO `expert` VALUES (1,3,'박전문가','tkwls','경력 많은 의사','의사 자격증','y','n','expert@gmail.com','2022-04-26 01:43:28','expert@gmail.com','2022-04-26 01:43:28'),(2,4,'김선생님','kim','경력 많은 보건소 선생님','보건 자격증','y','n','expert2@gmail.com','2022-04-26 01:43:28','expert2@gmail.com','2022-04-26 01:43:28');
 /*!40000 ALTER TABLE `expert` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -61,4 +61,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-25 15:05:07
+-- Dump completed on 2022-04-26 17:58:56

@@ -43,7 +43,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'0','blue8957@gmail.com','ssafy104!','n','blue8957@gmail.com','2022-04-25 05:21:05','blue8957@gmail.com','2022-04-25 05:21:05'),(2,'0','ssafy@gmail.com','ssafy104!','n','ssafy@gmail.com','2022-04-25 05:53:43','ssafy@gmail.com','2022-04-25 05:53:43'),(3,'1','expert@gmail.com','ssafy104!','n','expert@gmail.com','2022-04-25 05:54:59','expert@gmail.com','2022-04-25 05:54:59'),(4,'1','expert2@gmail.com','ssafy104!','n','expert2@gmail.com','2022-04-25 05:56:39','expert2@gmail.com','2022-04-25 05:56:39');
+INSERT INTO `user` VALUES (1,'0','blue8957@gmail.com','ssafy104!','n','blue8957@gmail.com','2022-04-26 01:43:28','blue8957@gmail.com','2022-04-26 01:43:28'),(2,'0','ssafy@gmail.com','ssafy104!','n','ssafy@gmail.com','2022-04-26 01:43:28','ssafy@gmail.com','2022-04-26 01:43:28'),(3,'1','expert@gmail.com','ssafy104!','n','expert@gmail.com','2022-04-26 01:43:28','expert@gmail.com','2022-04-26 01:43:28'),(4,'1','expert2@gmail.com','ssafy104!','n','expert2@gmail.com','2022-04-26 01:43:28','expert2@gmail.com','2022-04-26 01:43:28');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-25 15:05:07
+-- Dump completed on 2022-04-26 17:58:58

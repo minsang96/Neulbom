@@ -44,7 +44,7 @@ CREATE TABLE `career` (
 
 LOCK TABLES `career` WRITE;
 /*!40000 ALTER TABLE `career` DISABLE KEYS */;
-INSERT INTO `career` VALUES (1,3,'서울대병원 근무','n','expert@gmail.com','2022-04-25 05:57:15','expert@gmail.com','2022-04-25 05:57:15'),(2,3,'율제병원 근무','n','expert@gmail.com','2022-04-25 05:57:30','expert@gmail.com','2022-04-25 05:57:30'),(3,4,'중구 보건소 근무','n','expert2@gmail.com','2022-04-25 06:02:25','expert2@gmail.com','2022-04-25 06:02:25');
+INSERT INTO `career` VALUES (1,3,'서울대병원 근무','n','expert@gmail.com','2022-04-26 01:43:28','expert@gmail.com','2022-04-26 01:43:28'),(2,3,'율제병원 근무','n','expert@gmail.com','2022-04-26 01:43:28','expert@gmail.com','2022-04-26 01:43:28'),(3,4,'중구 보건소 근무','n','expert2@gmail.com','2022-04-26 01:43:28','expert2@gmail.com','2022-04-26 01:43:28');
 /*!40000 ALTER TABLE `career` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -57,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-25 15:05:08
+-- Dump completed on 2022-04-26 17:58:57
