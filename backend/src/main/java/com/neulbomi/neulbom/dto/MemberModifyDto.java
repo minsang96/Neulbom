@@ -20,7 +20,7 @@ import lombok.ToString;
 public class MemberModifyDto {
 	@ApiModelProperty(example="1",value="유저 시퀀스")
 	private int userSeq;
-	
+	 
 	@ApiModelProperty(example="https://notion-emojis.s3-us-west-2.amazonaws.com/prod/svg-twitter/1f331.svg",value="프로필 사진 링크")
 	private String img;
 	

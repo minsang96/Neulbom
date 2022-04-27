@@ -1,5 +1,11 @@
 package com.neulbomi.neulbom.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,6 +43,7 @@ public class MemberServiceImpl implements MemberService {
 	
 	@Override
 	public void signIn(MemberDto memberDto) {
+		// User 테이블에 추가
 		if(userRepository.findByDelYnAndUserEmail("n", memberDto.getEmail()).isPresent()) throw new ExistsUserEmailException();
 		userRepository.save(User.builder()
 				.userType(memberDto.getType())
@@ -46,9 +53,10 @@ public class MemberServiceImpl implements MemberService {
 				.regDt(TimeUtils.curTime())
 				.modEmail(memberDto.getEmail())
 				.modDt(TimeUtils.curTime()).build());
-		
+		// 이메일로 유저를 못찾을 경우 예외 처리
 		User user = userRepository.findByDelYnAndUserEmail("n", memberDto.getEmail()).orElseThrow(()-> new NotExistsUserException());
 
+		// Member 테이블에 추가
 		memberRepository.save(Member.builder()
 				.userSeq(user.getUserSeq())
 				.memberNickname(memberDto.getNickname())
@@ -65,6 +73,7 @@ public class MemberServiceImpl implements MemberService {
 				.modDt(TimeUtils.curTime()).build());
 		
 		for(String code : memberDto.getSetting()) {
+			// 입력받은 코드가 bloodPressure나 bloodSugar가 아닐 경우 예외 처리
 			if(!code.equals("bloodPresuure") && !code.equals("bloodSugar")) throw new NotExistsSettingException();
 			settingRepository.save(Setting.builder()
 					.userSeq(user.getUserSeq())
@@ -79,8 +88,10 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public void modify(MemberModifyDto memberModifyDto) {
+		// 유저 시퀀스로 정보를 못찾을경우 예외처리
 		Member member = memberRepository.findByDelYnAndUserSeq("n", memberModifyDto.getUserSeq()).orElseThrow(() -> new NotExistsUserException());
 		
+		// 변경된 내용만 변경
 		if(!memberModifyDto.getImg().equals(member.getMemberImg())) member.setMemberImg(memberModifyDto.getImg());
 		if(memberModifyDto.getHeight()!=member.getMemberHeight()) {
 			member.setMemberHeight(memberModifyDto.getHeight());
@@ -92,6 +103,7 @@ public class MemberServiceImpl implements MemberService {
 		member.setModDt(TimeUtils.curTime());
 		memberRepository.save(member);
 		
+		// bloodPressure, bloodSugar가 기존에 있었는지 여부 확인 후 맞게 수정
 		for(String code : settings) {
 			boolean flag = false;
 			for(String memberCode : memberModifyDto.getSetting()) {
@@ -126,6 +138,71 @@ public class MemberServiceImpl implements MemberService {
 		
 		
 		
+	}
+
+	@Override
+	public Map<String, Object> getInfo(int userSeq) {
+		Map<String, Object> result = new HashMap<>();
+		
+		// 유저 시퀀스로 정보를 못찾을경우 예외처리
+		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
+		Optional<List<Setting>> list = settingRepository.findByDelYnAndUserSeq("n", userSeq);
+		
+		result.put("memberNickname", member.getMemberNickname());
+		result.put("memberImg", member.getMemberImg());
+		result.put("memberHeight", member.getMemberHeight());
+		result.put("memberWeight", member.getMemberWeight());
+		result.put("memberYear", member.getMemberYear());
+		result.put("memberGender", member.getMemberGender());
+		result.put("memberDesc", member.getMemberDesc());
+		result.put("memberKcal", member.getMemberKcal());
+		result.put("memberEmail", member.getRegEmail());
+		
+		ArrayList<String> codelist = new ArrayList<>();
+		for(Setting setting : list.get()) {
+			codelist.add(setting.getCode());
+		}
+		
+		result.put("setting", codelist);
+		
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> getBloodInfo(int userSeq) {
+		Map<String, Object> result = new HashMap<>();
+		memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(()->new NotExistsUserException());
+		
+		Optional<List<Setting>> list = settingRepository.findByDelYnAndUserSeq("n", userSeq);
+		
+		for(String code : settings) {
+			boolean flag = false;
+			for(Setting setting : list.get()) {
+				if(setting.getCode().equals(code)) {
+					flag = true;
+					break;
+				}
+				result.put(code, flag);
+			}
+		}
+		
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> getChatInfo(int userSeq) {
+		Map<String, Object> result = new HashMap<>();
+		
+		// 유저 시퀀스로 정보를 못찾을경우 예외처리
+		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
+		
+		result.put("memberNickname", member.getMemberNickname());
+		result.put("memberImg", member.getMemberImg());
+		result.put("memberHeight", member.getMemberHeight());
+		result.put("memberWeight", member.getMemberWeight());
+		result.put("memberDesc", member.getMemberDesc());
+		
+		return result;
 	}
 
 }
