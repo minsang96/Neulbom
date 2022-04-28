@@ -18,11 +18,11 @@ const Main = () => {
   const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
   return (
-    <Container>
+    <Container style={{ backgroundColor: "white" }}>
       <Box>
         <Ad></Ad>
         <DailyDiet></DailyDiet>
-        <ButtonCompo props="+현대 혈당 추가"></ButtonCompo>
+        <ButtonCompo buttonName="+ 혈당 추가"></ButtonCompo>
         <DietList></DietList>
       </Box>
     </Container>

@@ -21,7 +21,7 @@ const DietList = () => (
       <Lunch></Lunch>
       <Dinner></Dinner>
     </Box>
-    <ButtonCompo props="+ 간식 추가"></ButtonCompo>
+    <ButtonCompo buttonName="+ 간식 추가"></ButtonCompo>
   </>
 );
 
