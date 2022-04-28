@@ -36,6 +36,9 @@ public class Other {
 	@Column(name = "other_date")
 	private String otherDate;
 
+	@Column(name = "other_time")
+	private String otherTime;
+
 	@Column(name = "del_yn")
 	private String delYn;
 

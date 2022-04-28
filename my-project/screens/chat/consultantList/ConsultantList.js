@@ -1,7 +1,5 @@
-import { View, Text, ScrollView, StyleSheet, TouchableHighlight, FlatList, Dimensions } from "react-native";
+import { View, StyleSheet, FlatList } from "react-native";
 import ConsultantCard from '../../../components/chat/ConsultantCard'
-
-const windowWidth = Dimensions.get('window').width;
 
 const ConsultantList = () => {
   return (
@@ -23,16 +21,14 @@ const ConsultantList = () => {
     data={[
       { title: 'Title Text', key: 'item1' },
       { title: 'Title Text2', key: 'item2' },
-      { title: 'Title Text3', key: 'item3' }
+      { title: 'Title Text3', key: 'item3' },
+      { title: 'Title Text3', key: 'item4' },
+      { title: 'Title Text3', key: 'item5' },
+      { title: 'Title Text3', key: 'item6' },
+      { title: 'Title Text3', key: 'item7' },
     ]}
     renderItem={({ item, index, separators }) => (
-    <TouchableHighlight
-      key={item.key}
-      onPress={() => this._onPress(item)}
-      onShowUnderlay={separators.highlight}
-      onHideUnderlay={separators.unhighlight}>
-      <ConsultantCard width={windowWidth/2}/>
-    </TouchableHighlight>
+      <ConsultantCard key={item.key}/>
     )}
   />
   )
@@ -42,6 +38,6 @@ export default ConsultantList;
 
 const styles = StyleSheet.create({
   container: {
-  
+    paddingHorizontal: '2%'
   }
 })

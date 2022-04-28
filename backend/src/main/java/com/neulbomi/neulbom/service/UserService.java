@@ -6,4 +6,7 @@ public interface UserService {
 	
 	// 이메일로 user 찾기
 	public User getUserByEmail(String userEmail);
+	
+	// userSeq로 user 찾기
+	public User getUserByUserSeq(int userSeq);
 }
