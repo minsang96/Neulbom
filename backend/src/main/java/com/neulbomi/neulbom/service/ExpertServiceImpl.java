@@ -87,7 +87,6 @@ public class ExpertServiceImpl implements ExpertService {
 					.modEmail(user.getUserEmail())
 					.build());
 		}
-		
 	}
 
 	@Override
@@ -134,5 +133,33 @@ public class ExpertServiceImpl implements ExpertService {
 		result.put("expertDesc", expert.getExpertDesc());
  
 		return result;
+	}
+
+	@Override
+	public Map<String, Object> getInfo(int userSeq) {
+		// 전문가 찾기
+		User userExpert = userRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsExpertException());
+		Expert expert = expertRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsExpertException());
+		
+		Map<String, Object> info =new HashMap<>();
+		info.put("userSeq", expert.getUserSeq());
+		info.put("userEmail", userExpert.getUserEmail());
+		info.put("expertName", expert.getExpertName());
+		info.put("expertImg", expert.getExpertImg());
+		info.put("expertDesc", expert.getExpertDesc());
+		info.put("expertCert", expert.getExpertCert());
+		
+		// 경력정보
+		ArrayList<Career> careers = careerRepository.findByDelYnAndUserSeq("n", userSeq);
+		ArrayList<Map<String, Object>> careerList = new ArrayList<Map<String,Object>>();
+		for (Career career : careers) {
+			Map<String, Object> obj = new HashMap<>();
+			obj.put("careerSeq", career.getCareerSeq());
+			obj.put("careerContent", career.getCareerContent());
+			careerList.add(obj);
+		}
+		info.put("expertCareer",  careerList);
+		
+		return info;
 	}
 }
