@@ -33,75 +33,66 @@ public class ReportServiceImpl implements ReportService {
 
 	@Autowired
 	BloodSugarRepository bsRepository;
-	
+
 	@Autowired
 	BloodPressureRepository bpRepository;
-	
+
 	@Autowired
 	DietRepository dietRepository;
 
 	@Autowired
 	FoodRepository foodRepository;
-	
+
 	// daily 혈당
 	@Override
 	public Map<String, Object> readDailyBS(int userSeq, String date) {
 		// 유저 시퀀스로 정보를 못찾을경우 예외처리
 		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
-		
+
 		Map<String, Object> result = new HashMap<>();
-		Map<String, Object> obj = null;
-		
-		List<BloodSugar> today = bsRepository.findUserDailyBS(userSeq, date);
-		obj = new HashMap<>();
-		for(int i = 0; i < today.size(); i++) {
-			obj.put(today.get(i).getBsTime(), today.get(i).getBsLevel());		
-		}
-		result.put("today", obj);
-		
-		String yesterday_ = returnYesterday(date);
-		List<BloodSugar> yesterday = bsRepository.findUserDailyBS(userSeq, yesterday_);
-		obj = new HashMap<>();
-		for(int i = 0; i < yesterday.size(); i++) {
-			obj.put(yesterday.get(i).getBsTime(), yesterday.get(i).getBsLevel());		
-		}
-		result.put("yesterday", obj);
-		
+		String yesterday = returnYesterday(date);
+
+		result.put("today", calcBS(userSeq, date));
+		result.put("yesterday", calcBS(userSeq, yesterday));
+
 		return result;
 	}
 
+	public Map<String, Object> calcBS(int userSeq, String date) {
+		List<BloodSugar> bs = bsRepository.findUserDailyBS(userSeq, date);
+		Map<String, Object> obj = new HashMap<>();
+		for (int i = 0; i < bs.size(); i++) {
+			obj.put(bs.get(i).getBsCode(), bs.get(i).getBsLevel());
+		}
+		return obj;
+	}
 
 	// daily 혈압
 	@Override
 	public Map<String, Object> readDailyBP(int userSeq, String date) {
 		// 유저 시퀀스로 정보를 못찾을경우 예외처리
 		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
-		
+
 		Map<String, Object> result = new HashMap<>();
-		Map<String, Object> obj = null;
-		
-		List<BloodPressure> today = bpRepository.findUserDailyBP(userSeq, date);
-		obj = new HashMap<>();
-		for(int i = 0; i < today.size(); i++) {
-			Map<String, Object> obj2 = new HashMap<>();
-			obj2.put("BpHigh", today.get(i).getBpHigh());		
-			obj2.put("BpLow", today.get(i).getBpLow());
-			obj.put(today.get(i).getBpTime(), obj2);
-		}
-		result.put("today", obj);
-		
-		String yesterday_ = returnYesterday(date);
-		List<BloodPressure> yesterday = bpRepository.findUserDailyBP(userSeq, yesterday_);
-		obj = new HashMap<>();
-		for(int i = 0; i < yesterday.size(); i++) {
-			Map<String, Object> obj2 = new HashMap<>();
-			obj2.put("BpHigh", yesterday.get(i).getBpHigh());		
-			obj2.put("BpLow", yesterday.get(i).getBpLow());
-			obj.put(yesterday.get(i).getBpTime(), obj2);	
-		}
-		result.put("yesterday", obj);
-		
+		String yesterday = returnYesterday(date);
+
+		result.put("today", calcBP(userSeq, date));
+		result.put("yesterday", calcBP(userSeq, yesterday));
+
 		return result;
+	}
+
+	public Map<String, Object> calcBP(int userSeq, String date) {
+		List<BloodPressure> bp = bpRepository.findUserDailyBP(userSeq, date);
+		Map<String, Object> obj = new HashMap<>();
+		for (int i = 0; i < bp.size(); i++) {
+			Map<String, Object> obj2 = new HashMap<>();
+			obj2.put("BpHigh", bp.get(i).getBpHigh());
+			obj2.put("BpLow", bp.get(i).getBpLow());
+			obj.put(bp.get(i).getBpCode(), obj2);
+		}
+
+		return obj;
 	}
 
 	// daily 칼로리
@@ -109,21 +100,21 @@ public class ReportServiceImpl implements ReportService {
 	public Map<String, Object> readDailyKcal(int userSeq, String date) {
 		// 유저 시퀀스로 정보를 못찾을경우 예외처리
 		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
-		
-		Map<String, Object> result = new HashMap<>();
-		result.put("today", calKcal(userSeq, date));
 
+		Map<String, Object> result = new HashMap<>();
 		String yesterday = returnYesterday(date);
-		result.put("yesterday", calKcal(userSeq, yesterday));
+
+		result.put("today", calcKcal(userSeq, date));
+		result.put("yesterday", calcKcal(userSeq, yesterday));
 
 		return result;
 	}
-	
-	public double calKcal(int userSeq, String date) {
+
+	public double calcKcal(int userSeq, String date) {
 		double kcalTotal = 0;
 
 		List<Diet> diet = dietRepository.findDiet(userSeq, date);
-		
+
 		for (int i = 0; i < diet.size(); i++) {
 			Diet target = diet.get(i);
 			String fc = target.getFoodCode();
@@ -133,8 +124,7 @@ public class ReportServiceImpl implements ReportService {
 		}
 		return kcalTotal;
 	}
-	
-	
+
 	// 오늘 날짜 입력 -> 어제 날짜 출력
 	private String returnYesterday(String today) {
 		SimpleDateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd");
