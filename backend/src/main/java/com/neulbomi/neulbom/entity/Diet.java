@@ -22,8 +22,7 @@ import lombok.ToString;
 public class Diet {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) // PK, Auto_Increment로 설정해서 직접 할당 방식이 아니라, 자동으로 생성되도록 하기 위한
-														// 어노테이션
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // PK, Auto_Increment로 설정해서 직접 할당 방식이 아니라, 자동으로 생성되도록 하기 위한 어노테이션
 	@Column(name = "diet_seq")
 	private long dietSeq;
 
@@ -42,6 +41,9 @@ public class Diet {
 	@Column(name = "diet_amount")
 	private int dietAmount;
 
+	@Column(name ="diet_date")
+	private String dietDate;
+	
 	@Column(name = "del_yn")
 	private String delYn;
 
