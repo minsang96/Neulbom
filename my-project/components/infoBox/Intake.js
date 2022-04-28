@@ -1,51 +1,28 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 
-const InfoMyself = () => {
-  // if 성별 줄 함수 고쳐야함 !!!!!!!!!!
-  const userGender = "남";
-  const whatsUserGender = () => {
-    if (userGender === "여") {
-      return <Text>👩</Text>;
-    } else {
-      return <Text>🧑</Text>;
-    }
-  };
-
+const Intake = () => {
   return (
     <View style={styles.box}>
-      <View style={styles.flexDirectionRow}>
-        <Image
-          source={require("../assets/images/dog.jpg")}
-          style={styles.image}
-        ></Image>
-        <View>
-          <Text style={styles.userName}>
-            건강하게삽시다 {whatsUserGender()}
-          </Text>
-          <Text>ssafy104@naver.com</Text>
-        </View>
-      </View>
-
       <View style={styles.userInfo}>
         <View style={styles.userInfoItem}>
-          <Text>나이</Text>
-          <Text style={styles.userInfoItemContent}>35</Text>
+          <Text>권장 칼로리</Text>
+          <Text style={styles.userInfoItemContent}>2100</Text>
         </View>
         <View style={styles.userInfoItem}>
-          <Text>키</Text>
-          <Text style={styles.userInfoItemContent}>165cm</Text>
+          <Text>권장 나트륨</Text>
+          <Text style={styles.userInfoItemContent}>350</Text>
         </View>
         <View style={styles.userInfoItem}>
-          <Text>몸무게</Text>
-          <Text style={styles.userInfoItemContent}>55kg</Text>
+          <Text>권장 당류</Text>
+          <Text style={styles.userInfoItemContent}>400</Text>
         </View>
       </View>
     </View>
   );
 };
 
-export default InfoMyself;
+export default Intake;
 
 const styles = StyleSheet.create({
   box: {

@@ -7,7 +7,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 
-const Alcohol = (props) => {
+const Coffee = (props) => {
   const [isDate, setIsDate] = useState(new Date());
   const [isTime, setIsTime] = useState(new Date());
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -21,8 +21,7 @@ const Alcohol = (props) => {
     setDatePickerVisibility(false);
   };
   const handleConfirm = (date) => {
-    console.warn("A date has been picked: ", date);
-    console.log(date);
+    // console.log(date);
     setIsDate(date);
     hideDatePicker();
   };
@@ -35,34 +34,33 @@ const Alcohol = (props) => {
     setTimePickerVisibility(false);
   };
   const handleTimeConfirm = (time) => {
-    console.warn("A time has been picked: ", time);
-    console.log(time);
+    // console.log(time);
     setIsTime(time);
     hideTimePicker();
   };
 
   return (
     <Modal
-      isVisible={props.isAlcoholModalVisible}
+      isVisible={props.isCoffeeModalVisible}
       style={styles.bottomModal}
       swipeDirection="down"
       onSwipeComplete={() => {
-        props.onPressAlcoholButton();
+        props.onPressCoffeeButton();
       }}
     >
       <View style={styles.modalView}>
-        <Text style={styles.titleText}>음주 기록</Text>
+        <Text style={styles.titleText}>커피 기록</Text>
         <Ionicons
           name="close"
           size={24}
           color="#09BC8A"
           style={styles.closeIcon}
           onPress={() => {
-            props.onPressAlcoholButton();
+            props.onPressCoffeeButton();
           }}
         />
 
-        <Text style={styles.subtitleText}>음주 날짜</Text>
+        <Text style={styles.subtitleText}>섭취 날짜</Text>
         <Text style={styles.dateTime}>
           <Pressable onPress={showDatePicker}>
             <Text style={styles.dateTimeText}>
@@ -78,7 +76,7 @@ const Alcohol = (props) => {
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}
         />
-        <Text style={styles.subtitleText}>음주 시간</Text>
+        <Text style={styles.subtitleText}>섭취 시간</Text>
         <Text style={styles.dateTime}>
           <Pressable onPress={showTimePicker}>
             <Text style={styles.dateTimeText}>
@@ -93,9 +91,9 @@ const Alcohol = (props) => {
           onCancel={hideTimePicker}
         />
         <ButtonCompo
-          buttonName="음주 등록하기"
+          buttonName="커피 등록하기"
           onPressButton={() => {
-            props.onPressAlcoholButton();
+            props.onPressCoffeeButton();
           }}
         ></ButtonCompo>
       </View>
@@ -103,7 +101,7 @@ const Alcohol = (props) => {
   );
 };
 
-export default Alcohol;
+export default Coffee;
 
 const styles = StyleSheet.create({
   input: {
