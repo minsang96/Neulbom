@@ -29,8 +29,8 @@ public class BloodPressure {
 	@Column(name = "user_seq")
 	private int userSeq;
 
-	@Column(name = "bp_time")
-	private String bpTime;
+	@Column(name = "bp_code")
+	private String bpCode;
 
 	@Column(name = "bp_high")
 	private int bpHigh;
@@ -40,6 +40,9 @@ public class BloodPressure {
 
 	@Column(name = "bp_date")
 	private String bpDate;
+
+	@Column(name = "bp_time")
+	private String bpTime;
 
 	@Column(name = "del_yn")
 	private String delYn;

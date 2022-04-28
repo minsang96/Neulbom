@@ -1,22 +1,51 @@
 import React, { useState } from "react";
 import Modal from "react-native-modal";
-import { Text, View, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import BloodPressure from "../../../../components/modal/BloodPressure";
+import BloodSugar from "../../../../components/modal/BloodSugar";
+import Alcohol from "../../../../components/modal/Alcohol";
+import Coffee from "../../../../components/modal/Coffee";
+import Workout from "../../../../components/modal/Workout";
 
 const AddTodayRecord = (props) => {
-  const [isSecModalVisible, setSecModalVisible] = useState(false);
+  // useState
+  const [isBloodModalVisible, setBloodModalVisible] = useState(false);
+  const [isBloodSugarModalVisible, setBloodSugarModalVisible] = useState(false);
+  const [isAlcoholModalVisible, setAlcoholModalVisible] = useState(false);
+  const [isCoffeeModalVisible, setCoffeeModalVisible] = useState(false);
+  const [isWorkoutModalVisible, setWorkoutModalVisible] = useState(false);
 
-  const onPressSecButton = () => {
-    setSecModalVisible(!isSecModalVisible);
+  // modal 관련 함수
+  const onPressBloodButton = () => {
+    setBloodModalVisible(!isBloodModalVisible);
+  };
+  const onPressBloodSugarButton = () => {
+    setBloodSugarModalVisible(!isBloodSugarModalVisible);
+  };
+  const onPressAlcoholButton = () => {
+    setAlcoholModalVisible(!isAlcoholModalVisible);
+  };
+  const onPressCoffeeButton = () => {
+    setCoffeeModalVisible(!isCoffeeModalVisible);
+  };
+  const onPressWorkoutButton = () => {
+    setWorkoutModalVisible(!isWorkoutModalVisible);
   };
 
   const onPressListItem = (key) => {
-    console.log(key);
-    console.log("-----");
-    // Alert.alert(`${key}`);
-    setSecModalVisible(true);
-    console.log(isSecModalVisible);
+    if (key === 0) {
+      setBloodSugarModalVisible(true);
+    } else if (key === 1) {
+      setBloodModalVisible(true);
+    } else if (key === 2) {
+      setAlcoholModalVisible(true);
+    } else if (key === 3) {
+      setCoffeeModalVisible(true);
+    } else if (key === 4) {
+      setWorkoutModalVisible(true);
+    }
+    props.onPressButton();
   };
 
   return (
@@ -51,11 +80,26 @@ const AddTodayRecord = (props) => {
           ))}
         </View>
       </Modal>
+      <BloodSugar
+        onPressBloodSugarButton={onPressBloodSugarButton}
+        isBloodSugarModalVisible={isBloodSugarModalVisible}
+      ></BloodSugar>
       <BloodPressure
-        onPressSecButton={onPressSecButton}
-        onPressButton={props.onPressButton}
-        isSecModalVisible={isSecModalVisible}
+        onPressBloodButton={onPressBloodButton}
+        isBloodModalVisible={isBloodModalVisible}
       ></BloodPressure>
+      <Alcohol
+        onPressAlcoholButton={onPressAlcoholButton}
+        isAlcoholModalVisible={isAlcoholModalVisible}
+      ></Alcohol>
+      <Coffee
+        onPressCoffeeButton={onPressCoffeeButton}
+        isCoffeeModalVisible={isCoffeeModalVisible}
+      ></Coffee>
+      <Workout
+        onPressWorkoutButton={onPressWorkoutButton}
+        isWorkoutModalVisible={isWorkoutModalVisible}
+      ></Workout>
     </>
   );
 };
