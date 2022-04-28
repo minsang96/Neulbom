@@ -1,17 +1,60 @@
 import React, { useState } from "react";
 import Modal from "react-native-modal";
-import { Text, View, StyleSheet, Pressable } from "react-native";
+import { Text, View, StyleSheet, TextInput, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import ButtonCompo from "../button/ButtonCompo";
+import RadioGroup from "react-native-radio-buttons-group";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 
-const Alcohol = (props) => {
-  const [isDate, setIsDate] = useState(new Date());
-  const [isTime, setIsTime] = useState(new Date());
+const BloodSugar = (props) => {
+  const radioButtonsData = [
+    {
+      id: "1",
+      label: "아침",
+      value: "아침",
+    },
+    {
+      id: "2",
+      label: "점심",
+      value: "점심",
+    },
+    {
+      id: "3",
+      label: "저녁",
+      value: "저녁",
+    },
+  ];
+
+  const radioButtonsData2 = [
+    {
+      id: "1",
+      label: "식전",
+      value: "식전",
+    },
+    {
+      id: "2",
+      label: "식후",
+      value: "식후",
+    },
+  ];
+
+  // useState
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
+  const [radioButtons, setRadioButtons] = useState(radioButtonsData);
+  const [radioButtons2, setRadioButtons2] = useState(radioButtonsData2);
+  const [isDate, setIsDate] = useState(new Date());
+  const [isTime, setIsTime] = useState(new Date());
+
+  // 라디오 버튼 관련 함수
+  const onPressRadioButton = (radioButtonsArray) => {
+    setRadioButtons(radioButtonsArray);
+  };
+  const onPressRadioButton2 = (radioButtonsArray2) => {
+    setRadioButtons2(radioButtonsArray2);
+  };
 
   // 날짜 관련 함수
   const showDatePicker = () => {
@@ -43,26 +86,25 @@ const Alcohol = (props) => {
 
   return (
     <Modal
-      isVisible={props.isAlcoholModalVisible}
+      isVisible={props.isBloodSugarModalVisible}
       style={styles.bottomModal}
       swipeDirection="down"
       onSwipeComplete={() => {
-        props.onPressAlcoholButton();
+        props.onPressBloodSugarButton();
       }}
     >
       <View style={styles.modalView}>
-        <Text style={styles.titleText}>음주 기록</Text>
+        <Text style={styles.titleText}>혈당 기록</Text>
         <Ionicons
           name="close"
           size={24}
           color="#09BC8A"
           style={styles.closeIcon}
           onPress={() => {
-            props.onPressAlcoholButton();
+            props.onPressBloodSugarButton();
           }}
         />
-
-        <Text style={styles.subtitleText}>음주 날짜</Text>
+        <Text style={styles.subtitleText}>측정 날짜</Text>
         <Text style={styles.dateTime}>
           <Pressable onPress={showDatePicker}>
             <Text style={styles.dateTimeText}>
@@ -78,7 +120,7 @@ const Alcohol = (props) => {
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}
         />
-        <Text style={styles.subtitleText}>음주 시간</Text>
+        <Text style={styles.subtitleText}>측정 시간</Text>
         <Text style={styles.dateTime}>
           <Pressable onPress={showTimePicker}>
             <Text style={styles.dateTimeText}>
@@ -92,10 +134,31 @@ const Alcohol = (props) => {
           onConfirm={handleTimeConfirm}
           onCancel={hideTimePicker}
         />
+        <Text style={styles.subtitleText}>측정 시점 선택</Text>
+        <View style={{ alignItems: "center" }}>
+          <RadioGroup
+            radioButtons={radioButtons}
+            onPress={onPressRadioButton}
+            layout="row"
+          />
+        </View>
+        <Text style={styles.subtitleText}>식전/식후</Text>
+        <View style={{ alignItems: "center" }}>
+          <RadioGroup
+            radioButtons={radioButtons2}
+            onPress={onPressRadioButton2}
+            layout="row"
+          />
+        </View>
+        <Text style={styles.subtitleText}>혈당값</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="측정된 혈당을 입력하세요"
+        ></TextInput>
         <ButtonCompo
-          buttonName="음주 등록하기"
+          buttonName="혈당 등록하기"
           onPressButton={() => {
-            props.onPressAlcoholButton();
+            props.onPressBloodSugarButton();
           }}
         ></ButtonCompo>
       </View>
@@ -103,7 +166,7 @@ const Alcohol = (props) => {
   );
 };
 
-export default Alcohol;
+export default BloodSugar;
 
 const styles = StyleSheet.create({
   input: {

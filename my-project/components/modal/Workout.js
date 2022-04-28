@@ -7,7 +7,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 
-const Alcohol = (props) => {
+const Workout = (props) => {
   const [isDate, setIsDate] = useState(new Date());
   const [isTime, setIsTime] = useState(new Date());
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -21,7 +21,6 @@ const Alcohol = (props) => {
     setDatePickerVisibility(false);
   };
   const handleConfirm = (date) => {
-    console.warn("A date has been picked: ", date);
     console.log(date);
     setIsDate(date);
     hideDatePicker();
@@ -35,7 +34,6 @@ const Alcohol = (props) => {
     setTimePickerVisibility(false);
   };
   const handleTimeConfirm = (time) => {
-    console.warn("A time has been picked: ", time);
     console.log(time);
     setIsTime(time);
     hideTimePicker();
@@ -43,26 +41,26 @@ const Alcohol = (props) => {
 
   return (
     <Modal
-      isVisible={props.isAlcoholModalVisible}
+      isVisible={props.isWorkoutModalVisible}
       style={styles.bottomModal}
       swipeDirection="down"
       onSwipeComplete={() => {
-        props.onPressAlcoholButton();
+        props.onPressWorkoutButton();
       }}
     >
       <View style={styles.modalView}>
-        <Text style={styles.titleText}>음주 기록</Text>
+        <Text style={styles.titleText}>운동 기록</Text>
         <Ionicons
           name="close"
           size={24}
           color="#09BC8A"
           style={styles.closeIcon}
           onPress={() => {
-            props.onPressAlcoholButton();
+            props.onPressWorkoutButton();
           }}
         />
 
-        <Text style={styles.subtitleText}>음주 날짜</Text>
+        <Text style={styles.subtitleText}>운동 날짜</Text>
         <Text style={styles.dateTime}>
           <Pressable onPress={showDatePicker}>
             <Text style={styles.dateTimeText}>
@@ -78,7 +76,7 @@ const Alcohol = (props) => {
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}
         />
-        <Text style={styles.subtitleText}>음주 시간</Text>
+        <Text style={styles.subtitleText}>운동 시간</Text>
         <Text style={styles.dateTime}>
           <Pressable onPress={showTimePicker}>
             <Text style={styles.dateTimeText}>
@@ -95,7 +93,7 @@ const Alcohol = (props) => {
         <ButtonCompo
           buttonName="음주 등록하기"
           onPressButton={() => {
-            props.onPressAlcoholButton();
+            props.onPressWorkoutButton();
           }}
         ></ButtonCompo>
       </View>
@@ -103,7 +101,7 @@ const Alcohol = (props) => {
   );
 };
 
-export default Alcohol;
+export default Workout;
 
 const styles = StyleSheet.create({
   input: {
