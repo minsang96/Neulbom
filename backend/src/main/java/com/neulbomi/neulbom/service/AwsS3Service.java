@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,7 +13,6 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.neulbomi.neulbom.exception.EmptyFileException;
 import com.neulbomi.neulbom.exception.FileUploadFailedException;
-import com.neulbomi.neulbom.response.BaseResponseBody;
 import com.neulbomi.neulbom.util.CommonUtils;
 
 import lombok.RequiredArgsConstructor;
