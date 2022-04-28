@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.neulbomi.neulbom.dto.CareerModifyDto;
 import com.neulbomi.neulbom.dto.ExpertJoinDto;
+import com.neulbomi.neulbom.dto.ExpertModifyDto;
 import com.neulbomi.neulbom.entity.Career;
 import com.neulbomi.neulbom.entity.Expert;
 import com.neulbomi.neulbom.entity.User;
@@ -161,5 +163,55 @@ public class ExpertServiceImpl implements ExpertService {
 		info.put("expertCareer",  careerList);
 		
 		return info;
+	}
+
+	@Override
+	public void modify(ExpertModifyDto expertModifyDto) {
+		// 현재 시간
+		String now = TimeUtils.curTime();
+				
+		// 전문가 찾기
+		User userExpert = userRepository.findByDelYnAndUserSeq("n", expertModifyDto.getUserSeq()).orElseThrow(() -> new NotExistsExpertException());
+		Expert expert = expertRepository.findByDelYnAndUserSeq("n", expertModifyDto.getUserSeq()).orElseThrow(() -> new NotExistsExpertException());
+		// 정보 수정하기
+		if(!expertModifyDto.getDesc().equals(expert.getExpertDesc())) {
+			expert.setExpertDesc(expertModifyDto.getDesc());
+		}
+		
+		ArrayList<CareerModifyDto> modifyCareers = expertModifyDto.getCareer();
+		// 이력 수정하기
+		ArrayList<Career> careers = careerRepository.findByDelYnAndUserSeq("n", expertModifyDto.getUserSeq());
+		
+		for(int n = modifyCareers.size() - 1; n >= 0; n--) {
+			CareerModifyDto modifyDto = modifyCareers.get(n);
+			// careerSeq = 0이면 새로 추가한 경력!
+			if(modifyDto.getCareerSeq() == 0) {
+				careerRepository.save(Career.builder()
+						.userSeq(expert.getUserSeq())
+						.careerContent(modifyDto.getCareerContent())
+						.regDt(now)
+						.regEmail(userExpert.getUserEmail())
+						.modDt(now)
+						.modEmail(userExpert.getUserEmail())
+						.build());
+			}
+			
+			// 원래 있던 경력 수정 한 것
+			else {
+				Career career = careerRepository.findByDelYnAndCareerSeq("n", modifyDto.getCareerSeq());
+				if(!career.getCareerContent().equals(modifyDto.getCareerContent())) {
+					career.setCareerContent(modifyDto.getCareerContent());
+					career.setModDt(now);
+					career.setModEmail(userExpert.getUserEmail());
+					careerRepository.save(career);
+				}
+				careers.remove(career);
+			}
+		}
+		
+		for (Career career : careers) {
+			career.setDelYn("y");
+			careerRepository.save(career);
+		}
 	}
 }
