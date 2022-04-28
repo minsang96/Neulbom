@@ -13,8 +13,13 @@ import org.springframework.stereotype.Service;
 
 import com.neulbomi.neulbom.entity.BloodPressure;
 import com.neulbomi.neulbom.entity.BloodSugar;
+import com.neulbomi.neulbom.entity.Member;
+import com.neulbomi.neulbom.entity.User;
+import com.neulbomi.neulbom.exception.NotExistsUserException;
 import com.neulbomi.neulbom.repository.BloodPressureRepository;
 import com.neulbomi.neulbom.repository.BloodSugarRepository;
+import com.neulbomi.neulbom.repository.MemberRepository;
+import com.neulbomi.neulbom.repository.UserRepository;
 
 @Service
 public class ReportServiceImpl implements ReportService {
@@ -25,8 +30,14 @@ public class ReportServiceImpl implements ReportService {
 	@Autowired
 	BloodPressureRepository bpRepository;
 	
+	@Autowired
+	MemberRepository memberRepository;
+	
 	@Override
 	public Map<String, Object> readDailyBS(int userSeq, String date) {
+		// 유저 시퀀스로 정보를 못찾을경우 예외처리
+		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
+		
 		Map<String, Object> result = new HashMap<>();
 		Map<String, Object> obj = null;
 		
@@ -51,6 +62,9 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public Map<String, Object> readDailyBP(int userSeq, String date) {
+		// 유저 시퀀스로 정보를 못찾을경우 예외처리
+		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
+		
 		Map<String, Object> result = new HashMap<>();
 		Map<String, Object> obj = null;
 		
