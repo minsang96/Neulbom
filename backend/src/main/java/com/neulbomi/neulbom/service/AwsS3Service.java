@@ -31,24 +31,25 @@ public class AwsS3Service {
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucketName;
 
-	public String uploadFileV1(String category, MultipartFile multipartFile) {
+	public String uploadFileV1(String category, int userSeq, MultipartFile multipartFile) {
 		// 파일이 제대로 업로드 된 것인지 확인
 		validateFileExists(multipartFile);
 
-		// 파일 이름 지정 - category를 이메일로 할까요?
-		String fileName = CommonUtils.buildFileName(category, multipartFile.getOriginalFilename());
+		// 파일 이름 지정 - userSeq
+		String fileName = CommonUtils.buildFileName(category, userSeq, multipartFile.getOriginalFilename());
 
 		ObjectMetadata objectMetadata = new ObjectMetadata();
 		objectMetadata.setContentType(multipartFile.getContentType());
 
 		try (InputStream inputStream = multipartFile.getInputStream()) {
-			amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
-					.withCannedAcl(CannedAccessControlList.PublicRead));
+			amazonS3Client
+					.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
+							.withCannedAcl(CannedAccessControlList.PublicRead));
 		} catch (IOException e) {
-			//파일 업로드 실패
+			// 파일 업로드 실패
 			throw new FileUploadFailedException();
 		}
-		
+
 		// S3에 업로드 된 사진의 URL 반환
 		return amazonS3Client.getUrl(bucketName, fileName).toString();
 	}

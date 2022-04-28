@@ -16,6 +16,7 @@ import com.neulbomi.neulbom.service.AwsS3Service;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
@@ -32,16 +33,16 @@ public class MainController {
 					@ApiResponse(code = 415, message = "유효하지 않은 파일입니다."),
 					@ApiResponse(code = 409, message = "잘못된 요청입니다."),
 					@ApiResponse(code = 500, message = "서버 오류"), })
-	public ResponseEntity<? extends BaseResponseBody> upload(@RequestPart(value = "file") MultipartFile multipartFile, @RequestParam String email) {
+	public ResponseEntity<? extends BaseResponseBody> upload(@RequestPart(value = "file") MultipartFile multipartFile, @RequestParam int userSeq, @RequestParam @ApiParam(value = "Profile : 프로필 사진, Diet : 음식 사진") String category) {
 		// S3 사진 업로드 예제
 		String url = "";
 		try {
-			url = awsS3Service.uploadFileV1(email, multipartFile);
+			url = awsS3Service.uploadFileV1(category, userSeq, multipartFile);
 		} catch (EmptyFileException e) {
-			return ResponseEntity.status(406).body(BaseResponseBody.of(415, "유효하지 않은 파일입니다."));
+			return ResponseEntity.status(415).body(BaseResponseBody.of(415, "유효하지 않은 파일입니다."));
 		} catch (FileUploadFailedException e) {
 			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "파일 업로드에 실패했습니다."));
 		}
-		return ResponseEntity.status(200).body(BaseResponseBody.of(409, url));
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, url));
 	}
 }
