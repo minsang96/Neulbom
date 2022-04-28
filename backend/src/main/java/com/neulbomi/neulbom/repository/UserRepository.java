@@ -10,4 +10,5 @@ import com.neulbomi.neulbom.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 	public Optional<User> findByDelYnAndUserEmail(String delYn, String userEmail);
+	public Optional<User> findByDelYnAndUserSeq(String delYn, int userSeq);
 }

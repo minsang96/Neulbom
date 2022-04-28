@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.neulbomi.neulbom.entity.User;
+import com.neulbomi.neulbom.exception.NotExistsUserException;
 import com.neulbomi.neulbom.repository.UserRepository;
 
 @Service
@@ -19,6 +20,12 @@ public class UserServiceImpl implements UserService {
 		Optional<User> user = userRepository.findByDelYnAndUserEmail("n", userEmail);
 		if(!user.isPresent()) return null;
 		return user.get();
+	}
+
+	@Override
+	public User getUserByUserSeq(int userSeq) {
+		User user = userRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
+		return user;
 	}
 
 }
