@@ -1,6 +1,6 @@
 import react from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Main from "../screens/mainpage/Main";
+import MainPage from "../screens/mainpage/MainPage";
 import Calendar from "../screens/calendar/Calendar";
 import Chat from "../screens/chat/Chat";
 import Mypage from "../screens/mypage/Mypage";
@@ -20,8 +20,9 @@ const Tabs = () => (
   >
     <Tab.Screen
       name="식단관리"
-      component={Main}
+      component={MainPage}
       options={{
+        headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
           // console.log(focused, color, size);
           return (
