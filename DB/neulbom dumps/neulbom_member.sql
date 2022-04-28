@@ -51,7 +51,7 @@ CREATE TABLE `member` (
 
 LOCK TABLES `member` WRITE;
 /*!40000 ALTER TABLE `member` DISABLE KEYS */;
-INSERT INTO `member` VALUES (1,1,'문서왕','image',161,40,1997,'f','질병 없음',10000,'n','freessafy104@gmail.com','2022-04-25 05:24:22','freessafy104@gmail.com','2022-04-25 05:24:22'),(2,2,'김싸피','image',171,68,1995,'m','질병 없음',20000,'n','ssafy@gmail.com','2022-04-25 05:53:43','ssafy@gmail.com','2022-04-25 05:53:43');
+INSERT INTO `member` VALUES (1,1,'문서왕','image',161,48,1997,'f','질병 없음',10000,'n','blue8957@gmail.com','2022-04-26 01:43:28','blue8957@gmail.com','2022-04-26 01:43:28'),(2,2,'김싸피','image',171,68,1995,'m','질병 없음',20000,'n','ssafy@gmail.com','2022-04-26 01:43:28','ssafy@gmail.com','2022-04-26 01:43:28');
 /*!40000 ALTER TABLE `member` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -64,4 +64,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-25 15:05:09
+-- Dump completed on 2022-04-26 17:58:56
