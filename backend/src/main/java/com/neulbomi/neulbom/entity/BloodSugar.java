@@ -28,14 +28,17 @@ public class BloodSugar {
 	@Column(name = "user_seq")
 	private int userSeq;
 
-	@Column(name = "bs_time")
-	private String bsTime;
+	@Column(name = "bs_code")
+	private String bsCode;
 
 	@Column(name = "bs_level")
 	private int bsLevel;
 
 	@Column(name = "bs_date")
 	private String bsDate;
+
+	@Column(name = "bs_time")
+	private String bsTime;
 
 	@Column(name = "del_yn")
 	private String delYn;
