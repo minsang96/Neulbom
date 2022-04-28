@@ -4,5 +4,6 @@ import java.util.Map;
 
 public interface ReportService {
 
-	public Map<String, Object> readBS(int userSeq, String date);
+	public Map<String, Object> readDailyBS(int userSeq, String date);
+	public Map<String, Object> readDailyBP(int userSeq, String date);
 }

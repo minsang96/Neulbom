@@ -11,7 +11,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.neulbomi.neulbom.entity.BloodPressure;
 import com.neulbomi.neulbom.entity.BloodSugar;
+import com.neulbomi.neulbom.repository.BloodPressureRepository;
 import com.neulbomi.neulbom.repository.BloodSugarRepository;
 
 @Service
@@ -20,8 +22,11 @@ public class ReportServiceImpl implements ReportService {
 	@Autowired
 	BloodSugarRepository bsRepository;
 	
+	@Autowired
+	BloodPressureRepository bpRepository;
+	
 	@Override
-	public Map<String, Object> readBS(int userSeq, String date) {
+	public Map<String, Object> readDailyBS(int userSeq, String date) {
 		Map<String, Object> result = new HashMap<>();
 		Map<String, Object> obj = null;
 		
@@ -43,6 +48,36 @@ public class ReportServiceImpl implements ReportService {
 		return result;
 	}
 
+
+	@Override
+	public Map<String, Object> readDailyBP(int userSeq, String date) {
+		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> obj = null;
+		
+		List<BloodPressure> today = bpRepository.findUserDailyBP(userSeq, date);
+		obj = new HashMap<>();
+		for(int i = 0; i < today.size(); i++) {
+			Map<String, Object> obj2 = new HashMap<>();
+			obj2.put("BpHigh", today.get(i).getBpHigh());		
+			obj2.put("BpLow", today.get(i).getBpLow());
+			obj.put(today.get(i).getBpTime(), obj2);
+		}
+		result.put("today", obj);
+		
+		String yesterday_ = returnYesterday(date);
+		List<BloodPressure> yesterday = bpRepository.findUserDailyBP(userSeq, yesterday_);
+		obj = new HashMap<>();
+		for(int i = 0; i < yesterday.size(); i++) {
+			Map<String, Object> obj2 = new HashMap<>();
+			obj2.put("BpHigh", yesterday.get(i).getBpHigh());		
+			obj2.put("BpLow", yesterday.get(i).getBpLow());
+			obj.put(yesterday.get(i).getBpTime(), obj2);	
+		}
+		result.put("yesterday", obj);
+		
+		return result;
+	}
+
 	private String returnYesterday(String today) {
 		SimpleDateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar cal = Calendar.getInstance();
@@ -57,5 +92,4 @@ public class ReportServiceImpl implements ReportService {
 			return null;
 		}
 	}
-
 }

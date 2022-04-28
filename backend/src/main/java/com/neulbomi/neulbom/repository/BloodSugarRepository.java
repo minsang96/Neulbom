@@ -12,8 +12,6 @@ import com.neulbomi.neulbom.entity.BloodSugar;
 @Repository
 public interface BloodSugarRepository extends JpaRepository<BloodSugar, Long> {
 	
-	public List<BloodSugar> findAll();
-	
 	@Query("SELECT bs FROM BloodSugar bs WHERE bs.userSeq=:userSeq AND bs.bsDate=:bsDate AND bs.delYn='n'")
 	public List<BloodSugar> findUserDailyBS(@Param("userSeq") int userSeq, @Param("bsDate") String bsDate);
 
