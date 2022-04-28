@@ -13,16 +13,23 @@ import org.springframework.stereotype.Service;
 
 import com.neulbomi.neulbom.entity.BloodPressure;
 import com.neulbomi.neulbom.entity.BloodSugar;
+import com.neulbomi.neulbom.entity.Diet;
+import com.neulbomi.neulbom.entity.Food;
 import com.neulbomi.neulbom.entity.Member;
 import com.neulbomi.neulbom.entity.User;
 import com.neulbomi.neulbom.exception.NotExistsUserException;
 import com.neulbomi.neulbom.repository.BloodPressureRepository;
 import com.neulbomi.neulbom.repository.BloodSugarRepository;
+import com.neulbomi.neulbom.repository.DietRepository;
+import com.neulbomi.neulbom.repository.FoodRepository;
 import com.neulbomi.neulbom.repository.MemberRepository;
 import com.neulbomi.neulbom.repository.UserRepository;
 
 @Service
 public class ReportServiceImpl implements ReportService {
+
+	@Autowired
+	MemberRepository memberRepository;
 
 	@Autowired
 	BloodSugarRepository bsRepository;
@@ -31,8 +38,12 @@ public class ReportServiceImpl implements ReportService {
 	BloodPressureRepository bpRepository;
 	
 	@Autowired
-	MemberRepository memberRepository;
+	DietRepository dietRepository;
+
+	@Autowired
+	FoodRepository foodRepository;
 	
+	// daily 혈당
 	@Override
 	public Map<String, Object> readDailyBS(int userSeq, String date) {
 		// 유저 시퀀스로 정보를 못찾을경우 예외처리
@@ -60,6 +71,7 @@ public class ReportServiceImpl implements ReportService {
 	}
 
 
+	// daily 혈압
 	@Override
 	public Map<String, Object> readDailyBP(int userSeq, String date) {
 		// 유저 시퀀스로 정보를 못찾을경우 예외처리
@@ -92,6 +104,38 @@ public class ReportServiceImpl implements ReportService {
 		return result;
 	}
 
+	// daily 칼로리
+	@Override
+	public Map<String, Object> readDailyKcal(int userSeq, String date) {
+		// 유저 시퀀스로 정보를 못찾을경우 예외처리
+		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
+		
+		Map<String, Object> result = new HashMap<>();
+		result.put("today", calKcal(userSeq, date));
+
+		String yesterday = returnYesterday(date);
+		result.put("yesterday", calKcal(userSeq, yesterday));
+
+		return result;
+	}
+	
+	public double calKcal(int userSeq, String date) {
+		double kcalTotal = 0;
+
+		List<Diet> diet = dietRepository.findDiet(userSeq, date);
+		
+		for (int i = 0; i < diet.size(); i++) {
+			Diet target = diet.get(i);
+			String fc = target.getFoodCode();
+			int amount = target.getDietAmount();
+			Food food = foodRepository.findFood(fc);
+			kcalTotal += food.getFoodKcal() * amount / food.getFoodAmount();
+		}
+		return kcalTotal;
+	}
+	
+	
+	// 오늘 날짜 입력 -> 어제 날짜 출력
 	private String returnYesterday(String today) {
 		SimpleDateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar cal = Calendar.getInstance();
