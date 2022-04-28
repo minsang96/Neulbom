@@ -21,4 +21,11 @@ public class UserServiceImpl implements UserService {
 		return user.get();
 	}
 
+	@Override
+	public User getUserByUserSeq(int userSeq) {
+		Optional<User> user = userRepository.findByDelYnAndUserSeq("n", userSeq);
+		if(!user.isPresent()) return null;
+		return user.get();
+	}
+
 }
