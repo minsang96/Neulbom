@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -207,6 +206,29 @@ public class ExpertController {
 			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "설정 정보를 조회할 수 없습니다."));
 		}
 		
-		return ResponseEntity.status(201).body(BaseResponseBody.of(201, "회원정보 수정 성공"));
+		return ResponseEntity.status(201).body(BaseResponseBody.of(200, "회원정보 수정 성공"));
+	}
+	
+	@PostMapping("/remove/career")
+	@ApiOperation(value = "전문가 회원 경력 삭제", notes = "해당 유저 시퀀스를 가진 회원의 경력들을 삭제한다.", response = BaseResponseBody.class)
+	@ApiResponses(
+			{ @ApiResponse(code = 201, message = "경력 삭제 성공"),
+			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
+			  @ApiResponse(code = 500, message = "서버 오류"),
+			  @ApiResponse(code = 409, message = "삭제 과정에서 발생하는 오류")
+			})
+	public ResponseEntity<? extends BaseResponseBody> removeCareer(@RequestHeader String Authorization, @RequestParam int userSeq,
+			@RequestBody long[] careerSeq) {
+		
+		try {
+			if(!userService.getUserByUserSeq(userSeq).getUserEmail().equals(jwtTokenProvider.getUserPk(Authorization)))
+				return ResponseEntity.status(409).body(BaseResponseBody.of(409, "잘못된 토큰입니다."));
+			expertService.removeCareer(careerSeq);
+		}
+		catch(NotExistsUserException e) {
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "계정 정보를 조회할 수 없습니다."));
+		}
+		
+		return ResponseEntity.status(201).body(BaseResponseBody.of(200, "전문가 경력 삭제 성공"));
 	}
 }
