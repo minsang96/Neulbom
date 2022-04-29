@@ -64,8 +64,7 @@ public class MemberController {
 			  @ApiResponse(code = 500, message = "서버 오류"),
 			  @ApiResponse(code = 409, message = "가입 과정에서 발생하는 오류")
 			})
-	public ResponseEntity<? extends BaseResponseBody> regist(@RequestBody MemberDto memberDto) {
-		
+	public ResponseEntity<? extends BaseResponseBody> regist(@RequestBody MemberDto memberDto) {		
 		try {
 			memberService.signIn(memberDto);
 		}
