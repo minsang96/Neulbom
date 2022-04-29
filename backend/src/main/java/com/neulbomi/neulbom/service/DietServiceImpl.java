@@ -82,7 +82,7 @@ public class DietServiceImpl implements DietService {
 			dietList.put(t, list);
 		}
 		
-		List<Diet> diets = dietRepository.findDiet(userSeq, dietDate);
+		List<Diet> diets = dietRepository.findDailyDiet(userSeq, dietDate);
 		for (Diet diet : diets) {
 			// 사용자가 섭취한 양 g
 			double amount = diet.getDietAmount(); 

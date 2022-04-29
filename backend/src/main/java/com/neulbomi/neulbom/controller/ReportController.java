@@ -144,4 +144,24 @@ public class ReportController {
 			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "계정 정보를 조회할 수 없음"));
 		}
 	}
+	
+	
+	@GetMapping("/weekly/calorie")
+	@ApiOperation(value = "일간 섭취 칼로리 총합", notes = "유저 시퀀스와 날짜를 입력 받아 전주, 이번주 섭취 칼로리 총합을 반환한다.")
+	@ApiImplicitParams({ @ApiImplicitParam(name = "userSeq", value = "유저 시퀀스", required = true),
+						 @ApiImplicitParam(name = "date", value = "yyyy-mm-dd", required = true) })
+	@ApiResponses(
+			{ @ApiResponse(code = 200, message = "주간 섭취 칼로리 총합 조회 성공"),
+			  @ApiResponse(code = 400, message = "잘못된 요청"),
+			  @ApiResponse(code = 409, message = "조회 과정에서 발생하는 오류"),
+			  @ApiResponse(code = 500, message = "서버 오류")
+			})
+	public ResponseEntity<? extends BaseResponseBody> weeklyKcal(@RequestParam(name = "userSeq") int userSeq, @RequestParam(name = "date") String date) {
+		try {
+			Map<String, Object> result = reportService.readWeeklyKcal(userSeq, date);
+			return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "조회 성공", result));
+		} catch (NotExistsUserException e) {
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "계정 정보를 조회할 수 없음"));
+		}
+	}
 }
