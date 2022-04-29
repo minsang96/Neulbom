@@ -3,6 +3,7 @@ package com.neulbomi.neulbom.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,7 +48,7 @@ public class DietController {
 					@ApiResponse(code = 409, message = "파일 업로드에 실패했습니다."),
 					@ApiResponse(code = 415, message = "유효하지 않은 파일입니다."),
 					@ApiResponse(code = 500, message = "서버 오류"), })
-	public ResponseEntity<? extends BaseResponseBody> dietRecord(DietDto dietDto,
+	public ResponseEntity<? extends BaseResponseBody> dietRecord(@RequestPart DietDto dietDto,
 			@RequestPart(value = "file") MultipartFile dietImg) {
 		try {
 			dietService.recordDiet(dietDto, dietImg);
