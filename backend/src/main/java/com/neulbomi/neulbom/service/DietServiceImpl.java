@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.neulbomi.neulbom.dto.DietDto;
@@ -195,5 +197,43 @@ public class DietServiceImpl implements DietService {
 			diet.setDelYn("y");
 			dietRepository.save(diet);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<JSONObject> searchFood(String keyword, int page, int size) {
+		List<JSONObject> result = new ArrayList<>();
+		PageRequest pageRequest = PageRequest.of(page - 1, size);
+		Page<Food> pageFoods = foodRepository.findByDelYnAndFoodNameContaining("n", keyword, pageRequest);
+		
+		for (Food food : pageFoods) {
+			JSONObject obj = new JSONObject();
+			obj.put("foodSeq", food.getFoodSeq());
+			obj.put("foodCode", food.getFoodCode());
+			obj.put("foodName", food.getFoodName());
+			obj.put("foodAmount", food.getFoodAmount());
+			obj.put("foodKcal", food.getFoodKcal());
+			obj.put("foodCarbohydrate", food.getFoodCarbohydrate());
+			obj.put("foodProtein", food.getFoodProtein());
+			obj.put("foodFat", food.getFoodFat());
+			obj.put("foodNatrium", food.getFoodNatrium());
+			obj.put("foodSugars", food.getFoodSugars());
+			obj.put("foodCalcium", food.getFoodCalcium());
+			obj.put("foodPhosphorus", food.getFoodPhosphorus());
+			obj.put("foodKalium", food.getFoodKalium());
+			obj.put("foodMagnesium", food.getFoodMagnesium());
+			obj.put("foodIron", food.getFoodIron());
+			obj.put("foodZinc", food.getFoodZinc());
+			obj.put("foodCholesterol", food.getFoodCholesterol());
+			obj.put("foodTransfat", food.getFoodTransfat());
+			
+			obj.put("pageable", pageFoods.getPageable());
+			obj.put("totalPages", pageFoods.getTotalPages());
+			obj.put("numberOfElements", pageFoods.getNumberOfElements());
+			obj.put("totalElements", pageFoods.getTotalElements());
+			
+			result.add(obj);
+		}
+		return result;
 	}
 }

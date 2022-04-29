@@ -2,7 +2,9 @@ package com.neulbomi.neulbom.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -101,5 +103,14 @@ public class DietController {
 			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "계정 정보를 조회할 수 없습니다."));
 		}
 	}
-
+	
+	@GetMapping("/search")
+	@ApiOperation(value = "음식 검색", notes = "사용자가 입력한 키워드로 음식을 검색한다.", response = BaseResponseBody.class)
+	@ApiResponses({ @ApiResponse(code = 200, message = "음식 검색 성공"),
+					@ApiResponse(code = 400, message = "잘못된 요청입니다."),
+					@ApiResponse(code = 500, message = "서버 오류"), })
+	public ResponseEntity<? extends BaseResponseBody> searchFood(@RequestParam String keyword, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "size", defaultValue = "10") int size) {
+		List<JSONObject> foodList = dietService.searchFood(keyword, page, size);
+		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "음식 검색 성공", foodList));
+	}
 }
