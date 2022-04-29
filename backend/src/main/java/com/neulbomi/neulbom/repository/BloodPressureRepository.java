@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.neulbomi.neulbom.entity.BloodPressure;
-import com.neulbomi.neulbom.entity.BloodSugar;
 
 @Repository
 public interface BloodPressureRepository extends JpaRepository<BloodPressure, Long> {

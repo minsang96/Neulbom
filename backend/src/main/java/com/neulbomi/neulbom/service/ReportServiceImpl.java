@@ -53,7 +53,7 @@ public class ReportServiceImpl implements ReportService {
 		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
 
 		Map<String, Object> result = new HashMap<>();
-		String yesterday = returnYesterday(date);
+		String yesterday = dateUtils.returnLastDate(date, -1);
 
 		result.put("today", calcBS(userSeq, date));
 		result.put("yesterday", calcBS(userSeq, yesterday));
@@ -77,7 +77,7 @@ public class ReportServiceImpl implements ReportService {
 		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
 
 		Map<String, Object> result = new HashMap<>();
-		String yesterday = returnYesterday(date);
+		String yesterday = dateUtils.returnLastDate(date, -1);
 
 		result.put("today", calcBP(userSeq, date));
 		result.put("yesterday", calcBP(userSeq, yesterday));
@@ -105,28 +105,15 @@ public class ReportServiceImpl implements ReportService {
 		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
 
 		Map<String, Object> result = new HashMap<>();
-		String yesterday = returnYesterday(date);
+		String yesterday = dateUtils.returnLastDate(date, -1);
+		String mode = "daily";
 
-		result.put("today", calcKcal(userSeq, date));
-		result.put("yesterday", calcKcal(userSeq, yesterday));
+		result.put("today", calcKcal(userSeq, date, "", mode));
+		result.put("yesterday", calcKcal(userSeq, yesterday, "", mode));
 
 		return result;
 	}
 
-	public double calcKcal(int userSeq, String date) {
-		double kcalTotal = 0;
-
-		List<Diet> diet = dietRepository.findDiet(userSeq, date);
-
-		for (int i = 0; i < diet.size(); i++) {
-			Diet target = diet.get(i);
-			String fc = target.getFoodCode();
-			int amount = target.getDietAmount();
-			Food food = foodRepository.findFood(fc);
-			kcalTotal += food.getFoodKcal() * amount / food.getFoodAmount();
-		}
-		return kcalTotal;
-	}
 
 	// daily 영양소
 	@Override
@@ -149,7 +136,7 @@ public class ReportServiceImpl implements ReportService {
 		
 		
 		Map<String, Object> intake = new HashMap<>();
-		List<Diet> diet = dietRepository.findDiet(userSeq, date);
+		List<Diet> diet = dietRepository.findDailyDiet(userSeq, date);
 
 		double foodKcal = 0;
 		double foodCarbohydrate = 0;
@@ -186,21 +173,6 @@ public class ReportServiceImpl implements ReportService {
 		return result;
 	}
 
-	// 오늘 날짜 입력 -> 어제 날짜 출력
-	private String returnYesterday(String today) {
-		SimpleDateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd");
-		Calendar cal = Calendar.getInstance();
-		Date dt;
-		try {
-			dt = dtFormat.parse(today);
-			cal.setTime(dt);
-			cal.add(Calendar.DATE, -1);
-			return dtFormat.format(cal.getTime());
-		} catch (ParseException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
 	
 	@Override
 	public Map<String, Object> readWeeklyBS(int userSeq, String date) {
@@ -250,6 +222,51 @@ public class ReportServiceImpl implements ReportService {
 		return result;
 	}
 	
+	// weekly 칼로리
+	@Override
+	public Map<String, Object> readWeeklyKcal(int userSeq, String date) {
+		// 유저 시퀀스로 정보를 못찾을경우 예외처리
+		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
+		String mode = "weekly";
+		Map<String, Object> result = new HashMap<>();
+		List<String> days = dateUtils.getDaysOfWeek(date, 2);
+		
+		String startDate = days.get(0);
+		String endDate = days.get(1);
+
+		result.put("this", calcKcal(userSeq, startDate, endDate, mode));
+		
+		String last = dateUtils.returnLastDate(date, -7);
+		
+		days = dateUtils.getDaysOfWeek(last, 2);
+		startDate = days.get(0);
+		endDate = days.get(1);
+		result.put("last", calcKcal(userSeq, startDate, endDate, mode));
+
+		return result;
+	}
 	
+
+	public double calcKcal(int userSeq, String startDate, String endDate, String mode) {
+		double kcalTotal = 0;
+
+		List<Diet> diet = null;
+		
+		// daily
+		if(mode.equals("daily")) 
+			diet = dietRepository.findDailyDiet(userSeq, startDate);
+		// weekly
+		else
+			diet = dietRepository.findWeeklyDiet(userSeq, startDate, endDate);
+
+		for (int i = 0; i < diet.size(); i++) {
+			Diet target = diet.get(i);
+			String fc = target.getFoodCode();
+			int amount = target.getDietAmount();
+			Food food = foodRepository.findFood(fc);
+			kcalTotal += food.getFoodKcal() * amount / food.getFoodAmount();
+		}
+		return kcalTotal;
+	}
 
 }

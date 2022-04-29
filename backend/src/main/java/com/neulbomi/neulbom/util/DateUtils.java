@@ -8,9 +8,10 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-// mode = 2 -> 월요일, 일요일 날짜 리턴
-// mode = 7 -> 월요일 ~ 일요일 전체 날짜 리턴
 public class DateUtils {
+
+	// mode = 2 -> 월요일, 일요일 날짜 리턴
+	// mode = 7 -> 월요일 ~ 일요일 전체 날짜 리턴
 	public static List<String> getDaysOfWeek(String dateStr, int mode) {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		List<String> arrYMD = new LinkedList<>();
@@ -65,5 +66,22 @@ public class DateUtils {
 
 		return result;
 
+	}
+	
+
+	// 오늘 날짜 입력 -> 어제 날짜 출력(days : -1) or 지난주 날짜 출력(days : -7)
+	public static String returnLastDate(String today, int days) {
+		SimpleDateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar cal = Calendar.getInstance();
+		Date dt;
+		try {
+			dt = dtFormat.parse(today);
+			cal.setTime(dt);
+			cal.add(Calendar.DATE, days);
+			return dtFormat.format(cal.getTime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }
