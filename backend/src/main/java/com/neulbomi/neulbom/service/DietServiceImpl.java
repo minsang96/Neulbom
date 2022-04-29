@@ -93,7 +93,7 @@ public class DietServiceImpl implements DietService {
 			double[] sum = nutrientSum.get(diet.getDietTime());
 			double times = amount / food.getFoodAmount();
 			
-			// 아침/점심/저녁 별로 칼로리/탄수화물/단백질/지방/나트룸/당 합 구하기
+			// 아침/점심/저녁 별로 칼로리/탄수화물/단백질/지방/나트륨/당 합 구하기
 			if(food.getFoodKcal() != null) 			sum[0] += (food.getFoodKcal() * times);
 			if(food.getFoodCarbohydrate() != null)  sum[1] += (food.getFoodCarbohydrate() * times);
 			if(food.getFoodProtein() != null) 		sum[2] += (food.getFoodProtein() * times);
