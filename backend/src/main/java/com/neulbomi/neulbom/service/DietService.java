@@ -22,4 +22,7 @@ public interface DietService {
 	// 음식 검색하기
 	public List<JSONObject> searchFood(String keyword, int page, int size);
 
+	// 일주일 식단, 기록 조회
+	public HashMap<String, HashMap<String, ArrayList<String>>> dietWeekly(int userSeq, String date) throws Exception;
+
 }

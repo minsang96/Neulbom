@@ -110,7 +110,27 @@ public class DietController {
 					@ApiResponse(code = 400, message = "잘못된 요청입니다."),
 					@ApiResponse(code = 500, message = "서버 오류"), })
 	public ResponseEntity<? extends BaseResponseBody> searchFood(@RequestParam String keyword, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "size", defaultValue = "10") int size) {
-		List<JSONObject> foodList = dietService.searchFood(keyword, page, size);
-		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "음식 검색 성공", foodList));
+		try {
+			List<JSONObject> foodList = dietService.searchFood(keyword, page, size);
+			return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "음식 검색 성공", foodList));
+		} catch (Exception e) {
+			return ResponseEntity.status(500).body(BaseResponseBody.of(500, "서버 오류입니다."));
+		}
+	}
+	
+	@GetMapping("/weekly")
+	@ApiOperation(value = "일주일 식단, 기록 목록 조회", notes = "일주일 식단, 기록 목록을 조회한다.", response = BaseResponseBody.class)
+	@ApiResponses({ @ApiResponse(code = 200, message = "일주일 식단, 기록 목록을 조회 성공"),
+					@ApiResponse(code = 400, message = "잘못된 요청입니다."),
+					@ApiResponse(code = 500, message = "서버 오류"), }) 
+	public ResponseEntity<? extends BaseResponseBody> dietWeekly(@RequestParam(name = "userSeq") int userSeq, @RequestParam(name = "date") String date)  {
+		try {
+			HashMap<String, HashMap<String, ArrayList<String>>> weeklyDietList = dietService.dietWeekly(userSeq, date);
+			return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "일주일 식단 조회 성공", weeklyDietList));
+		} catch (NotExistsUserException e) {
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "계정 정보를 조회할 수 없습니다."));
+		} catch (Exception e) {
+			return ResponseEntity.status(500).body(BaseResponseBody.of(500, "날짜 변환에 실패했습니다."));
+		}
 	}
 }

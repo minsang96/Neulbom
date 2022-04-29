@@ -15,11 +15,14 @@ import com.neulbomi.neulbom.dto.DietDto;
 import com.neulbomi.neulbom.entity.Diet;
 import com.neulbomi.neulbom.entity.Food;
 import com.neulbomi.neulbom.entity.Member;
+import com.neulbomi.neulbom.entity.Other;
 import com.neulbomi.neulbom.entity.User;
 import com.neulbomi.neulbom.exception.NotExistsUserException;
 import com.neulbomi.neulbom.repository.DietRepository;
 import com.neulbomi.neulbom.repository.FoodRepository;
 import com.neulbomi.neulbom.repository.MemberRepository;
+import com.neulbomi.neulbom.repository.OtherRepository;
+import com.neulbomi.neulbom.util.DateUtils;
 import com.neulbomi.neulbom.util.TimeUtils;
 
 @Service
@@ -39,6 +42,9 @@ public class DietServiceImpl implements DietService {
 	
 	@Autowired
 	MemberRepository memberRepository;
+	
+	@Autowired
+	OtherRepository otherRepository;
 	
 	@Override
 	public void recordDiet(ArrayList<DietDto> dietDtoList) {
@@ -235,5 +241,47 @@ public class DietServiceImpl implements DietService {
 			result.add(obj);
 		}
 		return result;
+	}
+
+	@Override
+	public HashMap<String, HashMap<String, ArrayList<String>>> dietWeekly(int userSeq, String date) throws Exception {
+		String[] weekday = {"sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"};
+		String[] time = {"breakfast", "lunch", "dinner"};
+		
+		HashMap<String, HashMap<String, ArrayList<String>>> dayMap = new HashMap<>();
+		for (String week : weekday) {
+			HashMap<String, ArrayList<String>> foodMap = new HashMap<>();
+			for (String t : time) {
+				foodMap.put(t, new ArrayList<String>());
+			}
+			foodMap.put("record", new ArrayList<String>());
+			dayMap.put(week, foodMap);
+		}
+		
+		List<String> monsun = DateUtils.getDaysOfWeek(date, 2);
+		List<Diet> diets = dietRepository.findUserDiet(userSeq, monsun.get(0), monsun.get(1));
+
+		for (Diet diet : diets) {
+			 String foodName = foodRepository.findFood(diet.getFoodCode()).getFoodName();
+
+			 HashMap<String, ArrayList<String>> day = dayMap.get(DateUtils.getDateDay(diet.getDietDate(), "yyyy-MM-dd"));
+			 ArrayList<String> foods = day.get(diet.getDietTime());
+			 foods.add(foodName);
+			 
+			 day.replace(diet.getDietTime(), foods);
+			 dayMap.replace(DateUtils.getDateDay(diet.getDietDate(), "yyyy-MM-dd"), day);
+		}
+		
+		List<Other> others = otherRepository.findUserOther(userSeq, monsun.get(0), monsun.get(1));
+		for (Other other : others) {
+			 HashMap<String, ArrayList<String>> day = dayMap.get(DateUtils.getDateDay(other.getOtherDate(), "yyyy-MM-dd"));
+			 ArrayList<String> otherList = day.get("record");
+			 otherList.add(other.getCode());
+			 
+			 day.replace("record", otherList);
+			 dayMap.replace(DateUtils.getDateDay(other.getOtherDate(), "yyyy-MM-dd"), day);
+		}
+		
+		return dayMap;
 	}
 }
