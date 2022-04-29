@@ -1,5 +1,6 @@
 package com.neulbomi.neulbom.service;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -195,6 +196,64 @@ public class ReportServiceImpl implements ReportService {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	@Override
+	public Map<String, Object> readWeeklyBS(int userSeq, String date) {
+		// 유저 시퀀스로 정보를 못찾을경우 예외처리
+		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
+
+		Map<String, Object> result = new HashMap<>();
+		String days[] = getDaysOfWeek(date);
+		
+		String startDate = days[0];
+		String endDate = days[1];
+		
+		List<BloodSugar> bs = bsRepository.findBBWeeklyBS(userSeq, startDate, endDate);
+		for (int i = 0; i < bs.size(); i++) {
+			result.put(bs.get(i).getBsDate(), bs.get(i).getBsLevel());
+		}
+		return result;
+	}
+	
+	// yyyy-mm-dd 입력하면 그 주 월요일, 일요일 날짜 리턴
+	public static String[] getDaysOfWeek(String dateStr) {
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		String[] arrYMD = new String[2];
+		try {
+			Date date = df.parse(dateStr);
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date);
+
+			int inYear = cal.get(cal.YEAR);
+			int inMonth = cal.get(cal.MONTH);
+			int inDay = cal.get(cal.DAY_OF_MONTH);
+			int indate = cal.get(cal.DAY_OF_WEEK);
+
+			if (indate != 1)  // 해당요일이 일요일이 아닌경우
+				indate = indate - 2;
+			 else  // 해당요일이 일요일인경우
+				indate = 7;
+			
+			inDay = inDay - indate;
+
+			int tmp[] = new int[] {0, 6};
+			for (int i = 0; i < 2; i++) {
+				cal.set(inYear, inMonth, inDay + tmp[i]);
+				String y = Integer.toString(cal.get(cal.YEAR));
+				String m = Integer.toString(cal.get(cal.MONTH) + 1);
+				String d = Integer.toString(cal.get(cal.DAY_OF_MONTH));
+				if (m.length() == 1)
+					m = "0" + m;
+				if (d.length() == 1)
+					d = "0" + d;
+
+				arrYMD[i] = y + "-" + m + "-" + d;
+			}
+		} catch (ParseException e) {
+		}
+
+		return arrYMD;
 	}
 
 }
