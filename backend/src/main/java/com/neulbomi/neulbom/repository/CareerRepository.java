@@ -11,4 +11,7 @@ import com.neulbomi.neulbom.entity.Career;
 public interface CareerRepository extends JpaRepository<Career, Long> {
 	// UserSeq로 찾기
 	public ArrayList<Career> findByDelYnAndUserSeq(String delYn, int userSeq);
+
+	// CareerSeq로 찾기
+	public Career findByDelYnAndCareerSeq(String string, long careerSeq);
 }

@@ -3,9 +3,8 @@
     "name": "my-project",
     "slug": "my-project",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
+    "assetBundlePatterns": ["**/*"],
+    "plugins": ["expo-image-picker"]
   },
   "name": "my-project"
 }

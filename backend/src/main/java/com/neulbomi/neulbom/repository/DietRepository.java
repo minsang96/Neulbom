@@ -13,6 +13,10 @@ import com.neulbomi.neulbom.entity.Diet;
 public interface DietRepository extends JpaRepository<Diet, Long> {
 	
 	@Query("SELECT d FROM diet d WHERE d.userSeq=:userSeq AND d.dietDate=:dietDate AND d.delYn='n'")
-	public List<Diet> findDiet(@Param("userSeq") int userSeq, @Param("dietDate") String dietDate);
+	public List<Diet> findDailyDiet(@Param("userSeq") int userSeq, @Param("dietDate") String dietDate);
+	
+	@Query("SELECT d FROM diet d WHERE d.userSeq=:userSeq AND d.dietDate BETWEEN :startDate AND :endDate AND d.delYn='n'")
+	public List<Diet> findWeeklyDiet(@Param("userSeq") int userSeq, @Param("startDate") String startDate, @Param("endDate") String endDate);
 
+	public Diet findByDelYnAndDietSeq(String string, long dietSeq);
 }

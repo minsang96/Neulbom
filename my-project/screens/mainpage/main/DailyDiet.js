@@ -38,6 +38,7 @@ const Box = styled.View`
   margin: 10px;
   margin-top: 20px;
   border-radius: 10px;
+  elevation: 3;
 `;
 
 const DailyDiet = () => (

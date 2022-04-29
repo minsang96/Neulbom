@@ -5,6 +5,8 @@ import Calendar from "../screens/calendar/Calendar";
 import Chat from "../screens/chat/Chat";
 import Mypage from "../screens/mypage/Mypage";
 import { Ionicons } from "@expo/vector-icons";
+import Stack from "./Stack";
+import FoodWrite from "../screens/mainpage/foodCamera/FoodWrite";
 
 const Tab = createBottomTabNavigator();
 

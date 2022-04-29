@@ -1,11 +1,12 @@
-import react from "react";
-import { Dimensions } from "react-native";
+import React from "react";
+import { Dimensions, TouchableOpacity } from "react-native";
 import Ad from "./main/Ad";
 import DailyDiet from "./main/DailyDiet";
 import DietList from "./main/DietList";
 import styled from "styled-components/native";
 import Swiper from "react-native-web-swiper";
 import ButtonCompo from "../../components/button/ButtonCompo";
+import Stack from "../../navigation/Stack";
 
 const Box = styled.View`
   flex: 1;
@@ -14,7 +15,7 @@ const Box = styled.View`
 
 const Container = styled.ScrollView``;
 
-const Main = () => {
+const MainPage = ({ navigation: { navigate } }) => {
   const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
   return (
@@ -22,11 +23,14 @@ const Main = () => {
       <Box>
         <Ad></Ad>
         <DailyDiet></DailyDiet>
-        <ButtonCompo buttonName="+ 혈당 추가"></ButtonCompo>
+        <ButtonCompo
+          onPressButton={() => navigate("Stack", { screen: "FoodWrite" })}
+          buttonName="+ 혈당 추가"
+        ></ButtonCompo>
         <DietList></DietList>
       </Box>
     </Container>
   );
 };
 
-export default Main;
+export default MainPage;
