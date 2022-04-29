@@ -278,7 +278,6 @@ public class DietServiceImpl implements DietService {
 			 ArrayList<String> otherList = day.get("record");
 			 otherList.add(other.getCode());
 			 
-			 System.out.println(other.getCode());
 			 day.replace("record", otherList);
 			 dayMap.replace(DateUtils.getDateDay(other.getOtherDate(), "yyyy-MM-dd"), day);
 		}
