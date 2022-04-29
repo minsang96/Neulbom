@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.neulbomi.neulbom.dto.CareerModifyDto;
 import com.neulbomi.neulbom.dto.ExpertJoinDto;
 import com.neulbomi.neulbom.dto.ExpertModifyDto;
 import com.neulbomi.neulbom.entity.Career;
@@ -178,38 +177,28 @@ public class ExpertServiceImpl implements ExpertService {
 			expert.setExpertDesc(expertModifyDto.getDesc());
 		}
 		
-		ArrayList<CareerModifyDto> modifyCareers = expertModifyDto.getCareer();
-		// 이력 수정하기
-		ArrayList<Career> careers = careerRepository.findByDelYnAndUserSeq("n", expertModifyDto.getUserSeq());
-		
-		for(int n = modifyCareers.size() - 1; n >= 0; n--) {
-			CareerModifyDto modifyDto = modifyCareers.get(n);
-			// careerSeq = 0이면 새로 추가한 경력!
-			if(modifyDto.getCareerSeq() == 0) {
-				careerRepository.save(Career.builder()
-						.userSeq(expert.getUserSeq())
-						.careerContent(modifyDto.getCareerContent())
-						.regDt(now)
-						.regEmail(userExpert.getUserEmail())
-						.modDt(now)
-						.modEmail(userExpert.getUserEmail())
-						.build());
-			}
-			
-			// 원래 있던 경력 수정 한 것
-			else {
-				Career career = careerRepository.findByDelYnAndCareerSeq("n", modifyDto.getCareerSeq());
-				if(!career.getCareerContent().equals(modifyDto.getCareerContent())) {
-					career.setCareerContent(modifyDto.getCareerContent());
-					career.setModDt(now);
-					career.setModEmail(userExpert.getUserEmail());
-					careerRepository.save(career);
-				}
-				careers.remove(career);
-			}
+		if(!expertModifyDto.getExpertImg().equals(expert.getExpertImg())) {
+			expert.setExpertImg(expertModifyDto.getExpertImg());
 		}
 		
-		for (Career career : careers) {
+		// 새로운 이력 추가하기
+		String[] careers = expertModifyDto.getCareer();
+		for (String career : careers) {
+			careerRepository.save(Career.builder()
+					.userSeq(expert.getUserSeq())
+					.careerContent(career)
+					.regDt(now)
+					.regEmail(userExpert.getUserEmail())
+					.modDt(now)
+					.modEmail(userExpert.getUserEmail())
+					.build());
+		}
+	}
+
+	@Override
+	public void removeCareer(long[] careerSeqs) {
+		for (long careerSeq : careerSeqs) {
+			Career career = careerRepository.findByDelYnAndCareerSeq("n", careerSeq);
 			career.setDelYn("y");
 			careerRepository.save(career);
 		}

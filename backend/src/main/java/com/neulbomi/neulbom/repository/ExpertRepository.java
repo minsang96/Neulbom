@@ -12,8 +12,7 @@ import com.neulbomi.neulbom.entity.Expert;
 public interface ExpertRepository extends JpaRepository<Expert, Integer> {
 	// UserSeq로 찾기
 	public Optional<Expert> findByDelYnAndUserSeq(String delYn, int userSeq);
-	
-	public List<Expert> findByDelYnAndEnabledYnOrderByRegDtAsc(String delYn, String enabledYn);
 
+	public List<Expert> findByDelYnAndEnabledYnOrderByRegDtAsc(String delYn, String enabledYn);
 
 }
