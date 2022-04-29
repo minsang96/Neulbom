@@ -8,7 +8,6 @@ import java.util.Map;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.neulbomi.neulbom.dto.DietDto;
 import com.neulbomi.neulbom.entity.Diet;
@@ -40,27 +39,28 @@ public class DietServiceImpl implements DietService {
 	MemberRepository memberRepository;
 	
 	@Override
-	public void recordDiet(DietDto dietDto, MultipartFile dietImg) {
+	public void recordDiet(ArrayList<DietDto> dietDtoList) {
 		// 현재 시간
 		String now = TimeUtils.curTime();
 		
-		User user = userService.getUserByUserSeq(dietDto.getUserSeq());
+		User user = userService.getUserByUserSeq(dietDtoList.get(0).getUserSeq());
 		if(user == null) throw new NotExistsUserException();
 		
-		String dietImgUrl = aswS3Service.uploadFileV1("Diet", user.getUserSeq(), dietImg);
-
-		dietRepository.save(Diet.builder()
-				.userSeq(dietDto.getUserSeq())
-				.dietTime(dietDto.getDietTime())
-				.foodCode(dietDto.getFoodCode())
-				.dietImg(dietImgUrl)
-				.dietAmount(dietDto.getFoodAmount())
-				.dietDate(dietDto.getDietDate())
-				.regDt(now)
-				.regEmail(user.getUserEmail())
-				.modDt(now)
-				.modEmail(user.getUserEmail())
-				.build());
+		for (int n = 0; n < dietDtoList.size(); n++) {
+			DietDto dietDto = dietDtoList.get(n);
+			dietRepository.save(Diet.builder()
+					.userSeq(dietDto.getUserSeq())
+					.dietTime(dietDto.getDietTime())
+					.foodCode(dietDto.getFoodCode())
+					.dietImg(dietDto.getDietImg())
+					.dietAmount(dietDto.getFoodAmount())
+					.dietDate(dietDto.getDietDate())
+					.regDt(now)
+					.regEmail(user.getUserEmail())
+					.modDt(now)
+					.modEmail(user.getUserEmail())
+					.build());
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -111,7 +111,6 @@ public class DietServiceImpl implements DietService {
 			obj.put("dietAmount", diet.getDietAmount());
 			
 			// 원래 음식의 영양 정보
-			// 프론트에서 계산하는 건가요
 			obj.put("foodSeq", food.getFoodSeq());
 			obj.put("foodCode", food.getFoodCode());
 			obj.put("foodName", food.getFoodName());
@@ -187,5 +186,14 @@ public class DietServiceImpl implements DietService {
 		result.put("recommend", rec);
 		
 		return result;
+	}
+
+	@Override
+	public void removeDiet(long[] dietSeqs) {
+		for (long dietSeq : dietSeqs) {
+			Diet diet = dietRepository.findByDelYnAndDietSeq("n", dietSeq);
+			diet.setDelYn("y");
+			dietRepository.save(diet);
+		}
 	}
 }

@@ -18,4 +18,5 @@ public interface DietRepository extends JpaRepository<Diet, Long> {
 	@Query("SELECT d FROM diet d WHERE d.userSeq=:userSeq AND d.dietDate BETWEEN :startDate AND :endDate AND d.delYn='n'")
 	public List<Diet> findWeeklyDiet(@Param("userSeq") int userSeq, @Param("startDate") String startDate, @Param("endDate") String endDate);
 
+	public Diet findByDelYnAndDietSeq(String string, long dietSeq);
 }
