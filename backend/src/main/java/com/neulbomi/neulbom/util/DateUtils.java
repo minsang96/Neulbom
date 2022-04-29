@@ -67,7 +67,6 @@ public class DateUtils {
 		return result;
 
 	}
-	
 
 	// 오늘 날짜 입력 -> 어제 날짜 출력(days : -1) or 지난주 날짜 출력(days : -7)
 	public static String returnLastDate(String today, int days) {
@@ -84,4 +83,50 @@ public class DateUtils {
 			return null;
 		}
 	}
+
+	/**
+	 * 특정 날짜에 대하여 요일을 구함(일 ~ 토)
+	 * 
+	 * @param date
+	 * @param dateType
+	 * @return
+	 * @throws Exception
+	 */
+	public static String getDateDay(String date, String dateType) throws Exception {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date nDate = dateFormat.parse(date);
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(nDate);
+		
+		int dayNum = cal.get(Calendar.DAY_OF_WEEK);
+
+		String day = "";
+		switch (dayNum) {
+		case 1:
+			day = "sunday";
+			break;
+		case 2:
+			day = "monday";
+			break;
+		case 3:
+			day = "tuesday";
+			break;
+		case 4:
+			day = "wednesday";
+			break;
+		case 5:
+			day = "thursday";
+			break;
+		case 6:
+			day = "friday";
+			break;
+		case 7:
+			day = "saturday";
+			break;
+		}
+
+		return day;
+	}
+
 }
