@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ import com.neulbomi.neulbom.repository.BloodSugarRepository;
 import com.neulbomi.neulbom.repository.DietRepository;
 import com.neulbomi.neulbom.repository.FoodRepository;
 import com.neulbomi.neulbom.repository.MemberRepository;
+import com.neulbomi.neulbom.util.DateUtils;
 
 @Service
 public class ReportServiceImpl implements ReportService {
@@ -41,6 +43,8 @@ public class ReportServiceImpl implements ReportService {
 
 	@Autowired
 	FoodRepository foodRepository;
+	
+	DateUtils dateUtils;
 	
 	// daily 혈당
 	@Override
@@ -204,10 +208,10 @@ public class ReportServiceImpl implements ReportService {
 		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
 
 		Map<String, Object> result = new HashMap<>();
-		String days[] = getDaysOfWeek(date);
+		List<String> days = dateUtils.getDaysOfWeek(date, 2);
 		
-		String startDate = days[0];
-		String endDate = days[1];
+		String startDate = days.get(0);
+		String endDate = days.get(1);
 		
 		List<BloodSugar> bs = bsRepository.findBBWeeklyBS(userSeq, startDate, endDate);
 		for (int i = 0; i < bs.size(); i++) {
@@ -216,44 +220,36 @@ public class ReportServiceImpl implements ReportService {
 		return result;
 	}
 	
-	// yyyy-mm-dd 입력하면 그 주 월요일, 일요일 날짜 리턴
-	public static String[] getDaysOfWeek(String dateStr) {
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		String[] arrYMD = new String[2];
-		try {
-			Date date = df.parse(dateStr);
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(date);
+	@Override
+	public Map<String, Object> readWeeklyBP(int userSeq, String date) {
+		// 유저 시퀀스로 정보를 못찾을경우 예외처리
+		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq)
+				.orElseThrow(() -> new NotExistsUserException());
 
-			int inYear = cal.get(cal.YEAR);
-			int inMonth = cal.get(cal.MONTH);
-			int inDay = cal.get(cal.DAY_OF_MONTH);
-			int indate = cal.get(cal.DAY_OF_WEEK);
+		Map<String, Object> result = new HashMap<>();
+		List<String> days = dateUtils.getDaysOfWeek(date, 7);
 
-			if (indate != 1)  // 해당요일이 일요일이 아닌경우
-				indate = indate - 2;
-			 else  // 해당요일이 일요일인경우
-				indate = 7;
-			
-			inDay = inDay - indate;
+		for (int i = 0; i < 7; i++) {
+			List<BloodPressure> today = bpRepository.findUserDailyBP(userSeq, days.get(i));
+			int cnt = today.size();
 
-			int tmp[] = new int[] {0, 6};
-			for (int i = 0; i < 2; i++) {
-				cal.set(inYear, inMonth, inDay + tmp[i]);
-				String y = Integer.toString(cal.get(cal.YEAR));
-				String m = Integer.toString(cal.get(cal.MONTH) + 1);
-				String d = Integer.toString(cal.get(cal.DAY_OF_MONTH));
-				if (m.length() == 1)
-					m = "0" + m;
-				if (d.length() == 1)
-					d = "0" + d;
-
-				arrYMD[i] = y + "-" + m + "-" + d;
+			int bpHigh = 0;
+			int bpLow = 0;
+			for (int c = 0; c < cnt; c++) {
+				bpHigh += today.get(c).getBpHigh();
+				bpLow += today.get(c).getBpLow();
 			}
-		} catch (ParseException e) {
+
+			Map<String, Object> obj = new HashMap<>();
+			if(cnt == 0) cnt = 1;
+			obj.put("BpHigh", bpHigh / cnt);
+			obj.put("BpLow", bpLow / cnt);
+			result.put(days.get(i), obj);
 		}
 
-		return arrYMD;
+		return result;
 	}
+	
+	
 
 }
