@@ -2,8 +2,6 @@ import React from "react";
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Dimensions } from "react-native";
 
-console.log(Dimensions.get("screen"));
-
 // 사용 예시 screen/calendar/calendarTab/CalendarTab
 const ButtonHalfCompo = (props) => {
   return (

@@ -13,7 +13,7 @@ export default Mypage;
 
 const styles = StyleSheet.create({
   background: {
-    backgroundColor: "white",
+    // backgroundColor: "white",
     paddingHorizontal: 20,
   },
 });
