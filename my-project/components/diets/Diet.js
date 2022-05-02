@@ -5,6 +5,8 @@ import palette from "../palette";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
+import { useDispatch, useSelector } from "react-redux";
+import imagesSlice from "../../slices/images";
 
 const Column = styled.View`
   flex-direction: row;
@@ -41,6 +43,8 @@ const Plus = styled.TouchableOpacity`
 const Diet = ({ kind, kcal, what, nutritions }) => {
   const navigation = useNavigation();
   const [image, setImage] = useState(null);
+  const dispatch = useDispatch();
+  const urls = useSelector((state) => state.images.imageurls);
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchCameraAsync({
@@ -54,6 +58,7 @@ const Diet = ({ kind, kcal, what, nutritions }) => {
 
     if (!result.cancelled) {
       setImage(result.uri);
+      dispatch(imagesSlice.actions.add(result.uri));
     }
     navigation.navigate("Stack", { screen: "FoodWrite" });
   };
@@ -67,11 +72,11 @@ const Diet = ({ kind, kcal, what, nutritions }) => {
           <Ionicons name="add" color="white" size={30} />
         </Plus>
       </Column>
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      {/* <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         {image && (
           <Image source={{ uri: image }} style={{ width: 20, height: 20 }} />
         )}
-      </View>
+      </View> */}
       <Content>{nutritions}</Content>
     </Box>
   );
