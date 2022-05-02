@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View } from "react-native";
+import { View, StyleSheet, Dimensions } from "react-native";
 import CalendarCompo from "../../../components/calendar/CalendarCompo";
 import ButtonCompo from "../../../components/button/ButtonCompo";
 import AddTodayRecord from "./component/AddTodayRecord";
@@ -13,7 +13,7 @@ const CalendarTab = () => {
 
   const todayList = ["혈당", "혈압", "술", "커피", "운동"];
   return (
-    <View>
+    <View style={styles.background}>
       <CalendarCompo></CalendarCompo>
       <ButtonCompo
         buttonName="오늘의 기록 등록하기"
@@ -29,3 +29,11 @@ const CalendarTab = () => {
 };
 
 export default CalendarTab;
+
+const styles = StyleSheet.create({
+  background: {
+    backgroundColor: "white",
+    paddingHorizontal: 20,
+    height: Dimensions.get("screen").height,
+  },
+});
