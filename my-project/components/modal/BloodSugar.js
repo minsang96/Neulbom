@@ -64,8 +64,7 @@ const BloodSugar = (props) => {
     setDatePickerVisibility(false);
   };
   const handleConfirm = (date) => {
-    console.warn("A date has been picked: ", date);
-    console.log(date);
+    // console.log(date);
     setIsDate(date);
     hideDatePicker();
   };
@@ -78,8 +77,7 @@ const BloodSugar = (props) => {
     setTimePickerVisibility(false);
   };
   const handleTimeConfirm = (time) => {
-    console.warn("A time has been picked: ", time);
-    console.log(time);
+    // console.log(time);
     setIsTime(time);
     hideTimePicker();
   };

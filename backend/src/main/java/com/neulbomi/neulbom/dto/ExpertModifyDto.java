@@ -1,7 +1,5 @@
 package com.neulbomi.neulbom.dto;
 
-import java.util.ArrayList;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
@@ -26,18 +24,10 @@ public class ExpertModifyDto {
 	@ApiModelProperty(example = "건강한 식습관 만들어요.", value = "전문가 한 줄 소개")
 	private String desc;
 
-	@ApiModelProperty(example = "{\r\n" + 
-			"  \"career\": [\r\n" + 
-			"    {\r\n" + 
-			"       \"careerSeq\":5,\r\n" + 
-			"        \"careerContent\":\"싸피 병원 수정 테스트\"\r\n" + 
-			"    },\r\n" + 
-			"    {\r\n" + 
-			"       \"careerSeq\":0,\r\n" + 
-			"        \"careerContent\":\"새로 추가되는 이력은 careerSeq 0으로 보내주세요!\"\r\n" + 
-			"    }\r\n" + 
-			"  ],\r\n" + 
-			"}", value = "전문가 한 줄 소개")
-	private ArrayList<CareerModifyDto> career;
+	@ApiModelProperty(example = "['싸피 병원 근무', '싸피 보건소 근무']", value = "새로운 이력")
+	private String[] career;
+	
+	@ApiModelProperty(example = "https://neulbom-s3-bucket.s3.ap-northeast-2.amazonaws.com/Diet/1_profile_1651197572906.jpg", value = "사진 url")
+	private String expertImg;
 	
 }

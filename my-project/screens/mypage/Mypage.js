@@ -1,18 +1,19 @@
 import react from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+
 import UserMypage from "./userMypage/UserMypage";
 
 const Mypage = () => (
-  <View style={styles.background}>
+  <ScrollView style={styles.background}>
     <UserMypage></UserMypage>
-  </View>
+  </ScrollView>
 );
 
 export default Mypage;
 
 const styles = StyleSheet.create({
   background: {
-    backgroundColor: "white",
-    marginHorizontal: 20,
+    // backgroundColor: "white",
+    paddingHorizontal: 20,
   },
 });

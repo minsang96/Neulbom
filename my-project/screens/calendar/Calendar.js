@@ -1,4 +1,4 @@
-import react from "react";
+import React from "react";
 import { View, Text } from "react-native";
 import CalendarTab from "./calendarTab/CalendarTab";
 import DailyReport from "./dailyReport/DailyReport";
