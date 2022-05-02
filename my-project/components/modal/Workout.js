@@ -21,7 +21,7 @@ const Workout = (props) => {
     setDatePickerVisibility(false);
   };
   const handleConfirm = (date) => {
-    console.log(date);
+    // console.log(date);
     setIsDate(date);
     hideDatePicker();
   };
@@ -34,7 +34,7 @@ const Workout = (props) => {
     setTimePickerVisibility(false);
   };
   const handleTimeConfirm = (time) => {
-    console.log(time);
+    // console.log(time);
     setIsTime(time);
     hideTimePicker();
   };

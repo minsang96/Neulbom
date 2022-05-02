@@ -51,11 +51,6 @@ const styles = StyleSheet.create({
   box: {
     backgroundColor: "rgba(229,229,229,0.5)",
     borderRadius: 10,
-    // 지우기
-    borderWidth: 1,
-    borderRadius: 5,
-    borderStyle: "solid",
-    borderColor: "black",
   },
   image: {
     width: 70,

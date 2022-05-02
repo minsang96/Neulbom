@@ -9,7 +9,7 @@ const ButtonCompo = (props) => {
         backgroundColor: "#09BC8A",
         padding: 10,
         marginVertical: 10,
-        marginHorizontal: 25,
+        // marginHorizontal: 25,
         alignItems: "center",
         borderRadius: 10,
       }}

@@ -1,44 +1,18 @@
 import React, { useState } from "react";
 import { View, TouchableOpacity, Alert, Text } from "react-native";
 import { Agenda } from "react-native-calendars";
+import CalorieCompo from "../../../components/calendar/report/CalorieCompo";
 
 const WeeklyReport = () => {
-  const [items, setItems] = useState({
-    "2017-05-16": [{ name: "item 1 - any js object" }],
-    "2017-05-23": [{ name: "item 2 - any js object", height: 80 }],
-    "2017-05-24": [],
-    "2017-05-25": [
-      { name: "item 3 - any js object" },
-      { name: "any js object" },
-    ],
-  });
-
-  const renderItem = (item) => (
-    <TouchableOpacity onPress={() => Alert.alert(item.name)}>
-      <Text>{item.name}</Text>
-    </TouchableOpacity>
-  );
-
-  const renderEmptyDate = () => {
-    return (
-      <View>
-        <Text>This is empty date!</Text>
-      </View>
-    );
-  };
-
-  const rowHasChanged = (r1, r2) => r1.name !== r2.name;
-
   return (
     <View>
       <Text>hey</Text>
-      <Agenda
-        items={items}
-        selected="2017-05-16"
-        renderItem={renderItem}
-        renderEmptyDate={renderEmptyDate}
-        rowHasChanged={rowHasChanged}
-      />
+      <CalorieCompo
+        title="평균 섭취 칼로리"
+        subtitle="지난 주 섭취한 칼로리와 이번 주를 비교해보세요."
+        before="지난 주"
+        after="이번 주"
+      ></CalorieCompo>
     </View>
   );
 };
