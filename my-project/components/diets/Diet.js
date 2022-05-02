@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text } from "react-native";
+import { View, Image, Text } from "react-native";
 import styled from "styled-components/native";
 import palette from "../palette";
 import { Ionicons } from "@expo/vector-icons";
@@ -46,7 +46,7 @@ const Diet = ({ kind, kcal, what, nutritions }) => {
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [4, 4],
       quality: 1,
     });
 
@@ -55,6 +55,7 @@ const Diet = ({ kind, kcal, what, nutritions }) => {
     if (!result.cancelled) {
       setImage(result.uri);
     }
+    navigation.navigate("Stack", { screen: "FoodWrite" });
   };
 
   return (
@@ -65,15 +66,12 @@ const Diet = ({ kind, kcal, what, nutritions }) => {
         <Plus onPress={pickImage}>
           <Ionicons name="add" color="white" size={30} />
         </Plus>
-        <View>
-          {image && (
-            <Image
-              source={{ uri: image }}
-              style={{ width: 200, height: 200 }}
-            />
-          )}
-        </View>
       </Column>
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        {image && (
+          <Image source={{ uri: image }} style={{ width: 20, height: 20 }} />
+        )}
+      </View>
       <Content>{nutritions}</Content>
     </Box>
   );
