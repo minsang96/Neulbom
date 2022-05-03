@@ -38,20 +38,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable()
-			.cors().configurationSource(corsConfigurationSource())
-			.and()
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt 인증, 세션 사용 안 함
-			.and()
-			.authorizeRequests()
-			.mvcMatchers("/v2/**", "/configuration/**", "/swagger*/**", "/webjars/**", "/swagger-resources/**") // spring security랑 swagger 함께 사용하기
-			.permitAll() 
-			.antMatchers("/member/modify","/member/info").hasRole("USER")
-			.antMatchers("/expert/modify","/expert/info","/expert/remove/career").hasRole("USER")
-			.antMatchers("/diet/remove").hasRole("USER")
-			.anyRequest().permitAll()  
-			.and()
-			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
-			.exceptionHandling();
+//			.cors().configurationSource(corsConfigurationSource())
+//			.and()
+//			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt 인증, 세션 사용 안 함
+//			.and()
+//			.authorizeRequests()
+//			.mvcMatchers("/v2/**", "/configuration/**", "/swagger*/**", "/webjars/**", "/swagger-resources/**") // spring security랑 swagger 함께 사용하기
+//			.permitAll() 
+//			.antMatchers("/member/modify","/member/info").hasRole("USER")
+//			.antMatchers("/expert/modify","/expert/info","/expert/remove/career").hasRole("USER")
+//			.antMatchers("/diet/remove").hasRole("USER")
+//			.anyRequest().permitAll()  
+//			.and()
+//			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+//			.exceptionHandling();
+		;
 	}
 	
 	@Bean
