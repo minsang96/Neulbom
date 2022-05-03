@@ -38,6 +38,7 @@ export default ConsultantList;
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#fff',
     paddingHorizontal: '2%'
   }
 })
