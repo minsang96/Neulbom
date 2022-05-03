@@ -6,7 +6,7 @@ import { Dimensions } from "react-native";
 const ButtonHalfCompo = (props) => {
   return (
     <TouchableOpacity style={styles.button} onPress={props.onPressButton}>
-      <Text style={{ color: "white", fontSize: 20 }}>{props.buttonName}</Text>
+      <Text style={{ color: "white", fontSize: 16 }}>{props.buttonName}</Text>
     </TouchableOpacity>
   );
 };
@@ -15,9 +15,11 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#09BC8A",
     padding: 10,
-    marginVertical: 10,
+    marginVertical: 5,
     marginHorizontal: 5,
-    width: Dimensions.get("screen").width / 2 - 40,
+    width:
+      Dimensions.get("screen").width / 2 -
+      Dimensions.get("screen").width * 0.15,
     alignItems: "center",
     borderRadius: 10,
   },

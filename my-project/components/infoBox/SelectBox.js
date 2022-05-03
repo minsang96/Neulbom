@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import ButtonHalfCompo from "../button/ButtonHalfCompo";
 
-const SelectBox = () => {
+const SelectBox = (props) => {
   return (
-    <View style={styles.box}>
+    <View style={props.styles.boxRow}>
       <ButtonHalfCompo buttonName="혈압"></ButtonHalfCompo>
       <ButtonHalfCompo buttonName="혈당"></ButtonHalfCompo>
     </View>
@@ -12,12 +12,3 @@ const SelectBox = () => {
 };
 
 export default SelectBox;
-
-const styles = StyleSheet.create({
-  box: {
-    backgroundColor: "rgba(229,229,229,0.5)",
-    borderRadius: 10,
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-});

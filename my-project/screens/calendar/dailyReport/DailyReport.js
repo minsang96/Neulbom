@@ -6,7 +6,6 @@ import NutrientCompo from "../../../components/calendar/report/NutrientCompo";
 import TodayReport from "../../../components/calendar/report/TodayReport";
 import BloodPressureReport from "../../../components/calendar/report/BloodPressureReport";
 import BloodSugarReport from "../../../components/calendar/report/BloodSugarReport";
-import styled from "styled-components/native";
 
 import { Dimensions } from "react-native";
 
@@ -51,7 +50,6 @@ export default DailyReport;
 
 const styles = StyleSheet.create({
   background: {
-    // backgroundColor: "white",
     paddingHorizontal: 20,
   },
   reportTitle: {

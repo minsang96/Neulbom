@@ -1,7 +1,7 @@
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image } from "react-native";
 
-const InfoMyself = () => {
+const InfoMyself = (props) => {
   // if 성별 줄 함수 고쳐야함 !!!!!!!!!!
   const userGender = "남";
   const whatsUserGender = () => {
@@ -13,32 +13,32 @@ const InfoMyself = () => {
   };
 
   return (
-    <View style={styles.box}>
-      <View style={styles.flexDirectionRow}>
+    <View style={props.styles.box}>
+      <View style={props.styles.flexDirectionRow}>
         <Image
           source={require("../assets/images/dog.jpg")}
-          style={styles.image}
+          style={props.styles.image}
         ></Image>
         <View>
-          <Text style={styles.userName}>
+          <Text style={props.styles.userName}>
             건강하게삽시다 {whatsUserGender()}
           </Text>
-          <Text>ssafy104@naver.com</Text>
+          <Text style={props.styles.email}>ssafy104@naver.com</Text>
         </View>
       </View>
 
-      <View style={styles.userInfo}>
-        <View style={styles.userInfoItem}>
+      <View style={props.styles.userInfo}>
+        <View style={props.styles.userInfoItem}>
           <Text>나이</Text>
-          <Text style={styles.userInfoItemContent}>35</Text>
+          <Text style={props.styles.userInfoItemContent}>35</Text>
         </View>
-        <View style={styles.userInfoItem}>
+        <View style={props.styles.userInfoItem}>
           <Text>키</Text>
-          <Text style={styles.userInfoItemContent}>165cm</Text>
+          <Text style={props.styles.userInfoItemContent}>165cm</Text>
         </View>
-        <View style={styles.userInfoItem}>
+        <View style={props.styles.userInfoItem}>
           <Text>몸무게</Text>
-          <Text style={styles.userInfoItemContent}>55kg</Text>
+          <Text style={props.styles.userInfoItemContent}>55kg</Text>
         </View>
       </View>
     </View>
@@ -46,42 +46,3 @@ const InfoMyself = () => {
 };
 
 export default InfoMyself;
-
-const styles = StyleSheet.create({
-  box: {
-    backgroundColor: "rgba(229,229,229,0.5)",
-    borderRadius: 10,
-  },
-  image: {
-    width: 70,
-    height: 70,
-    borderRadius: 50,
-    marginRight: 10,
-  },
-  userName: { fontSize: 20, marginBottom: 5 },
-  flexDirectionRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 10,
-    paddingLeft: 40,
-  },
-  userInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  userInfoItem: {
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "white",
-    margin: 10,
-    borderRadius: 10,
-    width: 70,
-    height: 70,
-  },
-  userInfoItemContent: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginTop: 5,
-  },
-});

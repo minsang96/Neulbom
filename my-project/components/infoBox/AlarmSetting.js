@@ -1,21 +1,12 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 
-const AlarmSetting = () => {
+const AlarmSetting = (props) => {
   return (
     <View>
-      <Text style={styles.font}>알람 설정하시오</Text>
+      <Text style={props.styles.box}>알람 설정하시오</Text>
     </View>
   );
 };
 
 export default AlarmSetting;
-
-const styles = StyleSheet.create({
-  font: {
-    backgroundColor: "rgba(229,229,229,0.5)",
-    padding: 10,
-    borderRadius: 10,
-    fontSize: 20,
-  },
-});
