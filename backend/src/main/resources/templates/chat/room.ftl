@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <!-- CSS -->
-    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.1/css/bootstrap.min.css">
     <style>
       [v-cloak] {
           display: none;
@@ -50,7 +50,7 @@
             },
             methods: {
                 findAllRoom: function() {
-                    axios.get('/chat/rooms').then(response => { this.chatrooms = response.data; });
+                    axios.get('/api/chat/rooms').then(response => { this.chatrooms = response.data; });
                 },
                 createRoom: function() {
                     if("" === this.room_name) {
@@ -59,7 +59,7 @@
                     } else {
                         var params = new URLSearchParams();
                         params.append("name",this.room_name);
-                        axios.post('/chat/room', params)
+                        axios.post('/api/chat/room', params)
                         .then(
                             response => {
                                 alert(response.data.name+"방 개설에 성공하였습니다.")
@@ -75,7 +75,7 @@
                     if(sender != "") {
                         localStorage.setItem('wschat.sender',sender);
                         localStorage.setItem('wschat.roomId',roomId);
-                        location.href="/chat/room/enter/"+roomId;
+                        location.href="/api/chat/room/enter/"+roomId;
                     }
                 }
             }

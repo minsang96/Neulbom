@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.1/css/bootstrap.min.css">
     <style>
       [v-cloak] {
           display: none;
@@ -43,7 +43,7 @@
     <script>
         //alert(document.title);
         // websocket & stomp initialize
-        var sock = new SockJS("/ws-stomp");
+        var sock = new SockJS("/api/ws-stomp");
         var ws = Stomp.over(sock);
         var reconnect = 0;
         // vue.js
@@ -63,7 +63,7 @@
             },
             methods: {
                 findRoom: function() {
-                    axios.get('/chat/room/'+this.roomId).then(response => { this.room = response.data; });
+                    axios.get('/api/chat/room/'+this.roomId).then(response => { this.room = response.data; });
                 },
                 sendMessage: function() {
                     ws.send("/pub/chat/message", {}, JSON.stringify({type:'TALK', roomId:this.roomId, sender:this.sender, message:this.message}));
@@ -78,7 +78,7 @@
         function connect() {
             // pub/sub event
             ws.connect({}, function(frame) {
-                ws.subscribe("/sub/chat/room/"+vm.$data.roomId, function(message) {
+                ws.subscribe("/api/sub/chat/room/"+vm.$data.roomId, function(message) {
                     var recv = JSON.parse(message.body);
                     vm.recvMessage(recv);
                 });
@@ -87,7 +87,7 @@
                 if(reconnect++ <= 5) {
                     setTimeout(function() {
                         console.log("connection reconnect");
-                        sock = new SockJS("/ws-stomp");
+                        sock = new SockJS("/api/ws-stomp");
                         ws = Stomp.over(sock);
                         connect();
                     },10*1000);
