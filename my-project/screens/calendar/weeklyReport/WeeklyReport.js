@@ -6,6 +6,7 @@ import CalorieCompo from "../../../components/calendar/report/CalorieCompo";
 import NutrientCompo from "../../../components/calendar/report/NutrientCompo";
 import UserInfo from "../../../components/calendar/report/UserInfo";
 import { Dimensions } from "react-native";
+import WeeklyEat from "../../../components/calendar/report/WeeklyEat";
 
 const screenSize = Dimensions.get("screen");
 
@@ -24,6 +25,7 @@ const WeeklyReport = () => {
         styles={styles}
       ></CalorieCompo>
       <NutrientCompo now="이번 주" styles={styles}></NutrientCompo>
+      <WeeklyEat styles={styles}></WeeklyEat>
     </ScrollView>
   );
 };
@@ -37,6 +39,7 @@ const styles = StyleSheet.create({
   reportTitle: {
     fontSize: 20,
     marginVertical: 10,
+    // fontWeight: "bold",
   },
   box: {
     backgroundColor: "white",
@@ -48,8 +51,9 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   title: {
-    fontSize: 16,
+    fontSize: 18,
     marginVertical: screenSize.width * 0.01,
+    fontWeight: "bold",
   },
   subTitle: {
     fontSize: 12,
