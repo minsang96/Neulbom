@@ -5,6 +5,7 @@ import Calendar from "../screens/calendar/Calendar";
 import Chat from "../screens/chat/Chat";
 import Mypage from "../screens/mypage/Mypage";
 import { Ionicons } from "@expo/vector-icons";
+import LoginStack from "./LoginStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -20,7 +21,8 @@ const Tabs = () => (
   >
     <Tab.Screen
       name="식단관리"
-      component={Main}
+      // component={Main}
+      component={LoginStack}
       options={{
         tabBarIcon: ({ focused, color, size }) => {
           // console.log(focused, color, size);
