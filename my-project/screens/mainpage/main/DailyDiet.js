@@ -1,8 +1,9 @@
-import react from "react";
-import { View, Text } from "react-native";
-import ButtonCompo from "../../../components/button/ButtonCompo";
+import React, { useCallback } from "react";
+import { View, Text, ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 import palette from "../../../components/palette";
+import { useQuery } from "react-query";
+import { getDiet } from "../../../api/diets";
 
 const StyledView = styled.View`
   border-width: 1;
@@ -41,18 +42,32 @@ const Box = styled.View`
   elevation: 3;
 `;
 
-const DailyDiet = () => (
-  <>
-    <Text>일일 영양 섭취량</Text>
-    <Box>
-      <Content>총 칼로리</Content>
-      <SubContent>나트륨</SubContent>
-      <SubContent>당</SubContent>
-      <SubContent>탄수화물</SubContent>
-      <SubContent>단백질</SubContent>
-      <SubContent>지방</SubContent>
-    </Box>
-  </>
-);
+const Spinner = styled.ActivityIndicator`
+  color: black;
+`;
+const DailyDiet = () => {
+  const dietDate = "2022-04-26";
+  const userSeq = "1";
+  const totalQuery = useQuery(["diet", dietDate, userSeq], () =>
+    getDiet(dietDate, userSeq)
+  );
+  if (!totalQuery.data) {
+    return <Spinner size="large"></Spinner>;
+  }
+  console.log(totalQuery);
+  return (
+    <>
+      <Text>일일 영양 섭취량</Text>
+      <Box>
+        <Content>총 칼로리 {totalQuery.data.kcal}</Content>
+        <SubContent>나트륨 {totalQuery.data.natrium}</SubContent>
+        <SubContent>당 {totalQuery.data.sugars}</SubContent>
+        <SubContent>탄수화물 {totalQuery.data.carbohydrate}</SubContent>
+        <SubContent>단백질 {totalQuery.data.protein}</SubContent>
+        <SubContent>지방 {totalQuery.data.fat}</SubContent>
+      </Box>
+    </>
+  );
+};
 
 export default DailyDiet;
