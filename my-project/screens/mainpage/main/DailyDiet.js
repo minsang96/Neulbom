@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { View, Text } from "react-native";
+import { View, Text, ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 import palette from "../../../components/palette";
 import { useQuery } from "react-query";
@@ -42,12 +42,18 @@ const Box = styled.View`
   elevation: 3;
 `;
 
+const Spinner = styled.ActivityIndicator`
+  color: black;
+`;
 const DailyDiet = () => {
   const dietDate = "2022-04-26";
   const userSeq = "1";
   const totalQuery = useQuery(["diet", dietDate, userSeq], () =>
     getDiet(dietDate, userSeq)
   );
+  if (!totalQuery.data) {
+    return <Spinner size="large"></Spinner>;
+  }
   console.log(totalQuery);
   return (
     <>
