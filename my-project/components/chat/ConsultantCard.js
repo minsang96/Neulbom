@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 const windowWidth = Dimensions.get('window').width;
 
 function ConsultantCard() {
-// function ConsultantCard({ navigation: { navigate } }) {
+// const ConsultantCard = ({ navigation: { navigate } }) => {
   const navigation = useNavigation();
   const cardWidth = windowWidth/2
   const imgWidth = cardWidth*55/100

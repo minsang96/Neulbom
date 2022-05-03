@@ -5,6 +5,7 @@ import Calendar from "../screens/calendar/Calendar";
 import Chat from "../screens/chat/Chat";
 import Mypage from "../screens/mypage/Mypage";
 import { Ionicons } from "@expo/vector-icons";
+import LoginStack from "./LoginStack";
 import Stack from "./Stack";
 import FoodWrite from "../screens/mainpage/foodCamera/FoodWrite";
 
@@ -22,7 +23,8 @@ const Tabs = () => (
   >
     <Tab.Screen
       name="식단관리"
-      component={MainPage}
+      component={LoginStack}
+      // component={MainPage}
       options={{
         headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
