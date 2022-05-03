@@ -6,19 +6,20 @@ import NutrientCompo from "../../../components/calendar/report/NutrientCompo";
 import TodayReport from "../../../components/calendar/report/TodayReport";
 import BloodPressureReport from "../../../components/calendar/report/BloodPressureReport";
 import BloodSugarReport from "../../../components/calendar/report/BloodSugarReport";
-import styled from "styled-components/native";
 
 import { Dimensions } from "react-native";
 
 const screenSize = Dimensions.get("screen");
 
 const DailyReport = () => {
-  // axios 불러오는 법 알아보기.. ㅋ
+  // 고쳐라 axios 불러오는 법 알아보기.. ㅋ
   const getDailyReportInfo = () => {
     axios
-      .get("http://localhost:3030/api/report/daily/bloodsugar")
+      .get("http://k6a104.p.ssafy.io:3030/api/report/daily/bloodsugar", {
+        params: { date: "2022-04-26", userSeq: 2 },
+      })
       .then(function (res) {
-        console.log(res);
+        console.log(res.data.data);
       })
       .catch(function (err) {
         console.log(err);
@@ -26,7 +27,7 @@ const DailyReport = () => {
   };
 
   useEffect(() => {
-    // getDailyReportInfo();
+    getDailyReportInfo();
   }, []);
 
   return (
@@ -51,7 +52,6 @@ export default DailyReport;
 
 const styles = StyleSheet.create({
   background: {
-    // backgroundColor: "white",
     paddingHorizontal: 20,
   },
   reportTitle: {
@@ -68,8 +68,9 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   title: {
-    fontSize: 16,
+    fontSize: 18,
     marginVertical: screenSize.width * 0.01,
+    fontWeight: "bold",
   },
   subTitle: {
     fontSize: 12,
