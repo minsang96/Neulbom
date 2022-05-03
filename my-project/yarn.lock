@@ -5525,6 +5525,11 @@
   "resolved" "https://registry.npmjs.org/react-native-tab-view/-/react-native-tab-view-3.1.1.tgz"
   "version" "3.1.1"
 
+"react-native-table-component@^1.2.2":
+  "integrity" "sha512-7bbsi5431iWcjj3toASh8lFHGi6AG/+MTd4M7GuksXKxx/CFs/Qwv1Ys7D2wgyuYKe3hxWNfSVrteFj0tOYXYw=="
+  "resolved" "https://registry.npmjs.org/react-native-table-component/-/react-native-table-component-1.2.2.tgz"
+  "version" "1.2.2"
+
 "react-native-web-swiper@^2.2.3":
   "integrity" "sha512-wNdTsu96dTbtNSaMly7YtDYj2PDxgSk9pjE84HDRwXyAaqvr/W8bcUvpmxrxxvyQfNZ7Qo19Z0P4aRgSqAoBGQ=="
   "resolved" "https://registry.npmjs.org/react-native-web-swiper/-/react-native-web-swiper-2.2.3.tgz"
