@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import dailyReportSlice from "../../../slices/dailyReport";
 import { Text, View, StyleSheet } from "react-native";
 import {
   Table,
@@ -8,10 +9,58 @@ import {
   Col,
 } from "react-native-table-component";
 import { Dimensions } from "react-native";
+import { getDailyBloodpressure } from "../../../api/reports";
+import { useDispatch, useSelector } from "react-redux";
 
 const screenSize = Dimensions.get("screen");
 
 const BloodPressureReport = (props) => {
+  // dispatch부터 해보고 안되면... 이렇게 하자...
+  // const [result, setResult] = useState({
+  //   breakfast: { BpHigh: "", BpLow: "" },
+  //   lunch: { BpHigh: "", BpLow: "" },
+  //   dinner: { BpHigh: "", BpLow: "" },
+  // });
+
+  //리덕스 쓰는 방법을 모르겠다,, ㅋㅋ
+  useEffect(() => {
+    const getDailyBloodpressureResult = async () => {
+      try {
+        const response = await getDailyBloodpressure("2022-04-26", 1);
+        // console.log("------");
+        // console.log(response);
+        // setBreakfast(response.today.breakfast);
+        reduxTest(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getDailyBloodpressureResult();
+  }, []);
+
+  const dispatch = useDispatch();
+  const reduxTest = (props) => {
+    dispatch(dailyReportSlice.actions.add(props));
+  };
+  const result = useSelector(
+    (state) => state.dailyReport.todayBloodPressure[0].todayBloodPressure
+  );
+
+  // useEffect(() => {
+  // const getDailyBloodpressureResult = async () => {
+  //   try {
+  //     const response = await getDailyBloodpressure("2022-04-26", 1);
+  //     console.log("------");
+  //     console.log(response);
+  //     setResult(response.today);
+  //     // setBreakfast(response.today.breakfast);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  //   getDailyBloodpressureResult();
+  // }, []);
+
   // 계산 잘하기
   const beforeEat = 130 - 120;
 
@@ -26,15 +75,41 @@ const BloodPressureReport = (props) => {
   const timeText = (idx) => {
     if (idx === 0) {
       return <Text style={styles.timeText}>아침</Text>;
+    } else if (idx === 1) {
+      return <Text style={styles.timeText}>점심</Text>;
     } else if (idx === 2) {
       return <Text style={styles.timeText}>저녁</Text>;
     }
   };
-
   const tableHead = ["최저", "최고"];
-  const tableData = [
-    ["어제", 120, "-"],
-    ["오늘", 130, "-"],
+  // const tableData1 = [
+  //   ["어제", result.today.breakfast.BpLow, "-"],
+  //   ["오늘", result.today.breakfast.BpHigh, "-"],
+  //   [" ", element(), "-"],
+  // ];
+  // const tableData2 = [
+  //   ["어제", result.today.lunch.BpLow, "-"],
+  //   ["오늘", result.today.lunch.BpHigh, "-"],
+  //   [" ", element(), "-"],
+  // ];
+  // const tableData3 = [
+  //   ["어제", result.today.dinner.BpLow, "-"],
+  //   ["오늘", result.today.dinner.BpHigh, "-"],
+  //   [" ", element(), "-"],
+  // ];
+  const tableData1 = [
+    ["어제", "", "-"],
+    ["오늘", "", "-"],
+    [" ", element(), "-"],
+  ];
+  const tableData2 = [
+    ["어제", "", "-"],
+    ["오늘", "", "-"],
+    [" ", element(), "-"],
+  ];
+  const tableData3 = [
+    ["어제", "", "-"],
+    ["오늘", "", "-"],
     [" ", element(), "-"],
   ];
 
@@ -60,7 +135,30 @@ const BloodPressureReport = (props) => {
           </TableWrapper>
           <TableWrapper style={{ flex: 1 }}>
             <Cols
-              data={tableData}
+              data={tableData1}
+              heightArr={[30, 30, 30]}
+              textStyle={styles.text}
+            />
+          </TableWrapper>
+        </Table>
+      </View>
+      {/* 점심 */}
+      <View>
+        <Table style={{ flexDirection: "row" }}>
+          <TableWrapper style={{ width: 80 }}>
+            <Cell data={timeText(1)} style={styles.singleHead} />
+            <TableWrapper style={{ flexDirection: "row" }}>
+              <Col
+                data={tableHead}
+                style={styles.title}
+                heightArr={[30, 30, 30, 30]}
+                textStyle={styles.titleText}
+              ></Col>
+            </TableWrapper>
+          </TableWrapper>
+          <TableWrapper style={{ flex: 1 }}>
+            <Cols
+              data={tableData2}
               heightArr={[30, 30, 30]}
               textStyle={styles.text}
             />
@@ -83,7 +181,7 @@ const BloodPressureReport = (props) => {
           </TableWrapper>
           <TableWrapper style={{ flex: 1 }}>
             <Cols
-              data={tableData}
+              data={tableData3}
               heightArr={[30, 30, 30]}
               textStyle={styles.text}
             />
