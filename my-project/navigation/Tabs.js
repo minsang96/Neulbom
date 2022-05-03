@@ -23,8 +23,8 @@ const Tabs = () => (
   >
     <Tab.Screen
       name="식단관리"
-      // component={LoginStack}
-      component={MainPage}
+      component={LoginStack}
+      // component={MainPage}
       options={{
         headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
