@@ -36,43 +36,46 @@ public class Food {
 	private int foodAmount;
 
 	@Column(name = "food_kcal")
-	private double foodKcal;
+	private Double foodKcal;
 	
 	@Column(name = "food_carbohydrate")
-	private double foodCarbohydrate;
+	private Double foodCarbohydrate;
 	
 	@Column(name = "food_sugars")
-	private double foodSugars;
+	private Double foodSugars;
 	
 	@Column(name = "food_fat")
-	private double foodFat;
+	private Double foodFat;
 	
 	@Column(name = "food_protein")
-	private double foodProtein;
+	private Double foodProtein;
+	
+	@Column(name = "food_calcium")
+	private Double foodCalcium;
 	
 	@Column(name = "food_phosphorus")
-	private double foodPhosphorus;
+	private Double foodPhosphorus;
 	
 	@Column(name = "food_natrium")
-	private double foodNatrium;
+	private Double foodNatrium;
 	
 	@Column(name = "food_kalium")
-	private double foodKalium;
+	private Double foodKalium;
 	
 	@Column(name = "food_magnesium")
-	private double foodMagnesium;
+	private Double foodMagnesium;
 	
 	@Column(name = "food_iron")
-	private double foodIron;
+	private Double foodIron;
 	
 	@Column(name = "food_zinc")
-	private double foodZinc;
+	private Double foodZinc;
 	
 	@Column(name = "food_cholesterol")
-	private double foodCholesterol;
+	private Double foodCholesterol;
 	
 	@Column(name = "food_transfat")
-	private double foodTransfat;
+	private Double foodTransfat;
 	
 	@Column(name = "del_yn")
 	private String delYn;

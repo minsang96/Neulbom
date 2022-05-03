@@ -8,6 +8,7 @@ import javax.persistence.Id;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -45,7 +46,7 @@ public class BloodPressure {
 	private String bpTime;
 
 	@Column(name = "del_yn")
-	private String delYn;
+	private String delYn ="n";
 
 	@Column(name = "reg_email")
 	private String regEmail;
@@ -58,5 +59,19 @@ public class BloodPressure {
 
 	@Column(name = "mod_dt")
 	private String modDt;
+	
+	@Builder
+	public BloodPressure(int userSeq, String bpCode, int bpHigh, int bpLow , String bpDate, String bpTime, String regEmail, String regDt, String modEmail, String modDt) {
+		this.userSeq = userSeq;
+		this.bpCode = bpCode;
+		this.bpHigh = bpHigh;
+		this.bpLow = bpLow;
+		this.bpDate = bpDate;
+		this.bpTime = bpTime;
+		this.regEmail = regEmail;
+		this.regDt = regDt;
+		this.modEmail = modEmail;
+		this.modDt = modDt;
+	}
 
 }

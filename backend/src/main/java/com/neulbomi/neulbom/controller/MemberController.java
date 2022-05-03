@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,15 +19,19 @@ import com.neulbomi.neulbom.dto.MemberModifyDto;
 import com.neulbomi.neulbom.exception.ExistsUserEmailException;
 import com.neulbomi.neulbom.exception.NotExistsSettingException;
 import com.neulbomi.neulbom.exception.NotExistsUserException;
+import com.neulbomi.neulbom.repository.UserRepository;
 import com.neulbomi.neulbom.response.AdvancedResponseBody;
 import com.neulbomi.neulbom.response.BaseResponseBody;
 import com.neulbomi.neulbom.service.MailService;
 import com.neulbomi.neulbom.service.MemberService;
+import com.neulbomi.neulbom.service.UserService;
+import com.neulbomi.neulbom.util.JwtTokenProvider;
 import com.neulbomi.neulbom.util.MailContentBuilder;
 import com.neulbomi.neulbom.util.TimeUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
@@ -45,6 +50,12 @@ public class MemberController {
 	@Autowired
 	private MailContentBuilder mailContentBuilder;
 	
+	@Autowired
+	private JwtTokenProvider jwtTokenProvider;
+	
+	@Autowired
+	private UserService userService;
+	
 	@PostMapping("/join")
 	@ApiOperation(value = "일반회원 회원가입", notes = "사용자가 입력한 일반 회원정보를 등록한다.", response = BaseResponseBody.class)
 	@ApiResponses(
@@ -53,8 +64,7 @@ public class MemberController {
 			  @ApiResponse(code = 500, message = "서버 오류"),
 			  @ApiResponse(code = 409, message = "가입 과정에서 발생하는 오류")
 			})
-	public ResponseEntity<? extends BaseResponseBody> regist(@RequestBody MemberDto memberDto) {
-		
+	public ResponseEntity<? extends BaseResponseBody> regist(@RequestBody MemberDto memberDto) {		
 		try {
 			memberService.signIn(memberDto);
 		}
@@ -78,9 +88,12 @@ public class MemberController {
 			  @ApiResponse(code = 500, message = "서버 오류"),
 			  @ApiResponse(code = 409, message = "수정 과정에서 발생하는 오류")
 			})
-	public ResponseEntity<? extends BaseResponseBody> modify(@RequestBody MemberModifyDto memberModifyDto) {
+	public ResponseEntity<? extends BaseResponseBody> modify(@RequestHeader String Authorization,
+			@RequestBody MemberModifyDto memberModifyDto) {
 		
 		try {
+			if(!userService.getUserByUserSeq(memberModifyDto.getUserSeq()).getUserEmail().equals(jwtTokenProvider.getUserPk(Authorization)))
+				return ResponseEntity.status(409).body(BaseResponseBody.of(409, "잘못된 토큰입니다."));
 			memberService.modify(memberModifyDto);
 		}
 		catch(NotExistsUserException e) {
@@ -101,9 +114,12 @@ public class MemberController {
 			  @ApiResponse(code = 500, message = "서버 오류"),
 			  @ApiResponse(code = 409, message = "조회 과정에서 발생하는 오류")
 			})
-	public ResponseEntity<? extends BaseResponseBody> getInfo(@RequestParam int userSeq) {
+	public ResponseEntity<? extends BaseResponseBody> getInfo(@RequestHeader String Authorization,
+			@RequestParam int userSeq) {
 		
 		try {
+			if(!userService.getUserByUserSeq(userSeq).getUserEmail().equals(jwtTokenProvider.getUserPk(Authorization)))
+				return ResponseEntity.status(409).body(BaseResponseBody.of(409, "잘못된 토큰입니다."));
 			Map<String, Object> result = memberService.getInfo(userSeq);
 			return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "회원정보 조회 성공",result));
 		}

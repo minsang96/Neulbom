@@ -1,5 +1,6 @@
 package com.neulbomi.neulbom.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,9 +9,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.neulbomi.neulbom.util.JwtAuthenticationFilter;
+import com.neulbomi.neulbom.util.JwtTokenProvider;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +24,9 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+	@Autowired
+	private JwtTokenProvider jwtTokenProvider;
+	
 	// 비밀번호 암호화
 	// BCryptPasswordEncoder
 	// : BCrypt라는 해시 함수를 이용하여 패스워드를 암호화하는 구현체
@@ -37,8 +45,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 			.mvcMatchers("/v2/**", "/configuration/**", "/swagger*/**", "/webjars/**", "/swagger-resources/**") // spring security랑 swagger 함께 사용하기
 			.permitAll() 
+			.antMatchers("/member/modify","/member/info").hasRole("USER")
+			.antMatchers("/expert/modify","/expert/info","/expert/remove/career").hasRole("USER")
+			.antMatchers("/diet/remove").hasRole("USER")
 			.anyRequest().permitAll()  
 			.and()
+			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
 			.exceptionHandling();
 	}
 	

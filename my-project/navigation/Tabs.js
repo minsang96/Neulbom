@@ -1,11 +1,13 @@
 import react from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Main from "../screens/main/Main";
+import MainPage from "../screens/mainpage/MainPage";
 import Calendar from "../screens/calendar/Calendar";
 import Chat from "../screens/chat/Chat";
 import Mypage from "../screens/mypage/Mypage";
 import { Ionicons } from "@expo/vector-icons";
 import LoginStack from "./LoginStack";
+import Stack from "./Stack";
+import FoodWrite from "../screens/mainpage/foodCamera/FoodWrite";
 
 const Tab = createBottomTabNavigator();
 
@@ -21,9 +23,10 @@ const Tabs = () => (
   >
     <Tab.Screen
       name="식단관리"
-      component={Main}
       // component={LoginStack}
+      component={MainPage}
       options={{
+        headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
           // console.log(focused, color, size);
           return (

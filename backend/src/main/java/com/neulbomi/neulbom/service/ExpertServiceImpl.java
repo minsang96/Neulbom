@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.neulbomi.neulbom.dto.ExpertJoinDto;
+import com.neulbomi.neulbom.dto.ExpertModifyDto;
 import com.neulbomi.neulbom.entity.Career;
 import com.neulbomi.neulbom.entity.Expert;
 import com.neulbomi.neulbom.entity.User;
@@ -87,7 +88,6 @@ public class ExpertServiceImpl implements ExpertService {
 					.modEmail(user.getUserEmail())
 					.build());
 		}
-		
 	}
 
 	@Override
@@ -134,5 +134,73 @@ public class ExpertServiceImpl implements ExpertService {
 		result.put("expertDesc", expert.getExpertDesc());
  
 		return result;
+	}
+
+	@Override
+	public Map<String, Object> getInfo(int userSeq) {
+		// 전문가 찾기
+		User userExpert = userRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsExpertException());
+		Expert expert = expertRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsExpertException());
+		
+		Map<String, Object> info =new HashMap<>();
+		info.put("userSeq", expert.getUserSeq());
+		info.put("userEmail", userExpert.getUserEmail());
+		info.put("expertName", expert.getExpertName());
+		info.put("expertImg", expert.getExpertImg());
+		info.put("expertDesc", expert.getExpertDesc());
+		info.put("expertCert", expert.getExpertCert());
+		
+		// 경력정보
+		ArrayList<Career> careers = careerRepository.findByDelYnAndUserSeq("n", userSeq);
+		ArrayList<Map<String, Object>> careerList = new ArrayList<Map<String,Object>>();
+		for (Career career : careers) {
+			Map<String, Object> obj = new HashMap<>();
+			obj.put("careerSeq", career.getCareerSeq());
+			obj.put("careerContent", career.getCareerContent());
+			careerList.add(obj);
+		}
+		info.put("expertCareer",  careerList);
+		
+		return info;
+	}
+
+	@Override
+	public void modify(ExpertModifyDto expertModifyDto) {
+		// 현재 시간
+		String now = TimeUtils.curTime();
+				
+		// 전문가 찾기
+		User userExpert = userRepository.findByDelYnAndUserSeq("n", expertModifyDto.getUserSeq()).orElseThrow(() -> new NotExistsExpertException());
+		Expert expert = expertRepository.findByDelYnAndUserSeq("n", expertModifyDto.getUserSeq()).orElseThrow(() -> new NotExistsExpertException());
+		// 정보 수정하기
+		if(!expertModifyDto.getDesc().equals(expert.getExpertDesc())) {
+			expert.setExpertDesc(expertModifyDto.getDesc());
+		}
+		
+		if(!expertModifyDto.getExpertImg().equals(expert.getExpertImg())) {
+			expert.setExpertImg(expertModifyDto.getExpertImg());
+		}
+		
+		// 새로운 이력 추가하기
+		String[] careers = expertModifyDto.getCareer();
+		for (String career : careers) {
+			careerRepository.save(Career.builder()
+					.userSeq(expert.getUserSeq())
+					.careerContent(career)
+					.regDt(now)
+					.regEmail(userExpert.getUserEmail())
+					.modDt(now)
+					.modEmail(userExpert.getUserEmail())
+					.build());
+		}
+	}
+
+	@Override
+	public void removeCareer(long[] careerSeqs) {
+		for (long careerSeq : careerSeqs) {
+			Career career = careerRepository.findByDelYnAndCareerSeq("n", careerSeq);
+			career.setDelYn("y");
+			careerRepository.save(career);
+		}
 	}
 }

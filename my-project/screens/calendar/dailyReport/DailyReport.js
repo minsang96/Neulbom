@@ -1,12 +1,79 @@
-import React from "react";
-import { ScrollView, Text } from "react-native";
+import React, { useEffect } from "react";
+import { ScrollView, Text, StyleSheet } from "react-native";
+import axios from "axios";
+import CalorieCompo from "../../../components/calendar/report/CalorieCompo";
+import NutrientCompo from "../../../components/calendar/report/NutrientCompo";
+import TodayReport from "../../../components/calendar/report/TodayReport";
+import BloodPressureReport from "../../../components/calendar/report/BloodPressureReport";
+import BloodSugarReport from "../../../components/calendar/report/BloodSugarReport";
+import styled from "styled-components/native";
+
+import { Dimensions } from "react-native";
+
+const screenSize = Dimensions.get("screen");
 
 const DailyReport = () => {
+  // axios 불러오는 법 알아보기.. ㅋ
+  const getDailyReportInfo = () => {
+    axios
+      .get("http://localhost:3030/api/report/daily/bloodsugar")
+      .then(function (res) {
+        console.log(res);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    // getDailyReportInfo();
+  }, []);
+
   return (
-    <ScrollView>
-      <Text>일간 리포트</Text>
+    <ScrollView style={styles.background}>
+      <Text style={styles.reportTitle}>정현정님의 일간 리포트</Text>
+      <BloodPressureReport styles={styles}></BloodPressureReport>
+      <BloodSugarReport styles={styles}></BloodSugarReport>
+      <CalorieCompo
+        title="총 섭취 칼로리"
+        subtitle="어제 섭취한 칼로리와 오늘을 비교해보세요."
+        before="어제"
+        after="오늘"
+        styles={styles}
+      ></CalorieCompo>
+      <NutrientCompo now="오늘" styles={styles}></NutrientCompo>
+      <TodayReport styles={styles}></TodayReport>
     </ScrollView>
   );
 };
 
 export default DailyReport;
+
+const styles = StyleSheet.create({
+  background: {
+    // backgroundColor: "white",
+    paddingHorizontal: 20,
+  },
+  reportTitle: {
+    fontSize: 20,
+    marginVertical: 10,
+  },
+  box: {
+    backgroundColor: "white",
+    paddingVertical: screenSize.height * 0.01,
+    paddingHorizontal: screenSize.width * 0.04,
+    margin: screenSize.width * 0.01,
+    marginBottom: screenSize.height * 0.01,
+    borderRadius: 10,
+    elevation: 3,
+  },
+  title: {
+    fontSize: 16,
+    marginVertical: screenSize.width * 0.01,
+  },
+  subTitle: {
+    fontSize: 12,
+    color: "#A7A7A7",
+    marginBottom: screenSize.height * 0.01,
+  },
+});

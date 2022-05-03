@@ -19,6 +19,6 @@ public class CommonUtils {
 
 	    return category + "/" + userSeq + SEPARATOR + fileName + SEPARATOR + now + fileExtension;
 	    // 카테고리(사용자 시퀀스)_원본파일이름_시간_원본파일확장자
-	    // ex: 1_profile_1651113098522.jpg
+	    // ex: Profile/1_profile_1651113098522.jpg
 	  }
 }

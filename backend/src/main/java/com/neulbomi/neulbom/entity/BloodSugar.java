@@ -8,6 +8,7 @@ import javax.persistence.Id;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -41,7 +42,7 @@ public class BloodSugar {
 	private String bsTime;
 
 	@Column(name = "del_yn")
-	private String delYn;
+	private String delYn = "n";
 
 	@Column(name = "reg_email")
 	private String regEmail;
@@ -55,4 +56,16 @@ public class BloodSugar {
 	@Column(name = "mod_dt")
 	private String modDt;
 
+	@Builder
+	public BloodSugar(int userSeq, String bsCode, int bsLevel, String bsDate, String bsTime, String regEmail, String regDt, String modEmail, String modDt) {
+		this.userSeq = userSeq;
+		this.bsCode = bsCode;
+		this.bsLevel = bsLevel;
+		this.bsDate = bsDate;
+		this.bsTime = bsTime;
+		this.regEmail = regEmail;
+		this.regDt = regDt;
+		this.modEmail = modEmail;
+		this.modDt = modDt;
+	}
 }
