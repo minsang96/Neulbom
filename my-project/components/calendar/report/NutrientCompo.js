@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { PieChart, StackedBarChart } from "react-native-svg-charts";
+import { PieChart } from "react-native-svg-charts";
+import * as Progress from "react-native-progress";
 
 const NutrientCompo = (props) => {
   const data = [50, 10, 40];
@@ -57,14 +58,32 @@ const NutrientCompo = (props) => {
         </View>
       </View>
       <View>
-        <StackedBarChart
-          style={{ height: 200 }}
-          keys={keys}
-          colors={colors}
-          data={data2}
-          showGrid={false}
-          contentInset={{ top: 30, bottom: 30 }}
+        <Text>권장 오늘</Text>
+        <Text>탄수화물</Text>
+        <Text>단백질</Text>
+        <Text>지방</Text>
+      </View>
+      <View style={styles.graphView}>
+        <Progress.Bar
+          progress={0.3}
+          animated={false}
+          color="#1F77B4"
+          borderColor="rgba(0, 122, 255, 0)"
+          unfilledColor="#E2E2E2"
+          height={10}
         />
+        <Progress.Bar
+          progress={0.3}
+          animated={false}
+          color="#FF7F0E"
+          borderColor="rgba(0, 122, 255, 0)"
+          unfilledColor="#E2E2E2"
+          height={10}
+        />
+      </View>
+      <View>
+        <Text>나트륨</Text>
+        <Text>당</Text>
       </View>
     </View>
   );

@@ -6,8 +6,8 @@ import InfoMyDisease from "../../../components/infoBox/InfoMyDisease";
 import InfoMyself from "../../../components/infoBox/InfoMyself";
 import Intake from "../../../components/infoBox/Intake";
 import SelectBox from "../../../components/infoBox/SelectBox";
-import { Dimensions } from "react-native";
 import Infomation from "../../../components/infoBox/Infomation";
+import { Dimensions } from "react-native";
 
 const screenSize = Dimensions.get("screen");
 
@@ -90,8 +90,9 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 16,
-    marginVertical: screenSize.width * 0.01,
+    fontSize: 20,
+    marginVertical: screenSize.height * 0.01,
+    marginLeft: screenSize.width * 0.01,
   },
   email: {
     color: "#A7A7A7",
