@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { PieChart, StackedBarChart } from "react-native-svg-charts";
 
 const NutrientCompo = (props) => {
@@ -38,21 +38,48 @@ const NutrientCompo = (props) => {
       <Text style={props.styles.subTitle}>
         권장 섭취 비율과 {props.now} 섭취 비율을 비교해보세요
       </Text>
-      <Text>권장 섭취 비율</Text>
-      <PieChart style={{ height: 200 }} data={pieData} innerRadius="80%" />
-      <Text>{props.now} 섭취 비율</Text>
-      <PieChart style={{ height: 200 }} data={pieData} innerRadius="80%" />
-
-      <StackedBarChart
-        style={{ height: 200 }}
-        keys={keys}
-        colors={colors}
-        data={data2}
-        showGrid={false}
-        contentInset={{ top: 30, bottom: 30 }}
-      />
+      <View style={styles.graphView}>
+        <View style={styles.graph}>
+          <Text style={styles.graphTitle}>권장 섭취 비율</Text>
+          <PieChart
+            style={{ height: 100, width: 100 }}
+            data={pieData}
+            innerRadius="70%"
+          />
+        </View>
+        <View style={styles.graph}>
+          <Text style={styles.graphTitle}>{props.now} 섭취 비율</Text>
+          <PieChart
+            style={{ height: 100, width: 100 }}
+            data={pieData}
+            innerRadius="70%"
+          />
+        </View>
+      </View>
+      <View>
+        <StackedBarChart
+          style={{ height: 200 }}
+          keys={keys}
+          colors={colors}
+          data={data2}
+          showGrid={false}
+          contentInset={{ top: 30, bottom: 30 }}
+        />
+      </View>
     </View>
   );
 };
 
 export default NutrientCompo;
+
+const styles = StyleSheet.create({
+  graphView: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  graph: {},
+  graphTitle: {
+    textAlign: "center",
+    marginBottom: 10,
+  },
+});
