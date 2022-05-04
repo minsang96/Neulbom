@@ -201,8 +201,19 @@ public class ReportServiceImpl implements ReportService {
 	public Map<String, Object> calcBS(int userSeq, String date) {
 		List<BloodSugar> bs = bsRepository.findUserDailyBS(userSeq, date);
 		Map<String, Object> obj = new HashMap<>();
-		for (int i = 0; i < bs.size(); i++) {
-			obj.put(bs.get(i).getBsCode(), bs.get(i).getBsLevel());
+		
+		// 초기 값 설정
+		obj.put("beforeBreakFast", "-");
+		obj.put("afterBreakFast", "-");
+		obj.put("beforeLunch", "-");
+		obj.put("afterLunch", "-");
+		obj.put("beforeDinner", "-");
+		obj.put("afterDinner", "-");
+
+		if (bs.size() != 0) {
+			for (int i = 0; i < bs.size(); i++) {
+				obj.put(bs.get(i).getBsCode(), bs.get(i).getBsLevel());
+			}
 		}
 		return obj;
 	}
@@ -211,11 +222,22 @@ public class ReportServiceImpl implements ReportService {
 	public Map<String, Object> calcBP(int userSeq, String date) {
 		List<BloodPressure> bp = bpRepository.findUserDailyBP(userSeq, date);
 		Map<String, Object> obj = new HashMap<>();
-		for (int i = 0; i < bp.size(); i++) {
-			Map<String, Object> obj2 = new HashMap<>();
-			obj2.put("BpHigh", bp.get(i).getBpHigh());
-			obj2.put("BpLow", bp.get(i).getBpLow());
-			obj.put(bp.get(i).getBpCode(), obj2);
+
+		// 초기 값 설정
+		Map<String, Object> level = new HashMap<>();
+		level.put("BpHigh", "-");
+		level.put("BpLow", "-");
+		obj.put("breakfast", level);
+		obj.put("lunch", level);
+		obj.put("dinner", level);
+
+		if (bp.size() != 0) {
+			for (int i = 0; i < bp.size(); i++) {
+				Map<String, Object> obj2 = new HashMap<>();
+				obj2.put("BpHigh", bp.get(i).getBpHigh());
+				obj2.put("BpLow", bp.get(i).getBpLow());
+				obj.put(bp.get(i).getBpCode(), obj2);
+			}
 		}
 		return obj;
 	}
