@@ -41,6 +41,7 @@ const Plus = styled.TouchableOpacity`
 `;
 
 const Diet = ({ kind, kcal, what, nutritions }) => {
+  console.log("testing what", what);
   const navigation = useNavigation();
   const [image, setImage] = useState(null);
   const dispatch = useDispatch();
@@ -72,11 +73,15 @@ const Diet = ({ kind, kcal, what, nutritions }) => {
           <Ionicons name="add" color="white" size={30} />
         </Plus>
       </Column>
-      {/* <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         {image && (
           <Image source={{ uri: image }} style={{ width: 20, height: 20 }} />
         )}
-      </View> */}
+      </View>
+      {/* {what.map((food) => (
+        <Text key={food.dietSeq}>{food.foodName}</Text>
+      ))} */}
+      <Content>{kcal} kcal</Content>
       <Content>{nutritions}</Content>
     </Box>
   );
