@@ -14,6 +14,7 @@ import com.neulbomi.neulbom.dto.BloodSugarDto;
 import com.neulbomi.neulbom.entity.BloodPressure;
 import com.neulbomi.neulbom.entity.BloodSugar;
 import com.neulbomi.neulbom.entity.User;
+import com.neulbomi.neulbom.exception.NotExistsRecordException;
 import com.neulbomi.neulbom.exception.NotExistsUserException;
 import com.neulbomi.neulbom.exception.WrongCommonCodeException;
 import com.neulbomi.neulbom.exception.WrongDateException;
@@ -139,6 +140,24 @@ public class RecordServiceImpl implements RecordService{
 				.regDt(TimeUtils.curTime())
 				.modEmail(user.getUserEmail())
 				.modDt(TimeUtils.curTime()).build());
+		
+	}
+
+	@Override
+	public void deleteBs(long bsSeq) {
+		BloodSugar bloodSugar = bsRepository.findByDelYnAndBsSeq("n", bsSeq).orElseThrow(() -> new NotExistsRecordException());
+		bloodSugar.setDelYn("y");
+		
+		bsRepository.save(bloodSugar);
+		
+	}
+
+	@Override
+	public void deleteBp(long bpSeq) {
+		BloodPressure bloodPressure = bpRepository.findByDelYnAndBpSeq("n", bpSeq).orElseThrow(() -> new NotExistsRecordException());
+		bloodPressure.setDelYn("y");
+		
+		bpRepository.save(bloodPressure);
 		
 	}
 

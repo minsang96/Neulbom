@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.neulbomi.neulbom.exception.NotExistsExpertException;
+import com.neulbomi.neulbom.exception.WrongDateException;
 import com.neulbomi.neulbom.response.AdvancedResponseBody;
 import com.neulbomi.neulbom.response.BaseResponseBody;
 import com.neulbomi.neulbom.service.CalendarService;
@@ -39,8 +40,12 @@ public class CalendarController {
 		HashMap<String, JSONObject> result = null;
 		try {
 			result = calendarService.getCalendarMonthRecord(userSeq, date);
-		} catch (NotExistsExpertException e) {
+		}
+		catch (NotExistsExpertException e) {
 			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "Member 테이블에서 회원 정보를 조회할 수 없습니다."));
+		}
+		catch(WrongDateException e) {
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "잘못된 날짜 양식입니다. YYYY-MM 형식으로 입력해주세요."));
 		}
 		
 		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "달력의 한 달 기록 조회 성공", result));

@@ -1,6 +1,7 @@
 package com.neulbomi.neulbom.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,4 +20,6 @@ public interface BloodSugarRepository extends JpaRepository<BloodSugar, Long> {
 	public List<BloodSugar> findBBWeeklyBS(@Param("userSeq") int userSeq, @Param("startDate") String startDate, @Param("endDate") String endDate);
 
 	public List<BloodSugar> findByDelYnAndUserSeqAndBsDateStartsWith(String delYn, int userSeq, String date);
+	
+	public Optional<BloodSugar> findByDelYnAndBsSeq(String delYn, long bsSeq);
 }
