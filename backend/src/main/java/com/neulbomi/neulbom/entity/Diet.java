@@ -18,9 +18,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 파라미터가 없는 기본 생성자를 생성한다. 접근 권한을 설정하여 어느 곳에서나 객체를 생성할 수 있는 상황을 막는다.
 @Getter
 @Setter
-@Builder
 @ToString
-@AllArgsConstructor
 public class Diet {
 
 	@Id
@@ -63,7 +61,7 @@ public class Diet {
 	private String modDt;
 
 	@Builder
-	public Diet(long dietSeq, int userSeq, String dietTime, String foodCode, String dietImg, int dietAmount,
+	public Diet(long dietSeq, int userSeq, String dietTime, String foodCode, String dietImg, int dietAmount, String delYn,
 			String dietDate, String regEmail, String regDt, String modEmail, String modDt) {
 		super();
 		this.dietSeq = dietSeq;
@@ -73,6 +71,7 @@ public class Diet {
 		this.dietImg = dietImg;
 		this.dietAmount = dietAmount;
 		this.dietDate = dietDate;
+		this.delYn = delYn;
 		this.regEmail = regEmail;
 		this.regDt = regDt;
 		this.modEmail = modEmail;

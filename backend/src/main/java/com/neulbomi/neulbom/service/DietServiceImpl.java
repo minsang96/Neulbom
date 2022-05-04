@@ -57,17 +57,18 @@ public class DietServiceImpl implements DietService {
 		for (int n = 0; n < dietDtoList.size(); n++) {
 			DietDto dietDto = dietDtoList.get(n);
 			dietRepository.save(Diet.builder()
-					.userSeq(dietDto.getUserSeq())
-					.dietTime(dietDto.getDietTime())
-					.foodCode(dietDto.getFoodCode())
-					.dietImg(dietDto.getDietImg())
-					.dietAmount(dietDto.getFoodAmount())
-					.dietDate(dietDto.getDietDate())
-					.regDt(now)
-					.regEmail(user.getUserEmail())
-					.modDt(now)
-					.modEmail(user.getUserEmail())
-					.build());
+						.userSeq(dietDto.getUserSeq())
+						.dietTime(dietDto.getDietTime())
+						.foodCode(dietDto.getFoodCode())
+						.dietImg(dietDto.getDietImg())
+						.dietAmount(dietDto.getFoodAmount())
+						.dietDate(dietDto.getDietDate())
+						.delYn("n")
+						.regDt(now)
+						.regEmail(user.getUserEmail())
+						.modDt(now)
+						.modEmail(user.getUserEmail())
+						.build());
 		}
 	}
 
