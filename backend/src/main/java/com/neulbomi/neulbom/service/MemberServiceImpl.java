@@ -76,7 +76,7 @@ public class MemberServiceImpl implements MemberService {
 		
 		for(String code : memberDto.getSetting().keySet()) {
 			// 입력받은 코드가 bloodPressure나 bloodSugar가 아닐 경우 예외 처리
-			if(!code.equals("bloodPresuure") && !code.equals("bloodSugar")) throw new NotExistsSettingException();
+			if(!code.equals("bloodPressure") && !code.equals("bloodSugar")) throw new NotExistsSettingException();
 			if(memberDto.getSetting().get(code)) {
 				settingRepository.save(Setting.builder()
 						.userSeq(user.getUserSeq())
