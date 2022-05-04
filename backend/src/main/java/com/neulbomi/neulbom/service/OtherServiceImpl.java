@@ -55,4 +55,10 @@ public class OtherServiceImpl implements OtherService{
 		
 	}
 
+	@Override
+	public void deleteRecord(int otherSeq) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
