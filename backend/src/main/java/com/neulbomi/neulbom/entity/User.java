@@ -62,12 +62,13 @@ public class User implements UserDetails{
 
 	// 회원가입
 	@Builder
-	public User(String userType, String userEmail, String userPwd, String regDt, String regEmail,
+	public User(String userType, String userEmail, String userPwd, String delYn, String regDt, String regEmail,
 			String modDt, String modEmail) {
 		super();
 		this.userType = userType;
 		this.userEmail = userEmail;
 		this.userPwd = userPwd;
+		this.delYn = delYn;
 		this.regDt = regDt;
 		this.regEmail = regEmail;
 		this.modDt = modDt;
