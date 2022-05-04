@@ -1,7 +1,7 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, Image } from "react-native";
 
-const InfoMyself = (props) => {
+const InfoConsultant = (props) => {
   // if 성별 줄 함수 고쳐야함 !!!!!!!!!!
   const userGender = "남";
   const whatsUserGender = () => {
@@ -26,23 +26,12 @@ const InfoMyself = (props) => {
           <Text style={props.styles.email}>ssafy104@naver.com</Text>
         </View>
       </View>
-
-      <View style={props.styles.userInfo}>
-        <View style={props.styles.userInfoItem}>
-          <Text>나이</Text>
-          <Text style={props.styles.userInfoItemContent}>35</Text>
-        </View>
-        <View style={props.styles.userInfoItem}>
-          <Text>키</Text>
-          <Text style={props.styles.userInfoItemContent}>165cm</Text>
-        </View>
-        <View style={props.styles.userInfoItem}>
-          <Text>몸무게</Text>
-          <Text style={props.styles.userInfoItemContent}>55kg</Text>
-        </View>
+      <Text style={props.styles.subtitle}>한 줄 소개</Text>
+      <View style={props.styles.box}>
+        <Text>여러분의 건강을 책임지겠습니다!</Text>
       </View>
     </View>
   );
 };
 
-export default InfoMyself;
+export default InfoConsultant;
