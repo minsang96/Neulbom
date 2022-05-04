@@ -203,8 +203,8 @@ public class ReportServiceImpl implements ReportService {
 		Map<String, Object> obj = new HashMap<>();
 		
 		// 초기 값 설정
-		obj.put("beforeBreakFast", "-");
-		obj.put("afterBreakFast", "-");
+		obj.put("beforeBreakfast", "-");
+		obj.put("afterBreakfast", "-");
 		obj.put("beforeLunch", "-");
 		obj.put("afterLunch", "-");
 		obj.put("beforeDinner", "-");
