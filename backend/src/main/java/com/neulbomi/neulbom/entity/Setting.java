@@ -50,9 +50,10 @@ public class Setting {
 	private String modDt;
 	
 	@Builder
-	public Setting(int userSeq, String code, String regEmail, String regDt, String modEmail, String modDt) {
+	public Setting(int userSeq, String code, String delYn, String regEmail, String regDt, String modEmail, String modDt) {
 		this.userSeq = userSeq;
 		this.code = code;
+		this.delYn = delYn;
 		this.regEmail = regEmail;
 		this.regDt = regDt;
 		this.modEmail = modEmail;

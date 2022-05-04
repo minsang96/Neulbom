@@ -72,7 +72,7 @@ public class Member {
 	
 	@Builder
 	public Member(int userSeq, String memberNickname, String memberImg, int memberHeight, int memberWeight, int memberYear, String memberGender,
-					String memberDesc, int memberKcal, String regEmail, String regDt, String modEmail, String modDt) {
+					String memberDesc, int memberKcal, String delYn, String regEmail, String regDt, String modEmail, String modDt) {
 		this.userSeq = userSeq;
 		this.memberNickname = memberNickname;
 		this.memberImg = memberImg;
@@ -82,6 +82,7 @@ public class Member {
 		this.memberGender = memberGender;
 		this.memberDesc = memberDesc;
 		this.memberKcal = memberKcal;
+		this.delYn = delYn;
 		this.regEmail = regEmail;
 		this.regDt = regDt;
 		this.modEmail = modEmail;
