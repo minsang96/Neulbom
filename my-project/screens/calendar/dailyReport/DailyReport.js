@@ -12,22 +12,6 @@ import { Dimensions } from "react-native";
 const screenSize = Dimensions.get("screen");
 
 const DailyReport = () => {
-  // axios 불러오는 법 알아보기.. ㅋ
-  const getDailyReportInfo = () => {
-    axios
-      .get("http://localhost:3030/api/report/daily/bloodsugar")
-      .then(function (res) {
-        console.log(res);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  };
-
-  useEffect(() => {
-    // getDailyReportInfo();
-  }, []);
-
   return (
     <ScrollView style={styles.background}>
       <Text style={styles.reportTitle}>정현정님의 일간 리포트</Text>
@@ -66,8 +50,9 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   title: {
-    fontSize: 16,
+    fontSize: 18,
     marginVertical: screenSize.width * 0.01,
+    fontWeight: "bold",
   },
   subTitle: {
     fontSize: 12,
