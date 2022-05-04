@@ -12,24 +12,6 @@ import { Dimensions } from "react-native";
 const screenSize = Dimensions.get("screen");
 
 const DailyReport = () => {
-  // 고쳐라 axios 불러오는 법 알아보기.. ㅋ
-  const getDailyReportInfo = () => {
-    axios
-      .get("http://k6a104.p.ssafy.io:3030/api/report/daily/bloodsugar", {
-        params: { date: "2022-04-26", userSeq: 2 },
-      })
-      .then(function (res) {
-        console.log(res.data.data);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  };
-
-  useEffect(() => {
-    getDailyReportInfo();
-  }, []);
-
   return (
     <ScrollView style={styles.background}>
       <Text style={styles.reportTitle}>정현정님의 일간 리포트</Text>
