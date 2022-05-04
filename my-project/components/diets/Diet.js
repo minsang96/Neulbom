@@ -40,12 +40,11 @@ const Plus = styled.TouchableOpacity`
   elevation: 5;
 `;
 
-const Diet = ({ kind, kcal, what, nutritions }) => {
-  console.log("testing what", what);
+const Diet = ({ kind, kcal, meal, total_meal }) => {
   const navigation = useNavigation();
   const [image, setImage] = useState(null);
   const dispatch = useDispatch();
-  const urls = useSelector((state) => state.images.imageurls);
+
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchCameraAsync({
@@ -54,7 +53,6 @@ const Diet = ({ kind, kcal, what, nutritions }) => {
       aspect: [4, 4],
       quality: 1,
     });
-
     console.log(result);
 
     if (!result.cancelled) {
@@ -68,7 +66,7 @@ const Diet = ({ kind, kcal, what, nutritions }) => {
     <Box>
       <Column>
         <Content style={{ flex: 1 }}>{kind}</Content>
-        <Content style={{ color: `${palette.green}` }}>{kcal}</Content>
+        <Content style={{ color: `${palette.green}` }}>{kcal} kcal</Content>
         <Plus onPress={pickImage}>
           <Ionicons name="add" color="white" size={30} />
         </Plus>
@@ -78,11 +76,20 @@ const Diet = ({ kind, kcal, what, nutritions }) => {
           <Image source={{ uri: image }} style={{ width: 20, height: 20 }} />
         )}
       </View>
-      {/* {what.map((food) => (
-        <Text key={food.dietSeq}>{food.foodName}</Text>
-      ))} */}
-      <Content>{kcal} kcal</Content>
-      <Content>{nutritions}</Content>
+      {meal.map((food) => (
+        <Box key={food.dietSeq}>
+          <Text>{food.foodName}</Text>
+          <Image
+            source={{ uri: food.dietImg }}
+            style={{ width: 55, height: 55 }}
+          ></Image>
+        </Box>
+      ))}
+      <Content>탄수화물 {total_meal.carbohydrate}g</Content>
+      <Content>단백질 {total_meal.protein}g</Content>
+      <Content>지방 {total_meal.fat}g</Content>
+      <Content>나트륨 {total_meal.natrium}mg</Content>
+      <Content>당 {total_meal.sugars}mg</Content>
     </Box>
   );
 };
