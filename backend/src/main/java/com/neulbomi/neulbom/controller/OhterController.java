@@ -69,7 +69,7 @@ public class OhterController {
 	public ResponseEntity<? extends BaseResponseBody> deleteRecord(@RequestParam long otherSeq) {		
 		try {
 			otherService.deleteRecord(otherSeq);
-			return ResponseEntity.status(201).body(BaseResponseBody.of(200, "기록 삭제 성공"));
+			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "기록 삭제 성공"));
 		}
 		catch(NotExistsRecordException e) {
 			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "잘못된 시퀀스 입니다."));
