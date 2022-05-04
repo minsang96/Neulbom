@@ -1,31 +1,29 @@
-import react from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import Diet from "../../../components/diets/Diet";
-import { useQuery } from "react-query";
-import { getLaunch } from "../../../api/diets";
-import styled from "styled-components/native";
+import { useSelector } from "react-redux";
 
-const Spinner = styled.ActivityIndicator`
-  flex: 1;
-  color: black;
-`;
 const Lunch = () => {
-  // const dietDate = "2022-04-26";
-  // const userSeq = "1";
-  // const lunchQuery = useQuery(["diet", dietDate, userSeq], () =>
-  //   getLaunch(dietDate, userSeq)
-  // );
-  // if (!lunchQuery.data) {
-  //   return <Spinner size="large"></Spinner>;
-  // }
+  const lunch = useSelector((state) => state.dietdaily.lunch);
+  const total_lunch = useSelector((state) => state.dietdaily.total_lunch);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    console.log("get new breakfast");
+    setLoading(false);
+  }, [lunch]);
+
   return (
     <View>
-      <Diet
-        kind="점심이요"
-        kcal="572Kcal"
-        what="234"
-        nutritions="탄수화물, 단백질"
-      ></Diet>
+      {loading ? (
+        <Text>Loading...</Text>
+      ) : (
+        <Diet
+          kind="점심"
+          kcal={total_lunch.kcal}
+          meal={lunch}
+          total_meal={total_lunch}
+        ></Diet>
+      )}
     </View>
   );
 };

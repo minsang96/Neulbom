@@ -82,6 +82,7 @@ const DailyDiet = () => {
               <SubContent>지방 {diet.total.fat}</SubContent>
             </Box>
           ))
+
           // <Content>총칼로리 {dietdaily[0].total.kcal}</Content>
         )}
       </Box>
