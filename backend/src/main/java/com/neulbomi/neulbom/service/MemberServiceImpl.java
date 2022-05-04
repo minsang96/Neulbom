@@ -39,7 +39,7 @@ public class MemberServiceImpl implements MemberService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	private String[] settings = {"bloodPressure", "bloodSugar"};
+	private String[] settings = {"bloodPressure","bloodSugar"};
 	
 	@Override
 	public void signIn(MemberDto memberDto) {
@@ -72,16 +72,18 @@ public class MemberServiceImpl implements MemberService {
 				.modEmail(memberDto.getEmail())
 				.modDt(TimeUtils.curTime()).build());
 		
-		for(String code : memberDto.getSetting()) {
+		for(String code : memberDto.getSetting().keySet()) {
 			// 입력받은 코드가 bloodPressure나 bloodSugar가 아닐 경우 예외 처리
 			if(!code.equals("bloodPresuure") && !code.equals("bloodSugar")) throw new NotExistsSettingException();
-			settingRepository.save(Setting.builder()
-					.userSeq(user.getUserSeq())
-					.code(code)
-					.regEmail(memberDto.getEmail())
-					.regDt(TimeUtils.curTime())
-					.modEmail(memberDto.getEmail())
-					.modDt(TimeUtils.curTime()).build());
+			if(memberDto.getSetting().get(code)) {
+				settingRepository.save(Setting.builder()
+						.userSeq(user.getUserSeq())
+						.code(code)
+						.regEmail(memberDto.getEmail())
+						.regDt(TimeUtils.curTime())
+						.modEmail(memberDto.getEmail())
+						.modDt(TimeUtils.curTime()).build());
+			}
 		}
 		
 	}
@@ -106,8 +108,8 @@ public class MemberServiceImpl implements MemberService {
 		// bloodPressure, bloodSugar가 기존에 있었는지 여부 확인 후 맞게 수정
 		for(String code : settings) {
 			boolean flag = false;
-			for(String memberCode : memberModifyDto.getSetting()) {
-				if(memberCode.equals(code)) {
+			for(String memberCode : memberModifyDto.getSetting().keySet()) {
+				if(memberModifyDto.getSetting().get(memberCode) && memberCode.equals(code)) {
 					flag = true;
 					break;
 				}
