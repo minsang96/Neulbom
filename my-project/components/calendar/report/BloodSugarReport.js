@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import {
   Table,
@@ -8,10 +8,23 @@ import {
   Col,
 } from "react-native-table-component";
 import { Dimensions } from "react-native";
+import { useSelector } from "react-redux";
 
 const screenSize = Dimensions.get("screen");
 
 const BloodSugarReport = (props) => {
+  const [loading, setLoading] = useState(true);
+  const todayBloodSugar = useSelector(
+    (state) => state.dailyReport.todayBloodSugar
+  );
+  const yesterdayBloodSugar = useSelector(
+    (state) => state.dailyReport.yesterdayBloodSugar
+  );
+
+  useEffect(() => {
+    setLoading(false);
+  }, [todayBloodSugar]);
+
   // 계산 잘하기
   const beforeEat = 130 - 120;
 
@@ -41,81 +54,87 @@ const BloodSugarReport = (props) => {
   ];
 
   return (
-    <View style={props.styles.box}>
-      <Text style={props.styles.title}>최근 혈당값 추세</Text>
-      <Text style={props.styles.subTitle}>
-        전날에 비해 얼마나 좋아졌을까요?
-      </Text>
-      {/* 아침 */}
-      <View style={styles.mainView}>
-        <Table style={{ flexDirection: "row" }}>
-          <TableWrapper style={{ width: 80 }}>
-            <Cell data={timeText(0)} style={styles.singleHead} />
-            <TableWrapper style={{ flexDirection: "row" }}>
-              <Col
-                data={tableHead}
-                style={styles.title}
-                heightArr={[30, 30, 30, 30]}
-                textStyle={styles.titleText}
-              ></Col>
-            </TableWrapper>
-          </TableWrapper>
-          <TableWrapper style={{ flex: 1 }}>
-            <Cols
-              data={tableData}
-              heightArr={[30, 30, 30]}
-              textStyle={styles.text}
-            />
-          </TableWrapper>
-        </Table>
-      </View>
-      {/* 점심 */}
-      <View style={styles.mainView}>
-        <Table style={{ flexDirection: "row" }}>
-          <TableWrapper style={{ width: 80 }}>
-            <Cell data={timeText(1)} style={styles.singleHead} />
-            <TableWrapper style={{ flexDirection: "row" }}>
-              <Col
-                data={tableHead}
-                style={styles.title}
-                heightArr={[30, 30, 30, 30]}
-                textStyle={styles.titleText}
-              ></Col>
-            </TableWrapper>
-          </TableWrapper>
-          <TableWrapper style={{ flex: 1 }}>
-            <Cols
-              data={tableData}
-              heightArr={[30, 30, 30]}
-              textStyle={styles.text}
-            />
-          </TableWrapper>
-        </Table>
-      </View>
-      {/* 저녁 */}
-      <View style={styles.mainView}>
-        <Table style={{ flexDirection: "row" }}>
-          <TableWrapper style={{ width: 80 }}>
-            <Cell data={timeText(2)} style={styles.singleHead} />
-            <TableWrapper style={{ flexDirection: "row" }}>
-              <Col
-                data={tableHead}
-                style={styles.title}
-                heightArr={[30, 30, 30, 30]}
-                textStyle={styles.titleText}
-              ></Col>
-            </TableWrapper>
-          </TableWrapper>
-          <TableWrapper style={{ flex: 1 }}>
-            <Cols
-              data={tableData}
-              heightArr={[30, 30, 30]}
-              textStyle={styles.text}
-            />
-          </TableWrapper>
-        </Table>
-      </View>
-    </View>
+    <>
+      {loading ? (
+        <View></View>
+      ) : (
+        <View style={props.styles.box}>
+          <Text style={props.styles.title}>최근 혈당값 추세</Text>
+          <Text style={props.styles.subTitle}>
+            전날에 비해 얼마나 좋아졌을까요?
+          </Text>
+          {/* 아침 */}
+          <View style={styles.mainView}>
+            <Table style={{ flexDirection: "row" }}>
+              <TableWrapper style={{ width: 80 }}>
+                <Cell data={timeText(0)} style={styles.singleHead} />
+                <TableWrapper style={{ flexDirection: "row" }}>
+                  <Col
+                    data={tableHead}
+                    style={styles.title}
+                    heightArr={[30, 30, 30, 30]}
+                    textStyle={styles.titleText}
+                  ></Col>
+                </TableWrapper>
+              </TableWrapper>
+              <TableWrapper style={{ flex: 1 }}>
+                <Cols
+                  data={tableData}
+                  heightArr={[30, 30, 30]}
+                  textStyle={styles.text}
+                />
+              </TableWrapper>
+            </Table>
+          </View>
+          {/* 점심 */}
+          <View style={styles.mainView}>
+            <Table style={{ flexDirection: "row" }}>
+              <TableWrapper style={{ width: 80 }}>
+                <Cell data={timeText(1)} style={styles.singleHead} />
+                <TableWrapper style={{ flexDirection: "row" }}>
+                  <Col
+                    data={tableHead}
+                    style={styles.title}
+                    heightArr={[30, 30, 30, 30]}
+                    textStyle={styles.titleText}
+                  ></Col>
+                </TableWrapper>
+              </TableWrapper>
+              <TableWrapper style={{ flex: 1 }}>
+                <Cols
+                  data={tableData}
+                  heightArr={[30, 30, 30]}
+                  textStyle={styles.text}
+                />
+              </TableWrapper>
+            </Table>
+          </View>
+          {/* 저녁 */}
+          <View style={styles.mainView}>
+            <Table style={{ flexDirection: "row" }}>
+              <TableWrapper style={{ width: 80 }}>
+                <Cell data={timeText(2)} style={styles.singleHead} />
+                <TableWrapper style={{ flexDirection: "row" }}>
+                  <Col
+                    data={tableHead}
+                    style={styles.title}
+                    heightArr={[30, 30, 30, 30]}
+                    textStyle={styles.titleText}
+                  ></Col>
+                </TableWrapper>
+              </TableWrapper>
+              <TableWrapper style={{ flex: 1 }}>
+                <Cols
+                  data={tableData}
+                  heightArr={[30, 30, 30]}
+                  textStyle={styles.text}
+                />
+              </TableWrapper>
+            </Table>
+          </View>
+        </View>
+      )}
+    </>
   );
 };
 
