@@ -10,7 +10,7 @@ const imagesSlice = createSlice({
     add: (state, action) => {
       state.imageurls.push({ imageurls: action.payload, id: Date.now() });
     },
-    remomve: (state, action) =>
+    remove: (state, action) =>
       state.imageurls.filter((image) => image.id !== action.payload),
   },
 });
