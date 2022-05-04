@@ -17,6 +17,7 @@ import com.neulbomi.neulbom.dto.BloodSugarDto;
 import com.neulbomi.neulbom.entity.BloodPressure;
 import com.neulbomi.neulbom.entity.BloodSugar;
 import com.neulbomi.neulbom.exception.ExistsUserEmailException;
+import com.neulbomi.neulbom.exception.NotExistsRecordException;
 import com.neulbomi.neulbom.exception.NotExistsSettingException;
 import com.neulbomi.neulbom.exception.NotExistsUserException;
 import com.neulbomi.neulbom.exception.WrongCommonCodeException;
@@ -88,6 +89,24 @@ public class RecordController {
 		}
 	}
 	
+	@GetMapping("/bs/delete")
+	@ApiOperation(value = "혈당 기록 삭제", notes = "혈당 기록을 삭제한다.", response = BaseResponseBody.class)
+	@ApiResponses(
+			{ @ApiResponse(code = 200, message = "혈당 기록 삭제 성공"),
+			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
+			  @ApiResponse(code = 500, message = "서버 오류"),
+			  @ApiResponse(code = 409, message = "삭제 과정에서 발생하는 오류")
+			})
+	public ResponseEntity<? extends BaseResponseBody> deleteBs(@RequestParam long bsSeq) {		
+		try {
+			recordService.deleteBs(bsSeq);
+			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "기록 삭제 성공"));
+		}
+		catch(NotExistsRecordException e) {
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "잘못된 시퀀스 입니다."));
+		}
+	}
+	
 	@GetMapping("/bp")
 	@ApiOperation(value = "날짜 별 혈압 기록 조회", notes = "해당 유저 시퀀스의 날짜 별 혈압 기록을 조회한다.", response = BaseResponseBody.class)
 	@ApiResponses(
@@ -133,6 +152,24 @@ public class RecordController {
 		}
 		catch(WrongCommonCodeException e) {
 			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "잘못된 공통 코드입니다."));
+		}
+	}
+	
+	@GetMapping("/bp/delete")
+	@ApiOperation(value = "혈압 기록 삭제", notes = "혈압 기록을 삭제한다.", response = BaseResponseBody.class)
+	@ApiResponses(
+			{ @ApiResponse(code = 200, message = "기록 삭제 성공"),
+			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
+			  @ApiResponse(code = 500, message = "서버 오류"),
+			  @ApiResponse(code = 409, message = "삭제 과정에서 발생하는 오류")
+			})
+	public ResponseEntity<? extends BaseResponseBody> deleteBp(@RequestParam long bpSeq) {		
+		try {
+			recordService.deleteBp(bpSeq);
+			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "기록 삭제 성공"));
+		}
+		catch(NotExistsRecordException e) {
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "잘못된 시퀀스 입니다."));
 		}
 	}
 }

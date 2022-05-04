@@ -1,45 +1,31 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import ButtonCompo from "../../../components/button/ButtonCompo";
-import AlarmSetting from "../../../components/infoBox/AlarmSetting";
-import InfoMyDisease from "../../../components/infoBox/InfoMyDisease";
-import InfoMyself from "../../../components/infoBox/InfoMyself";
-import Intake from "../../../components/infoBox/Intake";
-import SelectBox from "../../../components/infoBox/SelectBox";
 import Infomation from "../../../components/infoBox/Infomation";
 import { useNavigation } from "@react-navigation/native";
 import { Dimensions } from "react-native";
+import Qualification from "../../../components/infoBox/Qualification";
+import InfoConsultant from "../../../components/infoBox/InfoConsultant";
 
 const screenSize = Dimensions.get("screen");
 
-const UserMypage = (props) => {
+const ConsultantMypage = (props) => {
   const navigation = useNavigation();
   return (
     <ScrollView style={styles.background}>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("MypageUpdate"), props.onClick();
+          navigation.navigate("ConsultantMypageUpdate"), props.onClick();
         }}
       >
         <Text>수정하기</Text>
       </TouchableOpacity>
-
+      <Text>전문가</Text>
       <Text style={styles.title}>내 소개 😊</Text>
-      <InfoMyself styles={styles} update={props.update}></InfoMyself>
-      <Text style={styles.title}>권장 섭취량 ✨</Text>
-      <Intake styles={styles}></Intake>
-      <Text style={styles.title}>건강 수치 ✨</Text>
-      <SelectBox styles={styles}></SelectBox>
-      <Text style={styles.title}>알림 설정 ✨</Text>
-      <AlarmSetting styles={styles}></AlarmSetting>
-      <Text style={styles.title}>질병 소개 ✨</Text>
-      <InfoMyDisease styles={styles}></InfoMyDisease>
+      <InfoConsultant styles={styles} update={props.update}></InfoConsultant>
+      <Text style={styles.title}>이력 사항✨</Text>
+      <Qualification styles={styles} update={props.update}></Qualification>
+      <ButtonCompo buttonName="소개페이지 보기"></ButtonCompo>
       <Text style={styles.title}>이용 안내 ✨</Text>
       <Infomation styles={styles}></Infomation>
       <ButtonCompo buttonName="로그아웃"></ButtonCompo>
@@ -47,7 +33,7 @@ const UserMypage = (props) => {
   );
 };
 
-export default UserMypage;
+export default ConsultantMypage;
 
 const styles = StyleSheet.create({
   background: {
@@ -129,5 +115,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: screenSize.width * 0.2,
     height: screenSize.width * 0.2,
+  },
+  subtitle: {
+    fontSize: 16,
+    marginVertical: screenSize.height * 0.01,
+    marginLeft: screenSize.width * 0.01,
   },
 });

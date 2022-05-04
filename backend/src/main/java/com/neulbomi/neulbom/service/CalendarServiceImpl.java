@@ -2,6 +2,7 @@ package com.neulbomi.neulbom.service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -13,6 +14,8 @@ import com.neulbomi.neulbom.entity.BloodSugar;
 import com.neulbomi.neulbom.entity.Member;
 import com.neulbomi.neulbom.entity.Other;
 import com.neulbomi.neulbom.exception.NotExistsUserException;
+import com.neulbomi.neulbom.exception.WrongDateException;
+import com.neulbomi.neulbom.exception.WrongTimeException;
 import com.neulbomi.neulbom.repository.BloodPressureRepository;
 import com.neulbomi.neulbom.repository.BloodSugarRepository;
 import com.neulbomi.neulbom.repository.MemberRepository;
@@ -38,6 +41,9 @@ public class CalendarServiceImpl implements CalendarService {
 	public HashMap<String, JSONObject> getCalendarMonthRecord(int userSeq, String date) {
 		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
 		
+		if(!Pattern.matches("^(19|20)\\d{2}-(0[1-9]|1[012])$", date))
+			throw new WrongDateException();
+		
 		// date : 2022-05
 		
 		// 1. 혈당 기록 불러오기
@@ -60,6 +66,7 @@ public class CalendarServiceImpl implements CalendarService {
 			if(record.get("bloodSugar") == null) bloodSugarList = new JSONArray();
 			
 			JSONObject obj = new JSONObject();
+			obj.put("bsSeq", bloodSugar.getBsSeq());
 			obj.put("bsCode", bloodSugar.getBsCode());
 			obj.put("bsLevel", bloodSugar.getBsLevel());
 			obj.put("bsTime", bloodSugar.getBsTime());
@@ -87,6 +94,7 @@ public class CalendarServiceImpl implements CalendarService {
 			if(record.get("bloodPressure") == null) bloodPressureList = new JSONArray();
 			
 			JSONObject obj = new JSONObject();
+			obj.put("bpSeq", bloodPressure.getBpSeq());
 			obj.put("bpCode", bloodPressure.getBpCode());
 			obj.put("bpHigh", bloodPressure.getBpHigh());
 			obj.put("bpLow", bloodPressure.getBpLow());
@@ -115,6 +123,7 @@ public class CalendarServiceImpl implements CalendarService {
 			if(record.get(other.getCode()) == null) otherList = new JSONArray();
 			
 			JSONObject obj = new JSONObject();
+			obj.put("otherSeq", other.getOtherSeq());
 			obj.put("code", other.getCode());
 			obj.put("otherTime", other.getOtherTime());
 			

@@ -1,11 +1,7 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { Dimensions } from "react-native";
 import ButtonCompo from "../../../components/button/ButtonCompo";
 import AlarmSetting from "../../../components/infoBox/AlarmSetting";
 import InfoMyDisease from "../../../components/infoBox/InfoMyDisease";
@@ -13,25 +9,22 @@ import InfoMyself from "../../../components/infoBox/InfoMyself";
 import Intake from "../../../components/infoBox/Intake";
 import SelectBox from "../../../components/infoBox/SelectBox";
 import Infomation from "../../../components/infoBox/Infomation";
-import { useNavigation } from "@react-navigation/native";
-import { Dimensions } from "react-native";
 
 const screenSize = Dimensions.get("screen");
 
-const UserMypage = (props) => {
+const UserMypageUpdate = (props) => {
   const navigation = useNavigation();
   return (
     <ScrollView style={styles.background}>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("MypageUpdate"), props.onClick();
+          navigation.navigate("Mypage"), props.onClick();
         }}
       >
-        <Text>수정하기</Text>
+        <Text>뒤로가기</Text>
       </TouchableOpacity>
-
       <Text style={styles.title}>내 소개 😊</Text>
-      <InfoMyself styles={styles} update={props.update}></InfoMyself>
+      <InfoMyself styles={styles}></InfoMyself>
       <Text style={styles.title}>권장 섭취량 ✨</Text>
       <Intake styles={styles}></Intake>
       <Text style={styles.title}>건강 수치 ✨</Text>
@@ -40,14 +33,12 @@ const UserMypage = (props) => {
       <AlarmSetting styles={styles}></AlarmSetting>
       <Text style={styles.title}>질병 소개 ✨</Text>
       <InfoMyDisease styles={styles}></InfoMyDisease>
-      <Text style={styles.title}>이용 안내 ✨</Text>
-      <Infomation styles={styles}></Infomation>
-      <ButtonCompo buttonName="로그아웃"></ButtonCompo>
+      <ButtonCompo buttonName="수정 완료"></ButtonCompo>
     </ScrollView>
   );
 };
 
-export default UserMypage;
+export default UserMypageUpdate;
 
 const styles = StyleSheet.create({
   background: {

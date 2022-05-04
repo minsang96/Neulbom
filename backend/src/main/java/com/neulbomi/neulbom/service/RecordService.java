@@ -15,5 +15,9 @@ public interface RecordService {
 	public List<Map<String, Object>> getBpByDate(int userSeq, String bpDate);
 	// 혈압 기록 추가
 	public void addBp(BloodPressureDto bloodPressureDto);
+	// 혈당 기록 삭제
+	public void deleteBs(long bsSeq);
+	// 혈압 기록 삭제
+	public void deleteBp(long bpSeq);
 	
 }
