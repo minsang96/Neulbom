@@ -15,4 +15,6 @@ public interface BloodPressureRepository extends JpaRepository<BloodPressure, Lo
 	@Query("SELECT bp FROM BloodPressure bp WHERE bp.userSeq=:userSeq AND bp.bpDate=:bpDate AND bp.delYn='n'")
 	public List<BloodPressure> findUserDailyBP(@Param("userSeq") int userSeq, @Param("bpDate") String bpDate);
 
+	public List<BloodPressure> findByDelYnAndUserSeqAndBpDateStartsWith(String string, int userSeq, String date);
+
 }
