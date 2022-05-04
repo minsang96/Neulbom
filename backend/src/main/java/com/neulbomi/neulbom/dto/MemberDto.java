@@ -1,5 +1,7 @@
 package com.neulbomi.neulbom.dto;
 
+import java.util.Map;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
@@ -48,6 +50,6 @@ public class MemberDto {
 	@ApiModelProperty(example="고혈압,당뇨", value="질병")
 	private String desc;
 	
-	@ApiModelProperty(value="bloodPressure: 혈압, bloodSugar: 혈당")
-	private String[] setting;
+	@ApiModelProperty(example= "{bloodPressure : true, bloodSugar : false}", value="bloodPressure: 혈압, bloodSugar: 혈당")
+	private Map<String, Boolean> setting;
 }
