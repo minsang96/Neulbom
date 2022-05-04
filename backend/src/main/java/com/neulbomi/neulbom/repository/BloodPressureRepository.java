@@ -1,6 +1,7 @@
 package com.neulbomi.neulbom.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +18,5 @@ public interface BloodPressureRepository extends JpaRepository<BloodPressure, Lo
 
 	public List<BloodPressure> findByDelYnAndUserSeqAndBpDateStartsWith(String string, int userSeq, String date);
 
+	public Optional<BloodPressure> findByDelYnAndBpSeq(String delYn, long bpSeq);
 }

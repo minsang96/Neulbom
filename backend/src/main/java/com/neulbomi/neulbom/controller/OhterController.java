@@ -2,15 +2,15 @@ package com.neulbomi.neulbom.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.neulbomi.neulbom.dto.MemberDto;
 import com.neulbomi.neulbom.dto.OtherDto;
-import com.neulbomi.neulbom.exception.ExistsUserEmailException;
-import com.neulbomi.neulbom.exception.NotExistsSettingException;
+import com.neulbomi.neulbom.exception.NotExistsRecordException;
 import com.neulbomi.neulbom.exception.NotExistsUserException;
 import com.neulbomi.neulbom.exception.WrongCommonCodeException;
 import com.neulbomi.neulbom.exception.WrongDateException;
@@ -55,6 +55,24 @@ public class OhterController {
 		}
 		catch(WrongTimeException e) {
 			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "잘못된 시간 양식입니다. HH:MM 형식으로 입력해주세요."));
+		}
+	}
+	
+	@GetMapping("/delete")
+	@ApiOperation(value = "술,커피,운동 기록 삭제", notes = "사용자의 술,커피,운동 기록을 삭제한다.", response = BaseResponseBody.class)
+	@ApiResponses(
+			{ @ApiResponse(code = 200, message = "기록 삭제 성공"),
+			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
+			  @ApiResponse(code = 500, message = "서버 오류"),
+			  @ApiResponse(code = 409, message = "삭제 과정에서 발생하는 오류")
+			})
+	public ResponseEntity<? extends BaseResponseBody> deleteRecord(@RequestParam long otherSeq) {		
+		try {
+			otherService.deleteRecord(otherSeq);
+			return ResponseEntity.status(201).body(BaseResponseBody.of(200, "기록 삭제 성공"));
+		}
+		catch(NotExistsRecordException e) {
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "잘못된 시퀀스 입니다."));
 		}
 	}
 }

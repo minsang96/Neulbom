@@ -1,6 +1,7 @@
 package com.neulbomi.neulbom.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +18,6 @@ public interface OtherRepository extends JpaRepository<Other, Long> {
 
 	public List<Other> findByDelYnAndUserSeqAndOtherDateStartsWith(String string, int userSeq, String date);
 	
-	public Other findByDelYnAndOtherSeq(String delYn, int otherSeq);
+	public Optional<Other> findByDelYnAndOtherSeq(String delYn, long otherSeq);
 
 }

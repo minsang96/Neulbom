@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.neulbomi.neulbom.dto.OtherDto;
 import com.neulbomi.neulbom.entity.Other;
 import com.neulbomi.neulbom.entity.User;
+import com.neulbomi.neulbom.exception.NotExistsRecordException;
 import com.neulbomi.neulbom.exception.NotExistsUserException;
 import com.neulbomi.neulbom.exception.WrongCommonCodeException;
 import com.neulbomi.neulbom.exception.WrongDateException;
@@ -56,8 +57,10 @@ public class OtherServiceImpl implements OtherService{
 	}
 
 	@Override
-	public void deleteRecord(int otherSeq) {
-		// TODO Auto-generated method stub
+	public void deleteRecord(long otherSeq) {
+		Other other = otherRepository.findByDelYnAndOtherSeq("n", otherSeq).orElseThrow(() -> new NotExistsRecordException());
+		other.setDelYn("y");
+		otherRepository.save(other);
 		
 	}
 

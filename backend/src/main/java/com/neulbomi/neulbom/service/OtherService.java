@@ -6,6 +6,6 @@ public interface OtherService {
 	// 술,커피,운동 등록
 	public void addRecord(OtherDto otherDto);
 	// 술,커피,운동 기록 삭제
-	public void deleteRecord(int otherSeq);
+	public void deleteRecord(long otherSeq);
 	
 }
