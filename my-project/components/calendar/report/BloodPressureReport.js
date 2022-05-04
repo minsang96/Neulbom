@@ -15,6 +15,12 @@ import { useDispatch, useSelector } from "react-redux";
 const screenSize = Dimensions.get("screen");
 
 const BloodPressureReport = (props) => {
+  // const dispatch = useDispatch();
+  // const dailyPressureReport = useSelector(
+  //   (state) => state.dailyReport.bloodPressure
+  // );
+  // const [pressure, setPressure] = useState();
+  // const [pressureRedux, setPressureRedux] = useState(dailyPressureReport);
   // dispatch부터 해보고 안되면... 이렇게 하자...
   // const [result, setResult] = useState({
   //   breakfast: { BpHigh: "", BpLow: "" },
@@ -22,29 +28,38 @@ const BloodPressureReport = (props) => {
   //   dinner: { BpHigh: "", BpLow: "" },
   // });
 
-  //리덕스 쓰는 방법을 모르겠다,, ㅋㅋ
-  useEffect(() => {
-    const getDailyBloodpressureResult = async () => {
-      try {
-        const response = await getDailyBloodpressure("2022-04-26", 1);
-        // console.log("------");
-        // console.log(response);
-        // setBreakfast(response.today.breakfast);
-        reduxTest(response);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getDailyBloodpressureResult();
-  }, []);
+  // const getDailyBloodpressureResult = useCallback(async () => {
+  //   try {
+  //     const response = await getDailyBloodpressure("2022-04-26", 1);
+  //     // console.log("------");
+  //     // console.log(response);
+  //     dispatch(
+  //       dailyReportSlice.actions.setDailyReport({
+  //         bloodPressure: response,
+  //       })
+  //     );
+  //     console.log(dailyPressureReport.bloodPressure.today.lunch.BpLow);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     console.log("getDailyBloodpressure");
+  //   }
+  // });
+  // 리덕스 쓰는 방법을 모르겠다,, ㅋㅋ
+  // useEffect(() => {
+  //   getDailyBloodpressureResult();
+  // }, []);
 
-  const dispatch = useDispatch();
-  const reduxTest = (props) => {
-    dispatch(dailyReportSlice.actions.add(props));
-  };
-  const result = useSelector(
-    (state) => state.dailyReport.todayBloodPressure[0].todayBloodPressure
-  );
+  // useEffect(() => {
+  //   setPressure(dailyPressureReport);
+  //   console.log(dailyPressureReport);
+  // }, [pressureRedux]);
+  // const reduxTest = (props) => {
+  //   dispatch(dailyReportSlice.actions.add(props));
+  // };
+  // const result = useSelector(
+  //   (state) => state.dailyReport.todayBloodPressure[0].todayBloodPressure
+  // );
 
   // useEffect(() => {
   // const getDailyBloodpressureResult = async () => {
