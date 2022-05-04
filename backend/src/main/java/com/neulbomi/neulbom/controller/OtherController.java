@@ -26,7 +26,7 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 @RequestMapping("/other")
 @Api("술,커피,운동 기록 컨트롤러 API")
-public class OhterController {
+public class OtherController {
 	
 	@Autowired
 	OtherService otherService;

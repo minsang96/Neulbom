@@ -114,6 +114,11 @@ public class ReportServiceImpl implements ReportService {
 
 		Map<String, Object> result = new HashMap<>();
 		List<String> days = dateUtils.getDaysOfWeek(date, 2);
+		List<String> day7 = dateUtils.getDaysOfWeek(date, 7);
+		
+		for (int i = 0; i < 7; i++) {
+			result.put(day7.get(i), 0);
+		}
 		
 		String startDate = days.get(0);
 		String endDate = days.get(1);
