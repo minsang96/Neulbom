@@ -5,10 +5,10 @@ import DailyDiet from "./main/DailyDiet";
 import DietList from "./main/DietList";
 import styled from "styled-components/native";
 import ButtonCompo from "../../components/button/ButtonCompo";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import imagesSlice from "../../slices/images";
-import { useSelector } from "react-redux";
 import { getDiet } from "../../api/diets";
+import dietdailySlice from "../../slices/dietdaily";
 
 const Box = styled.View`
   flex: 1;
@@ -20,23 +20,36 @@ const Container = styled.ScrollView``;
 const MainPage = ({ navigation: { navigate } }) => {
   const { height: SCREEN_HEIGHT } = Dimensions.get("window");
   const dispatch = useDispatch();
+  const urls = useSelector((state) => state.images.imageurls);
+  const dietdaily = useSelector((state) => state.dietdaily.total);
+
+  // 첫 화면을 그릴 때 일일 영양 섭취량 정보를 리덕스에 저장
+  useEffect(() => {
+    const getMyDiet = async () => {
+      try {
+        const response = await getDiet("2022-04-26", "1");
+        // console.log("response", response);
+        dispatch(dietdailySlice.actions.add_total(response.total));
+      } catch (error) {
+        console.log(error);
+        console.log("mainpage");
+      } finally {
+        console.log("diet/daily");
+      }
+    };
+    getMyDiet();
+  }, []);
+
   const reduxTest = () => {
     dispatch(imagesSlice.actions.add("yayaya"));
     console.log("testing");
   };
-  const urls = useSelector((state) => state.images.imageurls);
+
   const reduxIn = useCallback(async () => {
+    console.log(dietdaily[0].total);
     // console.log(urls);
     // urls.map((url) => console.log(url.imageurls));
     console.log("ip");
-    try {
-      const response = await getDiet("2022-04-26", "1");
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      console.log("diet/daily");
-    }
   });
 
   return (
