@@ -1,17 +1,57 @@
 import React, { useEffect } from "react";
 import { ScrollView, Text, StyleSheet } from "react-native";
-import axios from "axios";
 import CalorieCompo from "../../../components/calendar/report/CalorieCompo";
 import NutrientCompo from "../../../components/calendar/report/NutrientCompo";
 import TodayReport from "../../../components/calendar/report/TodayReport";
 import BloodPressureReport from "../../../components/calendar/report/BloodPressureReport";
 import BloodSugarReport from "../../../components/calendar/report/BloodSugarReport";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Dimensions } from "react-native";
+import dailyReportSlice from "../../../slices/dailyReport";
+import {
+  getDailyBloodPressure,
+  getDailyBloodSugar,
+  getDailyCalorie,
+} from "../../../api/reports";
 
 const screenSize = Dimensions.get("screen");
 
 const DailyReport = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const getDailyBloodpressureResult = async () => {
+      try {
+        const response = await getDailyBloodPressure("2022-04-26", "2");
+        dispatch(
+          dailyReportSlice.actions.setDailyBloodPressureReport(response)
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const getDailyBloodSugarResult = async () => {
+      try {
+        const response = await getDailyBloodSugar("2022-04-26", "2");
+        dispatch(dailyReportSlice.actions.setDailyBloodSugarReport(response));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const getCalorieResult = async () => {
+      try {
+        const response = await getDailyCalorie("2022-04-26", "1");
+        dispatch(dailyReportSlice.actions.setDailyCalroieReport(response));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getDailyBloodpressureResult();
+    getDailyBloodSugarResult();
+    getCalorieResult();
+  }, []);
+
   return (
     <ScrollView style={styles.background}>
       <Text style={styles.reportTitle}>정현정님의 일간 리포트</Text>

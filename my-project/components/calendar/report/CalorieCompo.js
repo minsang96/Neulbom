@@ -1,10 +1,12 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
+import { useSelector } from "react-redux";
 
 const CalorieCompo = (props) => {
+  const calorie = useSelector((state) => state.dailyReport.calorie);
   // 테스트임 정보 받아오면 고칠 부분
-  const beforeCal = 1780;
-  const afterCal = 2150;
+  const beforeCal = parseInt(calorie.yesterday);
+  const afterCal = parseInt(calorie.today);
 
   return (
     <View style={props.styles.box}>
@@ -21,7 +23,13 @@ const CalorieCompo = (props) => {
         </View>
       </View>
       <View style={{ alignItems: "center" }}>
-        <Text style={styles.calCalculator}>▲{afterCal - beforeCal}</Text>
+        {beforeCal === afterCal ? (
+          <Text style={styles.calCalculator}>0</Text>
+        ) : beforeCal >= afterCal ? (
+          <Text style={styles.calCalculatorMin}>▼{beforeCal - afterCal}</Text>
+        ) : (
+          <Text style={styles.calCalculatorMax}>▲{afterCal - beforeCal}</Text>
+        )}
       </View>
     </View>
   );
@@ -38,12 +46,28 @@ const styles = StyleSheet.create({
   calorieText: {
     fontSize: 20,
   },
-  calCalculator: {
+  calCalculatorMax: {
     textAlign: "center",
     backgroundColor: "rgba(255,0,0,0.2)",
     borderRadius: 30,
     width: 60,
     color: "red",
+    marginBottom: 5,
+  },
+  calCalculatorMin: {
+    textAlign: "center",
+    backgroundColor: "rgba(0,56,255,0.2)",
+    borderRadius: 30,
+    width: 60,
+    color: "blue",
+    marginBottom: 5,
+  },
+  calCalculator: {
+    textAlign: "center",
+    backgroundColor: "rgba(0,0,0,0.2)",
+    borderRadius: 30,
+    width: 60,
+    color: "black",
     marginBottom: 5,
   },
 });

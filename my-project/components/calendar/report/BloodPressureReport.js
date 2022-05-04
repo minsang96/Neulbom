@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import dailyReportSlice from "../../../slices/dailyReport";
 import { Text, View, StyleSheet } from "react-native";
 import {
@@ -9,80 +9,30 @@ import {
   Col,
 } from "react-native-table-component";
 import { Dimensions } from "react-native";
-import { getDailyBloodpressure } from "../../../api/reports";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const screenSize = Dimensions.get("screen");
 
 const BloodPressureReport = (props) => {
-  // const dispatch = useDispatch();
-  // const dailyPressureReport = useSelector(
-  //   (state) => state.dailyReport.bloodPressure
-  // );
-  // const [pressure, setPressure] = useState();
-  // const [pressureRedux, setPressureRedux] = useState(dailyPressureReport);
-  // dispatch부터 해보고 안되면... 이렇게 하자...
-  // const [result, setResult] = useState({
-  //   breakfast: { BpHigh: "", BpLow: "" },
-  //   lunch: { BpHigh: "", BpLow: "" },
-  //   dinner: { BpHigh: "", BpLow: "" },
-  // });
+  const [loading, setLoading] = useState(true);
+  const todayBloodPressure = useSelector(
+    (state) => state.dailyReport.todayBloodPressure
+  );
+  const yesterdayBloodPressure = useSelector(
+    (state) => state.dailyReport.yesterdayBloodPressure
+  );
 
-  // const getDailyBloodpressureResult = useCallback(async () => {
-  //   try {
-  //     const response = await getDailyBloodpressure("2022-04-26", 1);
-  //     // console.log("------");
-  //     // console.log(response);
-  //     dispatch(
-  //       dailyReportSlice.actions.setDailyReport({
-  //         bloodPressure: response,
-  //       })
-  //     );
-  //     console.log(dailyPressureReport.bloodPressure.today.lunch.BpLow);
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     console.log("getDailyBloodpressure");
-  //   }
-  // });
-  // 리덕스 쓰는 방법을 모르겠다,, ㅋㅋ
-  // useEffect(() => {
-  //   getDailyBloodpressureResult();
-  // }, []);
-
-  // useEffect(() => {
-  //   setPressure(dailyPressureReport);
-  //   console.log(dailyPressureReport);
-  // }, [pressureRedux]);
-  // const reduxTest = (props) => {
-  //   dispatch(dailyReportSlice.actions.add(props));
-  // };
-  // const result = useSelector(
-  //   (state) => state.dailyReport.todayBloodPressure[0].todayBloodPressure
-  // );
-
-  // useEffect(() => {
-  // const getDailyBloodpressureResult = async () => {
-  //   try {
-  //     const response = await getDailyBloodpressure("2022-04-26", 1);
-  //     console.log("------");
-  //     console.log(response);
-  //     setResult(response.today);
-  //     // setBreakfast(response.today.breakfast);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  //   getDailyBloodpressureResult();
-  // }, []);
+  useEffect(() => {
+    setLoading(false);
+  }, [todayBloodPressure]);
 
   // 계산 잘하기
-  const beforeEat = 130 - 120;
+  const compare = 130 - 120;
 
   const element = () => {
     return (
       <View style={styles.btn}>
-        <Text style={styles.btnText}>▲{beforeEat}</Text>
+        <Text style={styles.btnText}>▲{compare}</Text>
       </View>
     );
   };
@@ -98,18 +48,22 @@ const BloodPressureReport = (props) => {
   };
   const tableHead = ["최저", "최고"];
   // const tableData1 = [
-  //   ["어제", result.today.breakfast.BpLow, "-"],
-  //   ["오늘", result.today.breakfast.BpHigh, "-"],
+  //   ["어제", "", "-"],
+  //   [
+  //     "오늘",
+  //     todayBloodPressure.breakfast.BpLow,
+  //     todayBloodPressure.breakfast.BpHigh,
+  //   ],
   //   [" ", element(), "-"],
   // ];
   // const tableData2 = [
-  //   ["어제", result.today.lunch.BpLow, "-"],
-  //   ["오늘", result.today.lunch.BpHigh, "-"],
+  //   ["어제", todayBloodPressure.breakfast.BpHigh, "-"],
+  //   ["오늘", todayBloodPressure.lunch.BpLow, todayBloodPressure.lunch.BpHigh],
   //   [" ", element(), "-"],
   // ];
   // const tableData3 = [
-  //   ["어제", result.today.dinner.BpLow, "-"],
-  //   ["오늘", result.today.dinner.BpHigh, "-"],
+  //   ["어제", todayBloodPressure.breakfast.BpHigh, "-"],
+  //   ["오늘", todayBloodPressure.dinner.BpLow, todayBloodPressure.dinner.BpHigh],
   //   [" ", element(), "-"],
   // ];
   const tableData1 = [
@@ -129,81 +83,87 @@ const BloodPressureReport = (props) => {
   ];
 
   return (
-    <View style={props.styles.box}>
-      <Text style={props.styles.title}>최근 혈압값 추세</Text>
-      <Text style={props.styles.subTitle}>
-        전날에 비해 얼마나 좋아졌을까요?
-      </Text>
-      {/* 아침 */}
-      <View style={styles.mainView}>
-        <Table style={{ flexDirection: "row" }}>
-          <TableWrapper style={{ width: 80 }}>
-            <Cell data={timeText(0)} style={styles.singleHead} />
-            <TableWrapper style={{ flexDirection: "row" }}>
-              <Col
-                data={tableHead}
-                style={styles.title}
-                heightArr={[30, 30, 30, 30]}
-                textStyle={styles.titleText}
-              ></Col>
-            </TableWrapper>
-          </TableWrapper>
-          <TableWrapper style={{ flex: 1 }}>
-            <Cols
-              data={tableData1}
-              heightArr={[30, 30, 30]}
-              textStyle={styles.text}
-            />
-          </TableWrapper>
-        </Table>
-      </View>
-      {/* 점심 */}
-      <View>
-        <Table style={{ flexDirection: "row" }}>
-          <TableWrapper style={{ width: 80 }}>
-            <Cell data={timeText(1)} style={styles.singleHead} />
-            <TableWrapper style={{ flexDirection: "row" }}>
-              <Col
-                data={tableHead}
-                style={styles.title}
-                heightArr={[30, 30, 30, 30]}
-                textStyle={styles.titleText}
-              ></Col>
-            </TableWrapper>
-          </TableWrapper>
-          <TableWrapper style={{ flex: 1 }}>
-            <Cols
-              data={tableData2}
-              heightArr={[30, 30, 30]}
-              textStyle={styles.text}
-            />
-          </TableWrapper>
-        </Table>
-      </View>
-      {/* 저녁 */}
-      <View>
-        <Table style={{ flexDirection: "row" }}>
-          <TableWrapper style={{ width: 80 }}>
-            <Cell data={timeText(2)} style={styles.singleHead} />
-            <TableWrapper style={{ flexDirection: "row" }}>
-              <Col
-                data={tableHead}
-                style={styles.title}
-                heightArr={[30, 30, 30, 30]}
-                textStyle={styles.titleText}
-              ></Col>
-            </TableWrapper>
-          </TableWrapper>
-          <TableWrapper style={{ flex: 1 }}>
-            <Cols
-              data={tableData3}
-              heightArr={[30, 30, 30]}
-              textStyle={styles.text}
-            />
-          </TableWrapper>
-        </Table>
-      </View>
-    </View>
+    <>
+      {loading ? (
+        <View></View>
+      ) : (
+        <View style={props.styles.box}>
+          <Text style={props.styles.title}>최근 혈압값 추세</Text>
+          <Text style={props.styles.subTitle}>
+            전날에 비해 얼마나 좋아졌을까요?
+          </Text>
+          {/* 아침 */}
+          <View style={styles.mainView}>
+            <Table style={{ flexDirection: "row" }}>
+              <TableWrapper style={{ width: 80 }}>
+                <Cell data={timeText(0)} style={styles.singleHead} />
+                <TableWrapper style={{ flexDirection: "row" }}>
+                  <Col
+                    data={tableHead}
+                    style={styles.title}
+                    heightArr={[30, 30, 30, 30]}
+                    textStyle={styles.titleText}
+                  ></Col>
+                </TableWrapper>
+              </TableWrapper>
+              <TableWrapper style={{ flex: 1 }}>
+                <Cols
+                  data={tableData1}
+                  heightArr={[30, 30, 30]}
+                  textStyle={styles.text}
+                />
+              </TableWrapper>
+            </Table>
+          </View>
+          {/* 점심 */}
+          <View>
+            <Table style={{ flexDirection: "row" }}>
+              <TableWrapper style={{ width: 80 }}>
+                <Cell data={timeText(1)} style={styles.singleHead} />
+                <TableWrapper style={{ flexDirection: "row" }}>
+                  <Col
+                    data={tableHead}
+                    style={styles.title}
+                    heightArr={[30, 30, 30, 30]}
+                    textStyle={styles.titleText}
+                  ></Col>
+                </TableWrapper>
+              </TableWrapper>
+              <TableWrapper style={{ flex: 1 }}>
+                <Cols
+                  data={tableData2}
+                  heightArr={[30, 30, 30]}
+                  textStyle={styles.text}
+                />
+              </TableWrapper>
+            </Table>
+          </View>
+          {/* 저녁 */}
+          <View>
+            <Table style={{ flexDirection: "row" }}>
+              <TableWrapper style={{ width: 80 }}>
+                <Cell data={timeText(2)} style={styles.singleHead} />
+                <TableWrapper style={{ flexDirection: "row" }}>
+                  <Col
+                    data={tableHead}
+                    style={styles.title}
+                    heightArr={[30, 30, 30, 30]}
+                    textStyle={styles.titleText}
+                  ></Col>
+                </TableWrapper>
+              </TableWrapper>
+              <TableWrapper style={{ flex: 1 }}>
+                <Cols
+                  data={tableData3}
+                  heightArr={[30, 30, 30]}
+                  textStyle={styles.text}
+                />
+              </TableWrapper>
+            </Table>
+          </View>
+        </View>
+      )}
+    </>
   );
 };
 
