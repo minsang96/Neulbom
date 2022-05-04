@@ -28,8 +28,8 @@ const MainPage = ({ navigation: { navigate } }) => {
     const getMyDiet = async () => {
       try {
         const response = await getDiet("2022-04-26", "1");
-        // console.log("response", response);
         dispatch(dietdailySlice.actions.set_diet(response));
+        dispatch(imagesSlice.actions.set(response));
       } catch (error) {
         console.log(error);
         console.log("mainpage");
