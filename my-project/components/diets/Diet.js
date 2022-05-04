@@ -43,7 +43,12 @@ const Plus = styled.TouchableOpacity`
 const Diet = ({ kind, kcal, meal, total_meal }) => {
   const navigation = useNavigation();
   const [image, setImage] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
+
+  const getMealDetail = async () => {
+    navigation.navigate("Stack", { screen: "FoodWrite" });
+  };
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -63,34 +68,44 @@ const Diet = ({ kind, kcal, meal, total_meal }) => {
   };
 
   return (
-    <Box>
-      <Column>
-        <Content style={{ flex: 1 }}>{kind}</Content>
-        <Content style={{ color: `${palette.green}` }}>{kcal} kcal</Content>
-        <Plus onPress={pickImage}>
-          <Ionicons name="add" color="white" size={30} />
-        </Plus>
-      </Column>
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        {image && (
-          <Image source={{ uri: image }} style={{ width: 20, height: 20 }} />
-        )}
-      </View>
-      {meal.map((food) => (
-        <Box key={food.dietSeq}>
-          <Text>{food.foodName}</Text>
-          <Image
-            source={{ uri: food.dietImg }}
-            style={{ width: 55, height: 55 }}
-          ></Image>
-        </Box>
-      ))}
-      <Content>탄수화물 {total_meal.carbohydrate}g</Content>
-      <Content>단백질 {total_meal.protein}g</Content>
-      <Content>지방 {total_meal.fat}g</Content>
-      <Content>나트륨 {total_meal.natrium}mg</Content>
-      <Content>당 {total_meal.sugars}mg</Content>
-    </Box>
+    <>
+      <Box>
+        <Column>
+          <Content style={{ flex: 1 }}>{kind}</Content>
+          <Content style={{ color: `${palette.green}` }}>{kcal} kcal</Content>
+          {/* <Plus onPress={pickImage}> */}
+          <Plus onPress={getMealDetail}>
+            {/* <Plus
+            onPress={() => {
+              setModalVisible(true);
+            }}
+          > */}
+            <Ionicons name="add" color="white" size={30} />
+          </Plus>
+        </Column>
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          {image && (
+            <Image source={{ uri: image }} style={{ width: 20, height: 20 }} />
+          )}
+        </View>
+        {meal.map((food) => (
+          <Box key={food.dietSeq}>
+            <Text>{food.foodName}</Text>
+            <Image
+              source={{ uri: food.dietImg }}
+              style={{ width: 55, height: 55 }}
+            ></Image>
+          </Box>
+        ))}
+        <Content>탄수화물 {total_meal.carbohydrate}g</Content>
+        <Content>단백질 {total_meal.protein}g</Content>
+        <Content>지방 {total_meal.fat}g</Content>
+        <Content>나트륨 {total_meal.natrium}mg</Content>
+        <Content>당 {total_meal.sugars}mg</Content>
+      </Box>
+    </>
   );
 };
 
