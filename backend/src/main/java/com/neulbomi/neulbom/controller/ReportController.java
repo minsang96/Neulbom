@@ -106,6 +106,25 @@ public class ReportController {
 		}
 	}
 	
+	@GetMapping("/daily/other")
+	@ApiOperation(value = "일간 기타 기록 내용", notes = "유저 시퀀스와 날짜를 입력받아 일일 운동, 음주, 커피 기록을 반환한다.")
+	@ApiImplicitParams({ @ApiImplicitParam(name = "userSeq", example = "1", value = "유저 시퀀스", required = true), 
+						 @ApiImplicitParam(name = "date", example = "2022-04-26", value = "yyyy-mm-dd", required = true) })
+	@ApiResponses(
+			{ @ApiResponse(code = 200, message = "데일리 기타 기록 정보 조회 성공"),
+				@ApiResponse(code = 400, message = "잘못된 요청"),
+				@ApiResponse(code = 409, message = "조회 과정에서 발생하는 오류"),
+				@ApiResponse(code = 500, message = "서버 오류")
+			})
+	public ResponseEntity<? extends BaseResponseBody> dailyOther(@RequestParam(name = "userSeq") int userSeq, @RequestParam(name = "date") String date) {
+		try {
+			Map<String, Object> result = reportService.readDailyOther(userSeq, date);
+			return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "조회 성공", result));
+		} catch (NotExistsUserException e) {
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "계정 정보를 조회할 수 없음"));
+		}
+	}
+	
 	@GetMapping("/weekly/bloodsugar")
 	@ApiOperation(value = "주간 공복 혈당값 추세", notes = "유저 시퀀스와 날짜를 입력 받아 일주일 아침 공복 혈당 값을 반환한다.")
 	@ApiImplicitParams({ @ApiImplicitParam(name = "userSeq", example = "2", value = "유저 시퀀스", required = true),
@@ -147,7 +166,7 @@ public class ReportController {
 	
 	
 	@GetMapping("/weekly/calorie")
-	@ApiOperation(value = "주간 섭취 칼로리 총합", notes = "유저 시퀀스와 날짜를 입력 받아 전주, 이번주 섭취 칼로리 총합을 반환한다.")
+	@ApiOperation(value = "일간 섭취 칼로리 총합", notes = "유저 시퀀스와 날짜를 입력 받아 전주, 이번주 섭취 칼로리 총합을 반환한다.")
 	@ApiImplicitParams({ @ApiImplicitParam(name = "userSeq", example = "1", value = "유저 시퀀스", required = true),
 						 @ApiImplicitParam(name = "date", example = "2022-04-26", value = "yyyy-mm-dd", required = true) })
 	@ApiResponses(
