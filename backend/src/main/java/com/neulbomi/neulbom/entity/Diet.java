@@ -8,6 +8,7 @@ import javax.persistence.Id;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,7 +19,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
 public class Diet {
 
 	@Id
@@ -42,8 +42,11 @@ public class Diet {
 	@Column(name = "diet_amount")
 	private int dietAmount;
 
+	@Column(name = "diet_date")
+	private String dietDate;
+
 	@Column(name = "del_yn")
-	private String delYn;
+	private String delYn = "n";
 
 	@Column(name = "reg_email")
 	private String regEmail;
@@ -56,5 +59,23 @@ public class Diet {
 
 	@Column(name = "mod_dt")
 	private String modDt;
+
+	@Builder
+	public Diet(long dietSeq, int userSeq, String dietTime, String foodCode, String dietImg, int dietAmount, String delYn,
+			String dietDate, String regEmail, String regDt, String modEmail, String modDt) {
+		super();
+		this.dietSeq = dietSeq;
+		this.userSeq = userSeq;
+		this.dietTime = dietTime;
+		this.foodCode = foodCode;
+		this.dietImg = dietImg;
+		this.dietAmount = dietAmount;
+		this.dietDate = dietDate;
+		this.delYn = delYn;
+		this.regEmail = regEmail;
+		this.regDt = regDt;
+		this.modEmail = modEmail;
+		this.modDt = modDt;
+	}
 
 }

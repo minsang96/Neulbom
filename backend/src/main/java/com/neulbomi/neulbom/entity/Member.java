@@ -8,6 +8,7 @@ import javax.persistence.Id;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -55,7 +56,7 @@ public class Member {
 	private int memberKcal;
 
 	@Column(name = "del_yn")
-	private String delYn;
+	private String delYn = "n";
 
 	@Column(name = "reg_email")
 	private String regEmail;
@@ -68,4 +69,23 @@ public class Member {
 
 	@Column(name = "mod_dt")
 	private String modDt;
+	
+	@Builder
+	public Member(int userSeq, String memberNickname, String memberImg, int memberHeight, int memberWeight, int memberYear, String memberGender,
+					String memberDesc, int memberKcal, String delYn, String regEmail, String regDt, String modEmail, String modDt) {
+		this.userSeq = userSeq;
+		this.memberNickname = memberNickname;
+		this.memberImg = memberImg;
+		this.memberHeight = memberHeight;
+		this.memberWeight = memberWeight;
+		this.memberYear = memberYear;
+		this.memberGender = memberGender;
+		this.memberDesc = memberDesc;
+		this.memberKcal = memberKcal;
+		this.delYn = delYn;
+		this.regEmail = regEmail;
+		this.regDt = regDt;
+		this.modEmail = modEmail;
+		this.modDt = modDt;
+	}
 }

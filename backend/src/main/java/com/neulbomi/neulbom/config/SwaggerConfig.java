@@ -23,7 +23,7 @@ public class SwaggerConfig {
         		// Swagger API 문서에 대한 설명 표기 메소드 (선택)
         		.apiInfo(apiInfo())
         		.select()
-        		// Swagger API 문서로 만들기 원하는 BasePackage (필수)
+        		// Swagger API 문서로 만들기 원하는 BasePackage(필수)
                 .apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot"))) 
                 // 해당 URL에 해당하는 요청만 Swagger API 문서로
                 .paths(PathSelectors.any())
