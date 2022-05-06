@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
   },
   input: {
     alignSelf: 'flex-start',
-    marginTop: '4%'
+    marginTop: '4%',
+    width: '100%'
   },
 })

@@ -1,12 +1,12 @@
 import React from "react";
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
 
-// props로 buttonName, fontSize, fontWieht, onPressButton, padding, width를 받을 수 있다.
-const ButtonGreen2 = (props) => {
+// props로 buttonName, fontSize, fontWieht, elevation, onPressButton, padding, width를 받을 수 있다.
+const ButtonWhite = (props) => {
   return (
     <TouchableOpacity
       style={{
-        backgroundColor: "#09BC8A",
+        backgroundColor: "#fff",
         padding: props.padding,
         marginVertical: 10,
         // marginHorizontal: 25,
@@ -17,11 +17,11 @@ const ButtonGreen2 = (props) => {
       }}
       onPress={props.onPressButton}
     >
-      <Text style={{ color: "white", fontSize: props.fontSize, fontWeight: props.fontWeight }}>{props.buttonName}</Text>
+      <Text style={{ fontSize: props.fontSize, fontWeight: props.fontWeight }}>{props.buttonName}</Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({});
 
-export default ButtonGreen2;
+export default ButtonWhite;
