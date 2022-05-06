@@ -2,16 +2,29 @@ import { View, Text, StyleSheet, Dimensions, TextInput } from 'react-native'
 import ButtonGray from '../../../components/button/ButtonSignUp';
 import ButtonGreen2 from '../../../components/button/ButtonGreen2'
 import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react'
+import axios from 'axios';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
-const login = () => {
-
-}
 
 export default function UserLogin({ navigation: { navigate }} ) {
   // const navigation = useNavigation();
+  const login = () => {
+    axios.post('https://k6a104.p.ssafy.io/api/user/login', {
+      userEmail: user.email,
+      userPwd: user.password
+    }).then(res=> {
+      console.log('--------------------------')
+      console.log(res.data.data)
+      // navigate('MainPage')
+    })
+  }
+  const [ user, setUser ] = useState({
+    email: null,
+    password: null
+  });
   const loginBoxHeight = windowHeight*28/100
   const loginBoxWidth = windowWidth*80/100
   return (
@@ -25,16 +38,18 @@ export default function UserLogin({ navigation: { navigate }} ) {
           style={styles.input}
           placeholder='이메일'
           keyboardType='email-address'
+          onChangeText={(event) => setUser({...user, email: event})}
         ></TextInput>
         <View style={styles.inputline}></View>
         <TextInput
           style={styles.input}
           placeholder='비밀번호'
           secureTextEntry={true}
+          onChangeText={(event) => setUser({...user, password: event})}
         ></TextInput>
         <View style={styles.inputline}></View>
         <ButtonGreen2
-          onPressButton={() => navigate('MainPage')}
+          onPressButton={() => login()}
           buttonName='로그인'
           fontSize={15}
           padding={9.5}
