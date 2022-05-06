@@ -1,6 +1,7 @@
 package com.neulbomi.neulbom.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,7 +57,10 @@ public class UserController {
 	        }
 	        List<String> auth = new ArrayList<>();
 	        auth.add("ROLE_USER");
-	        return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "로그인 성공", jwtTokenProvider.createToken(user.getUserEmail(),auth)));
+	        Map<String, Object> result = new HashMap<>();
+	        result.put("accessToken",jwtTokenProvider.createToken(user.getUserEmail(),auth));
+	        result.put("userSeq", user.getUserSeq());
+	        return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "로그인 성공", result));
 		}
 		catch(NotExistsUserException e) {
 			return ResponseEntity.status(202).body(AdvancedResponseBody.of(202, "가입 정보가 없습니다.", ""));
