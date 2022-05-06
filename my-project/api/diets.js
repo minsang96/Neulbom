@@ -40,3 +40,12 @@ export async function getDinner(dietDate, userSeq) {
   });
   return response.data.data.dinner;
 }
+
+export async function searchDiet(keyword) {
+  const response = await client({
+    method: "get",
+    url: "diet/search",
+    params: { keyword, page: 1, size: 10 },
+  });
+  return response.data.data;
+}

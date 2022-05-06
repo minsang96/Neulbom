@@ -7,6 +7,7 @@ import { Image, FlatList } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import imagesSlice from "../../../slices/images";
 import UploadMode from "../../../components/modal/UploadMode";
+import ButtonCompo from "../../../components/button/ButtonCompo";
 
 const Container = styled.ScrollView``;
 const View = styled.View``;
@@ -34,7 +35,7 @@ const FoodWrite = () => {
   useEffect(() => {
     setImagesLength(images.breakfast.length);
   }, [images]);
-  console.log(images.imageurls);
+  console.log("here", images.breakfast);
   const onCamera = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchCameraAsync({
@@ -59,44 +60,53 @@ const FoodWrite = () => {
         <View>
           <View>
             {imagesLength > 0 ? (
-              <View
-                style={{
-                  flex: 1,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Image
-                  source={{ uri: images.breakfast[imagesLength - 1].dietImg }}
-                  style={{ width: 200, height: 200 }}
-                />
-                <Text>{images.breakfast[imagesLength - 1].foodName}</Text>
-                <Text>
-                  {images.breakfast[imagesLength - 1].foodAmount}g (
-                  {Math.round(
-                    images.breakfast[imagesLength - 1].dietAmount /
-                      images.breakfast[imagesLength - 1].foodAmount
-                  )}
-                  인분)
-                </Text>
-                <Text>
-                  칼로리 {images.breakfast[imagesLength - 1].foodKcal}
-                </Text>
-                <Text>
-                  나트륨 {images.breakfast[imagesLength - 1].foodNatrium}
-                </Text>
-                <Text>
-                  당류 {images.breakfast[imagesLength - 1].foodSugars}
-                </Text>
-                <Text>
-                  탄수화물 {images.breakfast[imagesLength - 1].foodCarbohydrate}
-                </Text>
-                <Text>
-                  단백질 {images.breakfast[imagesLength - 1].foodProtein}
-                </Text>
-                <Text>
-                  지방 {images.breakfast[imagesLength - 1].foodTransfat}
-                </Text>
+              <View>
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Image
+                    source={{ uri: images.breakfast[imagesLength - 1].dietImg }}
+                    style={{ width: 200, height: 200 }}
+                  />
+                  <Text>{images.breakfast[imagesLength - 1].foodName}</Text>
+                  <Text>
+                    {images.breakfast[imagesLength - 1].foodAmount}g (
+                    {Math.round(
+                      images.breakfast[imagesLength - 1].dietAmount /
+                        images.breakfast[imagesLength - 1].foodAmount
+                    )}
+                    인분)
+                  </Text>
+                  <Text>
+                    칼로리 {images.breakfast[imagesLength - 1].foodKcal}
+                  </Text>
+                  <Text>
+                    나트륨 {images.breakfast[imagesLength - 1].foodNatrium}
+                  </Text>
+                  <Text>
+                    당류 {images.breakfast[imagesLength - 1].foodSugars}
+                  </Text>
+                  <Text>
+                    탄수화물{" "}
+                    {images.breakfast[imagesLength - 1].foodCarbohydrate}
+                  </Text>
+                  <Text>
+                    단백질 {images.breakfast[imagesLength - 1].foodProtein}
+                  </Text>
+                  <Text>
+                    지방 {images.breakfast[imagesLength - 1].foodTransfat}
+                  </Text>
+                </View>
+                <ButtonCompo
+                  buttonName="검색하기"
+                  onPressButton={() =>
+                    navigation.navigate("Stack", { screen: "FoodSearch" })
+                  }
+                ></ButtonCompo>
               </View>
             ) : (
               <Text>NO IMAGE</Text>
@@ -117,6 +127,20 @@ const FoodWrite = () => {
             >
               <Text>+</Text>
             </Plus>
+          </View>
+          <View>
+            <Text>he</Text>
+            <View>
+              {images.imageurls.map((imageurl) => {
+                <>
+                  <Image
+                    key={imageurl.id}
+                    source={{ uri: imageurl.imageurls }}
+                  />
+                  <Text>{imageurl.imageurls}</Text>
+                </>;
+              })}
+            </View>
           </View>
         </View>
       </Container>
