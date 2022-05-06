@@ -26,3 +26,30 @@ export async function getDailyCalorie(date, userSeq) {
   });
   return response.data.data;
 }
+
+export async function getDailyNutirent(date, userSeq) {
+  const response = await client({
+    method: "get",
+    url: "/report/daily/nutrient",
+    params: { date, userSeq },
+  });
+  return response.data.data;
+}
+
+export async function getDailyOtherReport(date, userSeq) {
+  const response = await client({
+    method: "get",
+    url: "/report/daily/other",
+    params: { date, userSeq },
+  });
+  return response.data.data;
+}
+
+export async function getWeeklyBloodPressure(date, userSeq) {
+  const response = await client({
+    method: "get",
+    url: "/report/weekly/bloodpressure",
+    params: { date, userSeq },
+  });
+  return response.data.data;
+}

@@ -152,6 +152,7 @@ const BloodSugar = (props) => {
         <TextInput
           style={styles.input}
           placeholder="측정된 혈당을 입력하세요"
+          keyboardType="numeric"
         ></TextInput>
         <ButtonCompo
           buttonName="혈당 등록하기"

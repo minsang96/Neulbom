@@ -14,9 +14,28 @@ import { Dimensions } from "react-native";
 const screenSize = Dimensions.get("screen");
 
 const NutrientCompo = (props) => {
-  const data = [50, 10, 40];
+  // 탄단지 그래프 그리기
+  const data1 = [
+    parseInt(props.recommendNutrient.carbohydrate),
+    parseInt(props.recommendNutrient.protein),
+    parseInt(props.recommendNutrient.fat),
+  ];
+  const data2 = [
+    parseInt(props.intakeNutrient.carbohydrate),
+    parseInt(props.intakeNutrient.protein),
+    parseInt(props.intakeNutrient.fat),
+  ];
   const tandanjiColor = ["#FF6107", "#7ED320", "#FFD302"];
-  const pieData = data
+  const pieData = data1
+    .filter((value) => value > 0)
+    .map((value, index) => ({
+      value,
+      svg: {
+        fill: tandanjiColor[index],
+      },
+      key: index,
+    }));
+  const pieData2 = data2
     .filter((value) => value > 0)
     .map((value, index) => ({
       value,
@@ -26,6 +45,7 @@ const NutrientCompo = (props) => {
       key: index,
     }));
 
+  // 수정하기-계산(현정)
   const beforeEat = 130 - 120;
 
   const element = () => {
@@ -58,18 +78,44 @@ const NutrientCompo = (props) => {
   const circleText1 = [circleView(0), circleView(1), circleView(2)];
   const tableHead1 = ["탄수화물", "단백질", "지방"];
   const tableData1 = [
-    ["권장", 60.1, "-", "-"],
-    [`${props.now}`, 20.8, "-", "-"],
+    [
+      "권장",
+      parseInt(props.recommendNutrient.carbohydrate),
+      parseInt(props.recommendNutrient.protein),
+      parseInt(props.recommendNutrient.fat),
+    ],
+    [
+      `${props.now}`,
+      parseInt(props.intakeNutrient.carbohydrate),
+      parseInt(props.intakeNutrient.protein),
+      parseInt(props.intakeNutrient.fat),
+    ],
     [" ", element(), "-", "-"],
   ];
 
   const circleText2 = [circleView(3), circleView(4)];
   const tableHead2 = ["나트륨", "당"];
   const tableData2 = [
-    ["권장", 60.1, "-"],
-    [`${props.now}`, 20.8, "-"],
+    [
+      "권장",
+      parseInt(props.recommendNutrient.natrium),
+      ,
+      parseInt(props.recommendNutrient.sugars),
+    ],
+    [
+      `${props.now}`,
+      parseInt(props.intakeNutrient.natrium),
+      ,
+      parseInt(props.intakeNutrient.sugars),
+    ],
     [" ", element(), "-"],
   ];
+
+  const sugarsProgress =
+    props.intakeNutrient.sugars / props.recommendNutrient.sugars;
+
+  const natriumProgress =
+    props.intakeNutrient.natrium / props.recommendNutrient.natrium;
 
   return (
     <View style={props.styles.box}>
@@ -86,7 +132,9 @@ const NutrientCompo = (props) => {
             innerRadius="70%"
           />
           <View style={styles.calText}>
-            <Text style={{ fontSize: 20 }}>1856</Text>
+            <Text style={{ fontSize: 20 }}>
+              {parseInt(props.recommendNutrient.kcal)}
+            </Text>
             <Text>kcal</Text>
           </View>
         </View>
@@ -94,11 +142,13 @@ const NutrientCompo = (props) => {
           <Text style={styles.graphTitle}>{props.now} 섭취 비율</Text>
           <PieChart
             style={{ height: 120, width: 110 }}
-            data={pieData}
+            data={pieData2}
             innerRadius="70%"
           />
           <View style={styles.calText}>
-            <Text style={{ fontSize: 20 }}>1856</Text>
+            <Text style={{ fontSize: 20 }}>
+              {parseInt(props.intakeNutrient.kcal)}
+            </Text>
             <Text>kcal</Text>
           </View>
         </View>
@@ -136,7 +186,7 @@ const NutrientCompo = (props) => {
       </View>
       <View style={styles.graphView}>
         <Progress.Bar
-          progress={0.3}
+          progress={natriumProgress}
           animated={false}
           color="#1F77B4"
           borderColor="rgba(0, 122, 255, 0)"
@@ -144,7 +194,7 @@ const NutrientCompo = (props) => {
           height={10}
         />
         <Progress.Bar
-          progress={0.3}
+          progress={sugarsProgress}
           animated={false}
           color="#FF0E9F"
           borderColor="rgba(0, 122, 255, 0)"

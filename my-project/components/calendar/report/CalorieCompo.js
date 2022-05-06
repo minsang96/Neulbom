@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 
 const CalorieCompo = (props) => {
   const calorie = useSelector((state) => state.dailyReport.calorie);
-  // 테스트임 정보 받아오면 고칠 부분
   const beforeCal = parseInt(calorie.yesterday);
   const afterCal = parseInt(calorie.today);
 
