@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ScrollView, StyleSheet, Text } from "react-native";
 import BloodPressureGraph from "../../../components/calendar/report/BloodPressureGraph";
 import BloodSugarGraph from "../../../components/calendar/report/BloodSugarGraph";
@@ -7,16 +7,56 @@ import NutrientCompo from "../../../components/calendar/report/NutrientCompo";
 import UserInfo from "../../../components/calendar/report/UserInfo";
 import { Dimensions } from "react-native";
 import WeeklyEat from "../../../components/calendar/report/WeeklyEat";
+import { useDispatch, useSelector } from "react-redux";
+import weeklyReportSlice from "../../../slices/weeklyReport";
+import { getWeeklyBloodPressure } from "../../../api/reports";
 
 const screenSize = Dimensions.get("screen");
 
 const WeeklyReport = () => {
+  // const dispatch = useDispatch();
+  // const weeklyBloodPressure = useSelector(
+  //   (state) => state.weeklyReport.weeklyBloodPressure
+  // );
+  // console.log(weeklyBloodPressure);
+  // // 수정하기-api(현정)
+  // const [loading, setLoading] = useState(true);
+  // useEffect(() => {
+  //   const getWeeklyBloodPressureResult = async () => {
+  //     try {
+  //       const response = await getWeeklyBloodPressure("2022-04-26", "2");
+  //       console.log("response" + response);
+  //       dispatch(
+  //         weeklyReportSlice.actions.setWeeklyBloodPressureReport(response)
+  //       );
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   getWeeklyBloodPressureResult();
+  // }, []);
+
+  // useEffect(() => {
+  //   if (weeklyBloodPressure.length > 0) {
+  //     setLoading(false);
+  //   } else {
+  //     console.log("None", weeklyBloodPressure);
+  //   }
+  // }, [weeklyBloodPressure]);
+
   return (
     <ScrollView style={styles.background}>
       <Text style={styles.reportTitle}>정현정님의 주간 리포트</Text>
       <UserInfo styles={styles}></UserInfo>
       <BloodSugarGraph styles={styles}></BloodSugarGraph>
-      <BloodPressureGraph styles={styles}></BloodPressureGraph>
+      {/* {loading ? (
+        <Text>Loading...</Text>
+      ) : (
+        <BloodPressureGraph
+          styles={styles}
+          weeklyBloodPressure={weeklyBloodPressure[0]}
+        ></BloodPressureGraph>
+      )} */}
       <CalorieCompo
         title="평균 섭취 칼로리"
         subtitle="지난 주 섭취한 칼로리와 이번 주를 비교해보세요."
@@ -24,7 +64,7 @@ const WeeklyReport = () => {
         after="이번 주"
         styles={styles}
       ></CalorieCompo>
-      <NutrientCompo now="이번 주" styles={styles}></NutrientCompo>
+      {/* <NutrientCompo now="이번 주" styles={styles}></NutrientCompo> */}
       <WeeklyEat styles={styles}></WeeklyEat>
     </ScrollView>
   );

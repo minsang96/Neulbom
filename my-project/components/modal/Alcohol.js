@@ -6,6 +6,7 @@ import ButtonCompo from "../button/ButtonCompo";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
+import { addExerciseRecode } from "../../api/recode";
 
 const Alcohol = (props) => {
   const [isDate, setIsDate] = useState(new Date());
@@ -37,6 +38,22 @@ const Alcohol = (props) => {
     // console.log(time);
     setIsTime(time);
     hideTimePicker();
+  };
+
+  const addExerciseRecodeFunction = () => {
+    const otherDto = {
+      code: "exercise",
+      otherDate: "2022-05-04",
+      otherTime: "13:22",
+      userSeq: 14,
+    };
+    try {
+      // const response = addExerciseRecode("exercise", "2022-05-05", "13:22", 14);
+      const response = addExerciseRecode(otherDto);
+    } catch (error) {
+      console.log(error);
+    } finally {
+    }
   };
 
   return (
@@ -94,6 +111,7 @@ const Alcohol = (props) => {
           buttonName="음주 등록하기"
           onPressButton={() => {
             props.onPressAlcoholButton();
+            addExerciseRecodeFunction();
           }}
         ></ButtonCompo>
       </View>

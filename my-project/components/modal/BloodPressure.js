@@ -129,11 +129,13 @@ const BloodPressure = (props) => {
         <TextInput
           style={styles.input}
           placeholder="최고 혈압을 입력하세요"
+          keyboardType="numeric"
         ></TextInput>
         <Text style={styles.subtitleText}>최저 혈압</Text>
         <TextInput
           style={styles.input}
           placeholder="최저 혈압을 입력하세요"
+          keyboardType="numeric"
         ></TextInput>
         <ButtonCompo
           buttonName="혈압 등록하기"
