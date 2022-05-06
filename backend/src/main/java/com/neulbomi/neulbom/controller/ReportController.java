@@ -147,7 +147,7 @@ public class ReportController {
 	
 	
 	@GetMapping("/weekly/calorie")
-	@ApiOperation(value = "일간 섭취 칼로리 총합", notes = "유저 시퀀스와 날짜를 입력 받아 전주, 이번주 섭취 칼로리 총합을 반환한다.")
+	@ApiOperation(value = "주간 섭취 칼로리 총합", notes = "유저 시퀀스와 날짜를 입력 받아 전주, 이번주 섭취 칼로리 총합을 반환한다.")
 	@ApiImplicitParams({ @ApiImplicitParam(name = "userSeq", example = "1", value = "유저 시퀀스", required = true),
 						 @ApiImplicitParam(name = "date", example = "2022-04-26", value = "yyyy-mm-dd", required = true) })
 	@ApiResponses(
