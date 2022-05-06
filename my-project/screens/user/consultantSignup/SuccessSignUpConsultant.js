@@ -10,7 +10,7 @@ export default function SuccessSignUp({navigation: {navigate}}) {
         width='100%'
         buttonName='홈으로 이동'
         padding={9.5}
-        onPressButton={() => navigate('Consultant')}
+        onPressButton={() => navigate('Chat')}
       ></ButtonGreen2>
     </View>
   )
