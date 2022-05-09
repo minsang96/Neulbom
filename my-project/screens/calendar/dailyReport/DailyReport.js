@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, Text, StyleSheet } from "react-native";
 import CalorieCompo from "../../../components/calendar/report/CalorieCompo";
-import NutrientCompo from "../../../components/calendar/report/NutrientCompo";
+import NutrientCompo from "../../../components/calendar/report/DailyNutrientCompo";
 import TodayReport from "../../../components/calendar/report/TodayReport";
 import BloodPressureReport from "../../../components/calendar/report/BloodPressureReport";
 import BloodSugarReport from "../../../components/calendar/report/BloodSugarReport";
@@ -26,14 +26,12 @@ const DailyReport = () => {
   const yesterdayBloodPressure = useSelector(
     (state) => state.dailyReport.yesterdayBloodPressure
   );
-
   const todayBloodSugar = useSelector(
     (state) => state.dailyReport.todayBloodSugar
   );
   const yesterdayBloodSugar = useSelector(
     (state) => state.dailyReport.yesterdayBloodSugar
   );
-
   const recommendNutrient = useSelector(
     (state) => state.dailyReport.recommendNutrient
   );
@@ -100,8 +98,6 @@ const DailyReport = () => {
       intakeNutrient.length > 0
     ) {
       setLoading(false);
-    } else {
-      console.log("None", yesterdayBloodSugar);
     }
   }, [yesterdayBloodSugar, todayBloodPressure, intakeNutrient]);
 

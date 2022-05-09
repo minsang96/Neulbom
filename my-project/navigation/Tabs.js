@@ -31,7 +31,6 @@ const Tabs = () => (
         options={{
           headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
-            // console.log(focused, color, size);
             return (
               <Ionicons
                 name={focused ? "restaurant" : "restaurant-outline"}
@@ -47,7 +46,6 @@ const Tabs = () => (
         component={Calendar}
         options={{
           tabBarIcon: ({ focused, color, size }) => {
-            // console.log(focused, color, size);
             return (
               <Ionicons
                 name={focused ? "calendar" : "calendar-sharp"}
@@ -63,7 +61,6 @@ const Tabs = () => (
         component={Chat}
         options={{
           tabBarIcon: ({ focused, color, size }) => {
-            // console.log(focused, color, size);
             return (
               <Ionicons
                 name={focused ? "chatbox-ellipses" : "chatbox-ellipses-outline"}
@@ -79,7 +76,6 @@ const Tabs = () => (
         component={Mypage}
         options={{
           tabBarIcon: ({ focused, color, size }) => {
-            // console.log(focused, color, size);
             return (
               <Ionicons
                 name={focused ? "person-circle" : "person-circle-outline"}
