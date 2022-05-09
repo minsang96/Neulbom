@@ -21,7 +21,6 @@ const Workout = (props) => {
     setDatePickerVisibility(false);
   };
   const handleConfirm = (date) => {
-    // console.log(date);
     setIsDate(date);
     hideDatePicker();
   };
@@ -34,9 +33,23 @@ const Workout = (props) => {
     setTimePickerVisibility(false);
   };
   const handleTimeConfirm = (time) => {
-    // console.log(time);
     setIsTime(time);
     hideTimePicker();
+  };
+
+  // 수정하기-api(현정)
+  const addExerciseRecodeFunction = () => {
+    const otherDto = {
+      code: "exercise",
+      otherDate: "2022-05-04",
+      otherTime: "13:22",
+      userSeq: 14,
+    };
+    try {
+      addOtherRecodeFunction(otherDto);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -94,6 +107,7 @@ const Workout = (props) => {
           buttonName="음주 등록하기"
           onPressButton={() => {
             props.onPressWorkoutButton();
+            addExerciseRecodeFunction();
           }}
         ></ButtonCompo>
       </View>

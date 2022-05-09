@@ -3,8 +3,14 @@ import { LineChart, Grid } from "react-native-svg-charts";
 import { Text, View } from "react-native";
 
 const BloodPressureGraph = (props) => {
-  const data1 = [50, 10, 40, 95, -4, -24, 85];
-  const data2 = [-87, 66, -69, 92, -40, -61, 16];
+  // 수정하기-api 순서 맞게 들어오는지 확인(현정)
+  const data1 = [];
+  const data2 = [];
+
+  for (var i in props.weeklyBloodPressure) {
+    data1.push(props.weeklyBloodPressure[i]["BpHigh"]);
+    data2.push(props.weeklyBloodPressure[i]["BpLow"]);
+  }
 
   const data = [
     {

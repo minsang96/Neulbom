@@ -12,13 +12,16 @@ import { Dimensions } from "react-native";
 const screenSize = Dimensions.get("screen");
 
 const BloodPressureReport = (props) => {
-  // 계산 잘하기
-  const compare = 130 - 120;
-
-  const element = () => {
+  const element = (before, after) => {
     return (
-      <View style={styles.btn}>
-        <Text style={styles.btnText}>▲{compare}</Text>
+      <View style={{ alignItems: "center" }}>
+        {before - after === 0 ? (
+          <Text style={styles.btnText}>0</Text>
+        ) : before > after ? (
+          <Text style={styles.btnDownText}>▼{before - after}</Text>
+        ) : (
+          <Text style={styles.btnUpText}>▲{after - before}</Text>
+        )}
       </View>
     );
   };
@@ -45,7 +48,18 @@ const BloodPressureReport = (props) => {
       props.todayBloodPressure.breakfast.BpLow,
       props.todayBloodPressure.breakfast.BpHigh,
     ],
-    [" ", element(), "-"],
+    [
+      " ",
+      element(
+        props.yesterdayBloodPressure.breakfast.BpLow,
+        props.todayBloodPressure.breakfast.BpLow
+      ),
+      element(
+        props.yesterdayBloodPressure.breakfast.BpHigh,
+        props.todayBloodPressure.breakfast.BpHigh
+      ),
+      ,
+    ],
   ];
   const tableData2 = [
     [
@@ -58,7 +72,17 @@ const BloodPressureReport = (props) => {
       props.todayBloodPressure.lunch.BpLow,
       props.todayBloodPressure.lunch.BpHigh,
     ],
-    [" ", element(), "-"],
+    [
+      " ",
+      element(
+        props.yesterdayBloodPressure.lunch.BpLow,
+        props.todayBloodPressure.lunch.BpLow
+      ),
+      element(
+        props.yesterdayBloodPressure.lunch.BpHigh,
+        props.todayBloodPressure.lunch.BpHigh
+      ),
+    ],
   ];
   const tableData3 = [
     [
@@ -71,7 +95,17 @@ const BloodPressureReport = (props) => {
       props.todayBloodPressure.dinner.BpLow,
       props.todayBloodPressure.dinner.BpHigh,
     ],
-    [" ", element(), "-"],
+    [
+      " ",
+      element(
+        props.yesterdayBloodPressure.dinner.BpLow,
+        props.todayBloodPressure.dinner.BpLow
+      ),
+      element(
+        props.yesterdayBloodPressure.dinner.BpHigh,
+        props.todayBloodPressure.dinner.BpHigh
+      ),
+    ],
   ];
 
   return (
@@ -166,12 +200,30 @@ const styles = StyleSheet.create({
   },
   titleText: { textAlign: "center" },
   text: { margin: 6, textAlign: "center" },
-  btn: {
+  btnUpText: {
+    textAlign: "center",
+    color: "red",
+    textAlign: "center",
     backgroundColor: "rgba(255,0,0,0.2)",
     borderRadius: 30,
-    marginHorizontal: screenSize.width * 0.03,
+    width: 60,
   },
-  btnText: { textAlign: "center", color: "red" },
+  btnDownText: {
+    textAlign: "center",
+    color: "blue",
+    textAlign: "center",
+    backgroundColor: "rgba(0,56,255,0.2)",
+    borderRadius: 30,
+    width: 60,
+  },
+  btnText: {
+    textAlign: "center",
+    color: "black",
+    textAlign: "center",
+    backgroundColor: "rgba(0,0,0,0.2)",
+    borderRadius: 30,
+    width: 60,
+  },
   timeText: {
     color: "white",
     fontWeight: "bold",
