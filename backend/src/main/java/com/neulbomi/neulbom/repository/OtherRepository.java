@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.neulbomi.neulbom.entity.BloodSugar;
 import com.neulbomi.neulbom.entity.Other;
 
 @Repository
@@ -19,5 +20,5 @@ public interface OtherRepository extends JpaRepository<Other, Long> {
 	public List<Other> findByDelYnAndUserSeqAndOtherDateStartsWith(String string, int userSeq, String date);
 	
 	public Optional<Other> findByDelYnAndOtherSeq(String delYn, long otherSeq);
-
+	
 }

@@ -1,25 +1,46 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, Text, StyleSheet } from "react-native";
 import CalorieCompo from "../../../components/calendar/report/CalorieCompo";
-import NutrientCompo from "../../../components/calendar/report/NutrientCompo";
+import NutrientCompo from "../../../components/calendar/report/DailyNutrientCompo";
 import TodayReport from "../../../components/calendar/report/TodayReport";
 import BloodPressureReport from "../../../components/calendar/report/BloodPressureReport";
 import BloodSugarReport from "../../../components/calendar/report/BloodSugarReport";
 import { useDispatch, useSelector } from "react-redux";
-
 import { Dimensions } from "react-native";
 import dailyReportSlice from "../../../slices/dailyReport";
 import {
   getDailyBloodPressure,
   getDailyBloodSugar,
   getDailyCalorie,
+  getDailyNutirent,
+  getDailyOtherReport,
 } from "../../../api/reports";
 
 const screenSize = Dimensions.get("screen");
 
 const DailyReport = () => {
   const dispatch = useDispatch();
+  const todayBloodPressure = useSelector(
+    (state) => state.dailyReport.todayBloodPressure
+  );
+  const yesterdayBloodPressure = useSelector(
+    (state) => state.dailyReport.yesterdayBloodPressure
+  );
+  const todayBloodSugar = useSelector(
+    (state) => state.dailyReport.todayBloodSugar
+  );
+  const yesterdayBloodSugar = useSelector(
+    (state) => state.dailyReport.yesterdayBloodSugar
+  );
+  const recommendNutrient = useSelector(
+    (state) => state.dailyReport.recommendNutrient
+  );
+  const intakeNutrient = useSelector(
+    (state) => state.dailyReport.intakeNutrient
+  );
 
+  // 수정하기-api(현정)
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const getDailyBloodpressureResult = async () => {
       try {
@@ -47,16 +68,60 @@ const DailyReport = () => {
         console.log(error);
       }
     };
+    const getDailyNutirentResult = async () => {
+      try {
+        const response = await getDailyNutirent("2022-04-26", "1");
+        dispatch(dailyReportSlice.actions.setDailyNutrientReport(response));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const getDailyOtherResult = async () => {
+      try {
+        const response = await getDailyOtherReport("2022-04-26", "1");
+        dispatch(dailyReportSlice.actions.setDailyOtherReport(response));
+      } catch (error) {
+        console.log(error);
+      }
+    };
     getDailyBloodpressureResult();
     getDailyBloodSugarResult();
     getCalorieResult();
+    getDailyNutirentResult();
+    getDailyOtherResult();
   }, []);
+
+  useEffect(() => {
+    if (
+      yesterdayBloodSugar.length > 0 &&
+      todayBloodPressure.length > 0 &&
+      intakeNutrient.length > 0
+    ) {
+      setLoading(false);
+    }
+  }, [yesterdayBloodSugar, todayBloodPressure, intakeNutrient]);
 
   return (
     <ScrollView style={styles.background}>
       <Text style={styles.reportTitle}>정현정님의 일간 리포트</Text>
-      <BloodPressureReport styles={styles}></BloodPressureReport>
-      <BloodSugarReport styles={styles}></BloodSugarReport>
+      {loading ? (
+        <Text>Loading...</Text>
+      ) : (
+        <BloodPressureReport
+          styles={styles}
+          todayBloodPressure={todayBloodPressure[0]}
+          yesterdayBloodPressure={yesterdayBloodPressure[0]}
+        ></BloodPressureReport>
+      )}
+      {loading ? (
+        <Text>Loading...</Text>
+      ) : (
+        <BloodSugarReport
+          styles={styles}
+          todayBloodSugar={todayBloodSugar[0]}
+          yesterdayBloodSugar={yesterdayBloodSugar[0]}
+        ></BloodSugarReport>
+      )}
       <CalorieCompo
         title="총 섭취 칼로리"
         subtitle="어제 섭취한 칼로리와 오늘을 비교해보세요."
@@ -64,7 +129,16 @@ const DailyReport = () => {
         after="오늘"
         styles={styles}
       ></CalorieCompo>
-      <NutrientCompo now="오늘" styles={styles}></NutrientCompo>
+      {loading ? (
+        <Text>Loading...</Text>
+      ) : (
+        <NutrientCompo
+          now="오늘"
+          styles={styles}
+          recommendNutrient={recommendNutrient[0]}
+          intakeNutrient={intakeNutrient[0]}
+        ></NutrientCompo>
+      )}
       <TodayReport styles={styles}></TodayReport>
     </ScrollView>
   );
