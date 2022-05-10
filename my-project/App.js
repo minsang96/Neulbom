@@ -3,20 +3,23 @@ import React from "react";
 import Root from "./navigation/Root";
 import store from "./store";
 import { Provider } from "react-redux";
-import { QueryClient, QueryClientProvider } from "react-query";
-
-const queryClient = new QueryClient();
+import { StyleSheet } from "react-native";
 
 export default function App() {
   return (
     <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <NavigationContainer>
-          <Root></Root>
-          {/* <Tabs></Tabs> */}
-          {/* <Stack></Stack> */}
-        </NavigationContainer>
-      </QueryClientProvider>
+      <NavigationContainer style={styles.block}>
+        <Root></Root>
+        {/* <Tabs></Tabs> */}
+        {/* <Stack></Stack> */}
+      </NavigationContainer>
     </Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  block: {
+    flex: 1,
+    backgroundColor: "white",
+  },
+});

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
 import palette from "../../../components/palette";
@@ -6,9 +6,14 @@ import { TextInput } from "react-native-gesture-handler";
 import { searchDiet } from "../../../api/diets";
 import { Pressable } from "react-native";
 import ButtonCompo from "../../../components/button/ButtonCompo";
+import { useDispatch } from "react-redux";
+import imagesSlice from "../../../slices/images";
 
 const View = styled.View``;
-const Text = styled.Text``;
+const Text = styled.Text`
+  color: ${(props) => props.color || `${palette.navy}`};
+`;
+
 const Plus = styled.TouchableOpacity`
   position: absolute;
   justify-content: center;
@@ -31,11 +36,16 @@ const ActionButtons = styled.Pressable`
   background-color: white;
 `;
 const FoodSearch = () => {
-  const navigation = useNavigation();
   const [foodName, setFoodName] = useState("");
   const [loading, setLoading] = useState(true);
   const [foods, setFoods] = useState([]);
-  const [select, setSelect] = useState("white");
+  const [tempFood, setTempFood] = useState([]);
+  const navigate = useNavigation();
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    console.log("selected tempFood", tempFood);
+  }, [tempFood]);
   const onSearch = async (text) => {
     try {
       const response = await searchDiet(text);
@@ -48,12 +58,17 @@ const FoodSearch = () => {
       console.log("diet/search");
     }
   };
+
   const onChangeFoodName = useCallback((text) => {
     setFoodName(text);
     onSearch(text);
   });
 
-  const onSelect = () => {};
+  const onSelect = () => {
+    dispatch(imagesSlice.actions.add(tempFood));
+    navigate.goBack();
+  };
+
   return (
     <View>
       <Text>검색하기</Text>
@@ -63,7 +78,9 @@ const FoodSearch = () => {
         onChangeText={onChangeFoodName}
         onSubmitEditing={onSearch}
       />
+
       <Line></Line>
+
       {loading ? (
         <Text>검색어를 입력해주세요!</Text>
       ) : (
@@ -71,7 +88,9 @@ const FoodSearch = () => {
           <ActionButtons
             key={food.foodSeq}
             android_ripple={{ color: `${palette.green}` }}
-            onPress={() => console.log(food)}
+            onPress={() => {
+              setTempFood(food);
+            }}
           >
             <Text>
               {food.foodName} ({food.foodKcal} kcal)
@@ -79,7 +98,12 @@ const FoodSearch = () => {
           </ActionButtons>
         ))
       )}
-      <ButtonCompo buttonName="선택한 음식 추가"></ButtonCompo>
+      <Pressable
+        style={{ backgroundColor: `${palette.green}` }}
+        onPress={onSelect}
+      >
+        <Text>선택한 음식 추가</Text>
+      </Pressable>
     </View>
   );
 };

@@ -49,3 +49,34 @@ export async function searchDiet(keyword) {
   });
   return response.data.data;
 }
+
+// 음식 인식 temp 함수
+export async function getInfoAI() {
+  // const response = await client({
+
+  // })
+  return false;
+}
+
+// 식단 저장
+export async function recordDiet(diets) {
+  const response = await client({
+    method: "post",
+    url: "/diet/record",
+    data: diets,
+  });
+  return response.data;
+}
+
+export async function uploadS3(file) {
+  const response = await client({
+    method: "post",
+    url: "/s3/upload",
+    data: file,
+    params: { userSeq: 1 },
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+}

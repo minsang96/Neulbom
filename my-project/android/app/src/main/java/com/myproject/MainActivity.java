@@ -1,4 +1,4 @@
-package com.myproject;
+package com.neulbompjt;
 
 import android.os.Build;
 import android.os.Bundle;
