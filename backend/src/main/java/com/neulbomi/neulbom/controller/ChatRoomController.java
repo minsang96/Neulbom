@@ -2,6 +2,7 @@ package com.neulbomi.neulbom.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,8 +26,10 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/chat")
 public class ChatRoomController {
 
+	@Autowired
 	private final ChatRoomRepository chatRoomRepository;
 	
+	@Autowired
 	ChatRoomService chatRoomService;
 	
 	// 채팅 리스트 화면
