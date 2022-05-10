@@ -8,17 +8,13 @@ import Qualification from "../../../components/infoBox/Qualification";
 import InfoConsultant from "../../../components/infoBox/InfoConsultant";
 import { useDispatch, useSelector } from "react-redux";
 import userSlice from "../../../slices/user";
-import EncryptedStorage from 'react-native-encrypted-storage';
+import EncryptedStorage from "react-native-encrypted-storage";
 
 const screenSize = Dimensions.get("screen");
 
 const ConsultantMypage = (props) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const userInfo = useSelector(state => state.user.userInfo)
-  useEffect(() => {
-    console.log(userInfo)
-  }, [])
   const logout = () => {
     async function removeUserSession() {
       try {
@@ -29,9 +25,9 @@ const ConsultantMypage = (props) => {
         console.log(error.code);
       }
     }
-    dispatch(userSlice.actions.logout())
-    removeUserSession()
-  }
+    dispatch(userSlice.actions.logout());
+    removeUserSession();
+  };
   return (
     <ScrollView style={styles.background}>
       <TouchableOpacity
@@ -55,7 +51,8 @@ const ConsultantMypage = (props) => {
       <Infomation styles={styles}></Infomation>
       <ButtonCompo
         onPressButton={() => logout()}
-        buttonName="로그아웃"></ButtonCompo>
+        buttonName="로그아웃"
+      ></ButtonCompo>
     </ScrollView>
   );
 };

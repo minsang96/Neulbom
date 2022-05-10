@@ -1,5 +1,11 @@
 import React from "react";
-import { Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import {
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  TextInput,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 import * as ImagePicker from "expo-image-picker";
@@ -17,7 +23,12 @@ const ConsultantMypageUpdate = (props) => {
       >
         <Text>뒤로가기</Text>
       </TouchableOpacity>
-      <Text>전문가</Text>
+      <Text>전문가 수정하기 페이지</Text>
+      <Text>사진 변경</Text>
+      <Text>한 줄 소개</Text>
+      <TextInput></TextInput>
+      <Text>이력 사항</Text>
+      <TextInput></TextInput>
     </ScrollView>
   );
 };
