@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, Image } from "react-native";
 
 const InfoConsultant = (props) => {
-  // if 성별 줄 함수 고쳐야함 !!!!!!!!!!
+  // 수정하기-성별 고치기(현정)
   const userGender = "남";
   const whatsUserGender = () => {
     if (userGender === "여") {

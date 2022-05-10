@@ -22,7 +22,11 @@ const ConsultantMypage = (props) => {
       </TouchableOpacity>
       <Text>전문가</Text>
       <Text style={styles.title}>내 소개 😊</Text>
-      <InfoConsultant styles={styles} update={props.update}></InfoConsultant>
+      <InfoConsultant
+        styles={styles}
+        update={props.update}
+        type={"infopage"}
+      ></InfoConsultant>
       <Text style={styles.title}>이력 사항✨</Text>
       <Qualification styles={styles} update={props.update}></Qualification>
       <ButtonCompo buttonName="소개페이지 보기"></ButtonCompo>

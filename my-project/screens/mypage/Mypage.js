@@ -11,7 +11,6 @@ const Mypage = () => {
   const [update, setUpdate] = useState(false);
   const onClick = () => {
     setUpdate(!update);
-    console.log(update);
   };
 
   return (
