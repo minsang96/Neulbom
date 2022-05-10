@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import ButtonCompo from "../../../components/button/ButtonCompo";
 import Infomation from "../../../components/infoBox/Infomation";
@@ -6,11 +6,32 @@ import { useNavigation } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 import Qualification from "../../../components/infoBox/Qualification";
 import InfoConsultant from "../../../components/infoBox/InfoConsultant";
+import { useDispatch, useSelector } from "react-redux";
+import userSlice from "../../../slices/user";
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 const screenSize = Dimensions.get("screen");
 
 const ConsultantMypage = (props) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const userInfo = useSelector(state => state.user.userInfo)
+  useEffect(() => {
+    console.log(userInfo)
+  }, [])
+  const logout = () => {
+    async function removeUserSession() {
+      try {
+        await EncryptedStorage.removeItem("user_session");
+        // Congrats! You've just removed your first value!
+      } catch (error) {
+        // There was an error on the native side
+        console.log(error.code);
+      }
+    }
+    dispatch(userSlice.actions.logout())
+    removeUserSession()
+  }
   return (
     <ScrollView style={styles.background}>
       <TouchableOpacity
@@ -32,7 +53,9 @@ const ConsultantMypage = (props) => {
       <ButtonCompo buttonName="소개페이지 보기"></ButtonCompo>
       <Text style={styles.title}>이용 안내 ✨</Text>
       <Infomation styles={styles}></Infomation>
-      <ButtonCompo buttonName="로그아웃"></ButtonCompo>
+      <ButtonCompo
+        onPressButton={() => logout()}
+        buttonName="로그아웃"></ButtonCompo>
     </ScrollView>
   );
 };

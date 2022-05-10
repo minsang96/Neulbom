@@ -80,6 +80,7 @@ export default function UserSignUp({ navigation: {navigate} } ) {
             keyboardType='email-address'
             onChangeText={(event) => setInfo({...info, email: event})}
             autoFocus={true}
+            autoCapitalize='none'
           ></TextInput>
           <View style={styles.inputline}></View>
           <View style={styles.certification}>
@@ -107,6 +108,7 @@ export default function UserSignUp({ navigation: {navigate} } ) {
             placeholder='비밀번호'
             secureTextEntry={true}
             onChangeText={(event) => setInfo({...info, password: event})}
+            autoCapitalize='none'
           ></TextInput>
           <View style={styles.inputline}></View>
           <TextInput
@@ -114,17 +116,18 @@ export default function UserSignUp({ navigation: {navigate} } ) {
             placeholder='비밀번호 확인'
             secureTextEntry={true}
             onChangeText={(event) => [passwordVerify(), setInfo({...info, passwordVerification: event})]}
+            autoCapitalize='none'
           ></TextInput>
           <View style={styles.inputline}></View>
         </View>
         <View style={{...styles.radiosBox}}>
           <View style={styles.radio}>
-            {info.gender === 'm' ? <TouchableOpacity style={{...styles.radioButton, width: radioWidth, height: radioWidth, borderRadius: radioWidth*30/100, backgroundColor: 'black'}}></TouchableOpacity> :
+            {info.gender === 'm' ? <TouchableOpacity style={{...styles.radioButton, width: radioWidth, height: radioWidth, borderRadius: radioWidth*30/100, backgroundColor: '#09BC8A'}}></TouchableOpacity> :
             <TouchableOpacity onPress={() => setInfo({...info, gender: 'm'})} style={{...styles.radioButton, width: radioWidth, height: radioWidth, borderRadius: radioWidth*30/100}}></TouchableOpacity>}
             <Text style={{fontSize: 16}}>남</Text>
           </View>
           <View style={styles.radio}>
-            {info.gender === 'f' ? <TouchableOpacity style={{...styles.radioButton, width: radioWidth, height: radioWidth, borderRadius: radioWidth*30/100, backgroundColor: 'black'}}></TouchableOpacity> :
+            {info.gender === 'f' ? <TouchableOpacity style={{...styles.radioButton, width: radioWidth, height: radioWidth, borderRadius: radioWidth*30/100, backgroundColor: '#09BC8A'}}></TouchableOpacity> :
             <TouchableOpacity onPress={() => setInfo({...info, gender: 'f'})} style={{...styles.radioButton, width: radioWidth, height: radioWidth, borderRadius: radioWidth*30/100}}></TouchableOpacity>}
             <Text style={{fontSize: 16}}>여</Text>
           </View>
@@ -159,9 +162,11 @@ export default function UserSignUp({ navigation: {navigate} } ) {
               <View style={{...styles.infoInputBox, width: infoInputBoxWidth, borderRadius: infoInputBoxWidth*5/100,elevation: infoCardWidth*1.7/100}}>
                 <View style={{...styles.infoInput, width: infoInputBoxWidth*60/100}}>
                   {<TextInput
+                    keyboardType='number-pad'
                     onChangeText={
                       (event) => setInfoFromInfoBox(event, item.param)}
                     maxLength={4}></TextInput>}
+                    
                 </View>
                 {item.measure === '년' ? <Text style={{position: 'absolute', left: '67%'}}>{item.measure}</Text> :
                 <Text style={{position: 'absolute', left: '60%'}}>{item.measure}</Text>}

@@ -235,12 +235,12 @@ public class ReportServiceImpl implements ReportService {
 		Map<String, Object> obj = new HashMap<>();
 		
 		// 초기 값 설정
-		obj.put("beforeBreakfast", "-");
-		obj.put("afterBreakfast", "-");
-		obj.put("beforeLunch", "-");
-		obj.put("afterLunch", "-");
-		obj.put("beforeDinner", "-");
-		obj.put("afterDinner", "-");
+		obj.put("beforeBreakfast", 0);
+		obj.put("afterBreakfast", 0);
+		obj.put("beforeLunch", 0);
+		obj.put("afterLunch", 0);
+		obj.put("beforeDinner", 0);
+		obj.put("afterDinner", 0);
 
 		if (bs.size() != 0) {
 			for (int i = 0; i < bs.size(); i++) {
@@ -257,8 +257,8 @@ public class ReportServiceImpl implements ReportService {
 
 		// 초기 값 설정
 		Map<String, Object> level = new HashMap<>();
-		level.put("BpHigh", "-");
-		level.put("BpLow", "-");
+		level.put("BpHigh", 0);
+		level.put("BpLow", 0);
 		obj.put("breakfast", level);
 		obj.put("lunch", level);
 		obj.put("dinner", level);

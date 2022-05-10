@@ -5491,6 +5491,10 @@
   dependencies:
     "logkitty" "^0.7.1"
 
+"react-native-encrypted-storage@^4.0.2":
+  "integrity" "sha512-vneDkHGDuTvLQjUBztqb2YI8QoH1zxdJonPGTS+g57lfJZff9fAjoLSSb6NgMBebpXFcK3I3sEresGyL+3AArw=="
+  "resolved" "https://registry.npmjs.org/react-native-encrypted-storage/-/react-native-encrypted-storage-4.0.2.tgz"
+  "version" "4.0.2"
 "react-native-flipper@>=0.100.0":
   "integrity" "sha512-FZJsQsMfvn6y6+xouvfFOtcNiZ8nkXT2/p1D7rBLIb1kTUw5357+sveg4qwp77UhmcBYiE9IRGHlgLp+tLWbnw=="
   "resolved" "https://registry.npmjs.org/react-native-flipper/-/react-native-flipper-0.145.0.tgz"
