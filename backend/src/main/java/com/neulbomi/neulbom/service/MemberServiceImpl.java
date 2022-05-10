@@ -163,7 +163,7 @@ public class MemberServiceImpl implements MemberService {
 		result.put("memberDesc", member.getMemberDesc());
 		result.put("memberKcal", member.getMemberKcal());
 		result.put("memberNatrium", 2000);
-		result.put("memberSuger", (member.getMemberKcal()*0.1)/4);
+		result.put("memberSugar", (member.getMemberKcal()*0.1)/4);
 		result.put("memberEmail", member.getRegEmail());
 		
 		ArrayList<String> codelist = new ArrayList<>();
