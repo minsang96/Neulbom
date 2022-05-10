@@ -69,13 +69,14 @@ export async function recordDiet(diets) {
 }
 
 export async function uploadS3(file) {
+  console.log(file);
   const response = await client({
     method: "post",
     url: "/s3/upload",
+    params: { category: "Diet", userSeq: 1 },
     data: file,
-    params: { userSeq: 1 },
     headers: {
-      "Content-Type": "multipart/form-data",
+      "content-type": "multipart/form-data",
     },
   });
   return response.data;

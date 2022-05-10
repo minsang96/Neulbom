@@ -33,12 +33,12 @@ const FoodWrite = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [imageLength, setImageLength] = useState(0);
 
-  const frm = new FormData();
   useEffect(() => {
     setImagesLength(images.breakfast.length);
     setImageLength(images.add.length);
   }, [images]);
 
+  // 카메라 켜기
   const onCamera = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchCameraAsync({
@@ -51,14 +51,10 @@ const FoodWrite = () => {
 
     if (!result.cancelled) {
       setImage(result.uri);
-      frm.append("image", {
-        uri: image,
-        type: "multipart/form-data",
-        name: image,
-      });
     }
   };
 
+  // 갤러리에서 사진 고르기 ** 안드로이드 이뮬레이터는 갤러리에 사진이 없으므로 구글에서 다운받아서 쓰면 됨!
   const onGallery = async () => {
     try {
       let result_g = await ImagePicker.launchImageLibraryAsync({
@@ -67,9 +63,9 @@ const FoodWrite = () => {
         aspect: [4, 3],
         quality: 1,
       });
-
       console.log(result_g);
 
+      // 사진이 선택되면, image에 uri 저장
       if (!result_g.cancelled) {
         setImage(result_g.uri);
       }
@@ -85,23 +81,33 @@ const FoodWrite = () => {
   const yourDate = moment(d, "yyyy-mm-dd").format();
   const formatted = yourDate.split("T")[0];
 
+  // 이미지 업로드 axios 보내는 로직 담아놓았음
   const saveDiet = async () => {
-    console.log(formatted);
-    const diets = [
-      {
-        dietDate: formatted,
-        dietImg: image,
-        dietTime: "breakfast",
-        foodAmount: images.add[imageLength - 1].food.foodAmount,
-        foodCode: images.add[imageLength - 1].food.foodCode,
-        userSeq: 1,
-      },
-    ];
+    const frm = new FormData();
+
+    frm.append("file", {
+      uri: image,
+      type: "multipart/form-data",
+      name: image.split("/").slice(-1)[0],
+    });
     try {
-      const response = await recordDiet(diets);
+      const response = await uploadS3(frm);
+      // response에 s3 이미지 주소 담겨 있음!
       console.log(response);
-      const response1 = await uploadS3(frm);
-      console.log(response1);
+
+      // 아래는 무시. 식단 저장에 쓸 로직임!
+      // const diets = [
+      //   {
+      //     dietDate: formatted,
+      //     dietImg: image,
+      //     dietTime: "breakfast",
+      //     foodAmount: images.add[imageLength - 1].food.foodAmount,
+      //     foodCode: images.add[imageLength - 1].food.foodCode,
+      //     userSeq: 1,
+      //   },
+      // ];
+      // const response1 = await recordDiet(diets);
+      // console.log(response1);
     } catch (error) {
       console.log(error);
     } finally {
