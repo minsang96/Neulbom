@@ -94,11 +94,11 @@ public class MemberController {
 		
 		try {
 			if(!userService.getUserByUserSeq(memberModifyDto.getUserSeq()).getUserEmail().equals(jwtTokenProvider.getUserPk(Authorization)))
-				return ResponseEntity.status(409).body(BaseResponseBody.of(409, "잘못된 토큰입니다."));
+				return ResponseEntity.status(407).body(BaseResponseBody.of(407, "잘못된 토큰입니다."));
 			memberService.modify(memberModifyDto);
 		}
 		catch(NotExistsUserException e) {
-			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "계정 정보를 조회할 수 없습니다."));
+			return ResponseEntity.status(408).body(BaseResponseBody.of(408, "계정 정보를 조회할 수 없습니다."));
 		}
 		catch(NotExistsSettingException e) {
 			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "설정 정보를 조회할 수 없습니다."));
