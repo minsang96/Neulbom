@@ -3,7 +3,12 @@ import { Text, View } from "react-native";
 import { LineChart, Grid } from "react-native-svg-charts";
 
 const BloodSugarGraph = (props) => {
-  const data = [50, 10, 40, 95, -4, -24, 85];
+  // 수정하기-api 순서 맞게 들어오는지 확인(현정)
+  const data = [];
+  for (var i in props.weeklyBloodSugar) {
+    data.push(props.weeklyBloodSugar[i]);
+  }
+
   return (
     <View style={props.styles.box}>
       <Text style={props.styles.title}>주간 아침 공복 혈당값 추세</Text>

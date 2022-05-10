@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
-import dailyReportSlice from "../../../slices/dailyReport";
+import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 import {
   Table,
@@ -9,80 +8,20 @@ import {
   Col,
 } from "react-native-table-component";
 import { Dimensions } from "react-native";
-import { getDailyBloodpressure } from "../../../api/reports";
-import { useDispatch, useSelector } from "react-redux";
 
 const screenSize = Dimensions.get("screen");
 
 const BloodPressureReport = (props) => {
-  // const dispatch = useDispatch();
-  // const dailyPressureReport = useSelector(
-  //   (state) => state.dailyReport.bloodPressure
-  // );
-  // const [pressure, setPressure] = useState();
-  // const [pressureRedux, setPressureRedux] = useState(dailyPressureReport);
-  // dispatch부터 해보고 안되면... 이렇게 하자...
-  // const [result, setResult] = useState({
-  //   breakfast: { BpHigh: "", BpLow: "" },
-  //   lunch: { BpHigh: "", BpLow: "" },
-  //   dinner: { BpHigh: "", BpLow: "" },
-  // });
-
-  // const getDailyBloodpressureResult = useCallback(async () => {
-  //   try {
-  //     const response = await getDailyBloodpressure("2022-04-26", 1);
-  //     // console.log("------");
-  //     // console.log(response);
-  //     dispatch(
-  //       dailyReportSlice.actions.setDailyReport({
-  //         bloodPressure: response,
-  //       })
-  //     );
-  //     console.log(dailyPressureReport.bloodPressure.today.lunch.BpLow);
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     console.log("getDailyBloodpressure");
-  //   }
-  // });
-  // 리덕스 쓰는 방법을 모르겠다,, ㅋㅋ
-  // useEffect(() => {
-  //   getDailyBloodpressureResult();
-  // }, []);
-
-  // useEffect(() => {
-  //   setPressure(dailyPressureReport);
-  //   console.log(dailyPressureReport);
-  // }, [pressureRedux]);
-  // const reduxTest = (props) => {
-  //   dispatch(dailyReportSlice.actions.add(props));
-  // };
-  // const result = useSelector(
-  //   (state) => state.dailyReport.todayBloodPressure[0].todayBloodPressure
-  // );
-
-  // useEffect(() => {
-  // const getDailyBloodpressureResult = async () => {
-  //   try {
-  //     const response = await getDailyBloodpressure("2022-04-26", 1);
-  //     console.log("------");
-  //     console.log(response);
-  //     setResult(response.today);
-  //     // setBreakfast(response.today.breakfast);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  //   getDailyBloodpressureResult();
-  // }, []);
-
-  // 계산 잘하기
-  const beforeEat = 130 - 120;
-
-  const element = () => {
+  const element = (before, after) => {
     return (
-      <View style={styles.btn}>
-        <Text style={styles.btnText}>▲{beforeEat}</Text>
+      <View style={{ alignItems: "center" }}>
+        {before - after === 0 ? (
+          <Text style={styles.btnText}>0</Text>
+        ) : before > after ? (
+          <Text style={styles.btnDownText}>▼{before - after}</Text>
+        ) : (
+          <Text style={styles.btnUpText}>▲{after - before}</Text>
+        )}
       </View>
     );
   };
@@ -97,35 +36,76 @@ const BloodPressureReport = (props) => {
     }
   };
   const tableHead = ["최저", "최고"];
-  // const tableData1 = [
-  //   ["어제", result.today.breakfast.BpLow, "-"],
-  //   ["오늘", result.today.breakfast.BpHigh, "-"],
-  //   [" ", element(), "-"],
-  // ];
-  // const tableData2 = [
-  //   ["어제", result.today.lunch.BpLow, "-"],
-  //   ["오늘", result.today.lunch.BpHigh, "-"],
-  //   [" ", element(), "-"],
-  // ];
-  // const tableData3 = [
-  //   ["어제", result.today.dinner.BpLow, "-"],
-  //   ["오늘", result.today.dinner.BpHigh, "-"],
-  //   [" ", element(), "-"],
-  // ];
   const tableData1 = [
-    ["어제", "", "-"],
-    ["오늘", "", "-"],
-    [" ", element(), "-"],
+    [
+      "어제",
+      props.yesterdayBloodPressure.breakfast.BpLow,
+      ,
+      props.yesterdayBloodPressure.breakfast.BpHigh,
+    ],
+    [
+      "오늘",
+      props.todayBloodPressure.breakfast.BpLow,
+      props.todayBloodPressure.breakfast.BpHigh,
+    ],
+    [
+      " ",
+      element(
+        props.yesterdayBloodPressure.breakfast.BpLow,
+        props.todayBloodPressure.breakfast.BpLow
+      ),
+      element(
+        props.yesterdayBloodPressure.breakfast.BpHigh,
+        props.todayBloodPressure.breakfast.BpHigh
+      ),
+      ,
+    ],
   ];
   const tableData2 = [
-    ["어제", "", "-"],
-    ["오늘", "", "-"],
-    [" ", element(), "-"],
+    [
+      "어제",
+      props.yesterdayBloodPressure.lunch.BpLow,
+      props.yesterdayBloodPressure.lunch.BpHigh,
+    ],
+    [
+      "오늘",
+      props.todayBloodPressure.lunch.BpLow,
+      props.todayBloodPressure.lunch.BpHigh,
+    ],
+    [
+      " ",
+      element(
+        props.yesterdayBloodPressure.lunch.BpLow,
+        props.todayBloodPressure.lunch.BpLow
+      ),
+      element(
+        props.yesterdayBloodPressure.lunch.BpHigh,
+        props.todayBloodPressure.lunch.BpHigh
+      ),
+    ],
   ];
   const tableData3 = [
-    ["어제", "", "-"],
-    ["오늘", "", "-"],
-    [" ", element(), "-"],
+    [
+      "어제",
+      props.yesterdayBloodPressure.dinner.BpLow,
+      props.yesterdayBloodPressure.dinner.BpHigh,
+    ],
+    [
+      "오늘",
+      props.todayBloodPressure.dinner.BpLow,
+      props.todayBloodPressure.dinner.BpHigh,
+    ],
+    [
+      " ",
+      element(
+        props.yesterdayBloodPressure.dinner.BpLow,
+        props.todayBloodPressure.dinner.BpLow
+      ),
+      element(
+        props.yesterdayBloodPressure.dinner.BpHigh,
+        props.todayBloodPressure.dinner.BpHigh
+      ),
+    ],
   ];
 
   return (
@@ -220,12 +200,30 @@ const styles = StyleSheet.create({
   },
   titleText: { textAlign: "center" },
   text: { margin: 6, textAlign: "center" },
-  btn: {
+  btnUpText: {
+    textAlign: "center",
+    color: "red",
+    textAlign: "center",
     backgroundColor: "rgba(255,0,0,0.2)",
     borderRadius: 30,
-    marginHorizontal: screenSize.width * 0.03,
+    width: 60,
   },
-  btnText: { textAlign: "center", color: "red" },
+  btnDownText: {
+    textAlign: "center",
+    color: "blue",
+    textAlign: "center",
+    backgroundColor: "rgba(0,56,255,0.2)",
+    borderRadius: 30,
+    width: 60,
+  },
+  btnText: {
+    textAlign: "center",
+    color: "black",
+    textAlign: "center",
+    backgroundColor: "rgba(0,0,0,0.2)",
+    borderRadius: 30,
+    width: 60,
+  },
   timeText: {
     color: "white",
     fontWeight: "bold",

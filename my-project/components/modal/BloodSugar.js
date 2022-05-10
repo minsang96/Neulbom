@@ -7,23 +7,24 @@ import RadioGroup from "react-native-radio-buttons-group";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
+import { addBSRecodeFunction } from "../../api/recode";
 
 const BloodSugar = (props) => {
   const radioButtonsData = [
     {
       id: "1",
       label: "아침",
-      value: "아침",
+      value: "Breakfast",
     },
     {
       id: "2",
       label: "점심",
-      value: "점심",
+      value: "Lunch",
     },
     {
       id: "3",
       label: "저녁",
-      value: "저녁",
+      value: "Dinner",
     },
   ];
 
@@ -31,55 +32,82 @@ const BloodSugar = (props) => {
     {
       id: "1",
       label: "식전",
-      value: "식전",
+      value: "before",
     },
     {
       id: "2",
       label: "식후",
-      value: "식후",
+      value: "after",
     },
   ];
 
   // useState
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
-  const [radioButtons, setRadioButtons] = useState(radioButtonsData);
-  const [radioButtons2, setRadioButtons2] = useState(radioButtonsData2);
-  const [isDate, setIsDate] = useState(new Date());
-  const [isTime, setIsTime] = useState(new Date());
+  const [radioButtons, setRadioButtons] = useState("");
+  const [radioButtons2, setRadioButtons2] = useState("");
+  const [radioButtonData, setRadioButtonData] = useState(radioButtonsData);
+  const [radioButtonData2, setRadioButtonData2] = useState(radioButtonsData2);
+  const [isDate, setIsDate] = useState(new Date().toISOString().split("T")[0]);
+  const [isTime, setIsTime] = useState(
+    new Date().toTimeString().split(" ")[0].slice(0, 5)
+  );
 
   // 라디오 버튼 관련 함수
   const onPressRadioButton = (radioButtonsArray) => {
-    setRadioButtons(radioButtonsArray);
+    let i = 0;
+    for (i; i < radioButtonsArray.length; i++) {
+      if (radioButtonsArray[i].selected === true) {
+        setRadioButtons(radioButtonsArray[i].value);
+        break;
+      }
+    }
   };
   const onPressRadioButton2 = (radioButtonsArray2) => {
-    setRadioButtons2(radioButtonsArray2);
+    let i = 0;
+    for (i; i < radioButtonsArray2.length; i++) {
+      if (radioButtonsArray2[i].selected === true) {
+        setRadioButtons2(radioButtonsArray2[i].value);
+        break;
+      }
+    }
   };
 
   // 날짜 관련 함수
   const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
+    setDatePickerVisibility(!isDatePickerVisible);
+    // console.log(isDatePickerVisible);
   };
   const handleConfirm = (date) => {
-    // console.log(date);
-    setIsDate(date);
-    hideDatePicker();
+    const selectDate = new Date(date).toISOString().split("T")[0];
+    console.log(selectDate);
+    setIsDate(selectDate);
+    showDatePicker();
   };
 
   // 시간 관련 함수
   const showTimePicker = () => {
-    setTimePickerVisibility(true);
-  };
-  const hideTimePicker = () => {
-    setTimePickerVisibility(false);
+    setTimePickerVisibility(!isTimePickerVisible);
   };
   const handleTimeConfirm = (time) => {
-    // console.log(time);
-    setIsTime(time);
-    hideTimePicker();
+    setIsTime(time.toTimeString().split(" ")[0].slice(0, 5));
+    showTimePicker();
+  };
+
+  // 수정하기-api(현정)
+  const addBloodSugarRecodeFunction = () => {
+    const bloodSugarDto = {
+      bsCode: radioButtons2 + radioButtons,
+      bsDate: isDate,
+      bsLevel: 100,
+      bsTime: isTime,
+      userSeq: 14,
+    };
+    try {
+      addBSRecodeFunction(bloodSugarDto);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -116,13 +144,14 @@ const BloodSugar = (props) => {
           isVisible={isDatePickerVisible}
           mode="date"
           onConfirm={handleConfirm}
-          onCancel={hideDatePicker}
+          onCancel={showDatePicker}
         />
         <Text style={styles.subtitleText}>측정 시간</Text>
         <Text style={styles.dateTime}>
           <Pressable onPress={showTimePicker}>
             <Text style={styles.dateTimeText}>
-              {format(new Date(isTime), "a p", { locale: ko })}
+              {isTime}
+              {/* {format(new Date(isTime), "a p", { locale: ko })} */}
             </Text>
           </Pressable>
         </Text>
@@ -130,12 +159,12 @@ const BloodSugar = (props) => {
           isVisible={isTimePickerVisible}
           mode="time"
           onConfirm={handleTimeConfirm}
-          onCancel={hideTimePicker}
+          onCancel={showTimePicker}
         />
         <Text style={styles.subtitleText}>측정 시점 선택</Text>
         <View style={{ alignItems: "center" }}>
           <RadioGroup
-            radioButtons={radioButtons}
+            radioButtons={radioButtonData}
             onPress={onPressRadioButton}
             layout="row"
           />
@@ -143,7 +172,7 @@ const BloodSugar = (props) => {
         <Text style={styles.subtitleText}>식전/식후</Text>
         <View style={{ alignItems: "center" }}>
           <RadioGroup
-            radioButtons={radioButtons2}
+            radioButtons={radioButtonData2}
             onPress={onPressRadioButton2}
             layout="row"
           />
@@ -152,11 +181,13 @@ const BloodSugar = (props) => {
         <TextInput
           style={styles.input}
           placeholder="측정된 혈당을 입력하세요"
+          keyboardType="numeric"
         ></TextInput>
         <ButtonCompo
           buttonName="혈당 등록하기"
           onPressButton={() => {
             props.onPressBloodSugarButton();
+            addBloodSugarRecodeFunction();
           }}
         ></ButtonCompo>
       </View>

@@ -49,6 +49,7 @@ public class MemberServiceImpl implements MemberService {
 				.userType(memberDto.getType())
 				.userEmail(memberDto.getEmail())
 				.userPwd(passwordEncoder.encode(memberDto.getPwd()))
+				.delYn("n")
 				.regEmail(memberDto.getEmail())
 				.regDt(TimeUtils.curTime())
 				.modEmail(memberDto.getEmail())
@@ -67,6 +68,7 @@ public class MemberServiceImpl implements MemberService {
 				.memberGender(memberDto.getGender())
 				.memberDesc(memberDto.getDesc())
 				.memberKcal(NutrientUtils.getTotalKcal(memberDto.getGender(), memberDto.getHeight()))
+				.delYn("n")
 				.regEmail(memberDto.getEmail())
 				.regDt(TimeUtils.curTime())
 				.modEmail(memberDto.getEmail())
@@ -74,11 +76,12 @@ public class MemberServiceImpl implements MemberService {
 		
 		for(String code : memberDto.getSetting().keySet()) {
 			// 입력받은 코드가 bloodPressure나 bloodSugar가 아닐 경우 예외 처리
-			if(!code.equals("bloodPresuure") && !code.equals("bloodSugar")) throw new NotExistsSettingException();
+			if(!code.equals("bloodPressure") && !code.equals("bloodSugar")) throw new NotExistsSettingException();
 			if(memberDto.getSetting().get(code)) {
 				settingRepository.save(Setting.builder()
 						.userSeq(user.getUserSeq())
 						.code(code)
+						.delYn("n")
 						.regEmail(memberDto.getEmail())
 						.regDt(TimeUtils.curTime())
 						.modEmail(memberDto.getEmail())
@@ -119,6 +122,7 @@ public class MemberServiceImpl implements MemberService {
 					settingRepository.save(Setting.builder()
 							.userSeq(memberModifyDto.getUserSeq())
 							.code(code)
+							.delYn("n")
 							.regEmail(member.getRegEmail())
 							.regDt(TimeUtils.curTime())
 							.modEmail(member.getRegEmail())
