@@ -6,6 +6,7 @@ import ButtonCompo from "../button/ButtonCompo";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
+import { addOtherRecodeFunction } from "../../api/recode";
 
 const Coffee = (props) => {
   const [isDate, setIsDate] = useState(new Date());
@@ -21,7 +22,6 @@ const Coffee = (props) => {
     setDatePickerVisibility(false);
   };
   const handleConfirm = (date) => {
-    // console.log(date);
     setIsDate(date);
     hideDatePicker();
   };
@@ -34,9 +34,23 @@ const Coffee = (props) => {
     setTimePickerVisibility(false);
   };
   const handleTimeConfirm = (time) => {
-    // console.log(time);
     setIsTime(time);
     hideTimePicker();
+  };
+
+  // 수정하기-api(현정)
+  const addCoffeeRecodeFunction = () => {
+    const otherDto = {
+      code: "coffee",
+      otherDate: "2022-05-04",
+      otherTime: "13:22",
+      userSeq: 14,
+    };
+    try {
+      addOtherRecodeFunction(otherDto);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -94,6 +108,7 @@ const Coffee = (props) => {
           buttonName="커피 등록하기"
           onPressButton={() => {
             props.onPressCoffeeButton();
+            addCoffeeRecodeFunction();
           }}
         ></ButtonCompo>
       </View>

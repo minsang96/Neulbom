@@ -20,6 +20,17 @@ const screenSize = Dimensions.get("screen");
 
 const UserMypage = (props) => {
   const navigation = useNavigation();
+  const logout = () => {
+    async function removeUserSession() {
+      try {
+        await EncryptedStorage.removeItem("user_session");
+        // Congrats! You've just removed your first value!
+      } catch (error) {
+        // There was an error on the native side
+      }
+    }
+    navigation.navigate('login')
+  }
   return (
     <ScrollView style={styles.background}>
       <TouchableOpacity
@@ -42,7 +53,9 @@ const UserMypage = (props) => {
       <InfoMyDisease styles={styles}></InfoMyDisease>
       <Text style={styles.title}>이용 안내 ✨</Text>
       <Infomation styles={styles}></Infomation>
-      <ButtonCompo buttonName="로그아웃"></ButtonCompo>
+      <ButtonCompo 
+        onPressButton={() => logout()}
+        buttonName="로그아웃"></ButtonCompo>
     </ScrollView>
   );
 };

@@ -22,7 +22,7 @@ public class DietDto {
 	@ApiModelProperty(example = "breakfast", value = "breakfast/lunch/dinner")
 	private String dietTime;
 
-	@ApiModelProperty(example = "1011001", value = "1011001 : 쌀밥")
+	@ApiModelProperty(example = "01011001", value = "01011001 : 쌀밥")
 	private String foodCode;
 
 	@ApiModelProperty(example = "300", value = "음식 중량(g)")

@@ -13,10 +13,29 @@ import { Dimensions } from "react-native";
 
 const screenSize = Dimensions.get("screen");
 
-const NutrientCompo = (props) => {
-  const data = [50, 10, 40];
+const WeeklyNutrientCompo = (props) => {
+  // 탄단지 그래프 그리기
+  const data1 = [
+    parseInt(props.weeklyNutrient.recommend.carbohydrate),
+    parseInt(props.weeklyNutrient.recommend.protein),
+    parseInt(props.weeklyNutrient.recommend.fat),
+  ];
+  const data2 = [
+    parseInt(props.weeklyNutrient.intake.carbohydrate),
+    parseInt(props.weeklyNutrient.intake.protein),
+    parseInt(props.weeklyNutrient.intake.fat),
+  ];
   const tandanjiColor = ["#FF6107", "#7ED320", "#FFD302"];
-  const pieData = data
+  const pieData = data1
+    .filter((value) => value > 0)
+    .map((value, index) => ({
+      value,
+      svg: {
+        fill: tandanjiColor[index],
+      },
+      key: index,
+    }));
+  const pieData2 = data2
     .filter((value) => value > 0)
     .map((value, index) => ({
       value,
@@ -26,12 +45,18 @@ const NutrientCompo = (props) => {
       key: index,
     }));
 
-  const beforeEat = 130 - 120;
+  // 수정하기-계산(현정)
 
-  const element = () => {
+  const element = (before, after) => {
     return (
-      <View style={styles.btn}>
-        <Text style={styles.btnText}>▲{beforeEat}</Text>
+      <View style={{ alignItems: "center" }}>
+        {before - after === 0 ? (
+          <Text style={styles.btnText}>0</Text>
+        ) : before > after ? (
+          <Text style={styles.btnDownText}>▼{before - after}</Text>
+        ) : (
+          <Text style={styles.btnUpText}>▲{after - before}</Text>
+        )}
       </View>
     );
   };
@@ -58,18 +83,70 @@ const NutrientCompo = (props) => {
   const circleText1 = [circleView(0), circleView(1), circleView(2)];
   const tableHead1 = ["탄수화물", "단백질", "지방"];
   const tableData1 = [
-    ["권장", 60.1, "-", "-"],
-    [`${props.now}`, 20.8, "-", "-"],
-    [" ", element(), "-", "-"],
+    [
+      "권장",
+      parseInt(props.weeklyNutrient.recommend.carbohydrate),
+      parseInt(props.weeklyNutrient.recommend.protein),
+      parseInt(props.weeklyNutrient.recommend.fat),
+    ],
+    [
+      `${props.now}`,
+      parseInt(props.weeklyNutrient.intake.carbohydrate),
+      parseInt(props.weeklyNutrient.intake.protein),
+      parseInt(props.weeklyNutrient.intake.fat),
+    ],
+    [
+      " ",
+      element(
+        parseInt(props.weeklyNutrient.recommend.carbohydrate),
+        parseInt(props.weeklyNutrient.intake.carbohydrate)
+      ),
+      element(
+        parseInt(props.weeklyNutrient.recommend.protein),
+        parseInt(props.weeklyNutrient.intake.protein)
+      ),
+      element(
+        parseInt(props.weeklyNutrient.recommend.fat),
+        parseInt(props.weeklyNutrient.intake.fat)
+      ),
+      ,
+    ],
   ];
 
   const circleText2 = [circleView(3), circleView(4)];
   const tableHead2 = ["나트륨", "당"];
   const tableData2 = [
-    ["권장", 60.1, "-"],
-    [`${props.now}`, 20.8, "-"],
-    [" ", element(), "-"],
+    [
+      "권장",
+      parseInt(props.weeklyNutrient.recommend.natrium),
+      ,
+      parseInt(props.weeklyNutrient.recommend.sugars),
+    ],
+    [
+      `${props.now}`,
+      parseInt(props.weeklyNutrient.intake.natrium),
+      ,
+      parseInt(props.weeklyNutrient.intake.sugars),
+    ],
+    [
+      " ",
+      element(
+        parseInt(props.weeklyNutrient.recommend.natrium),
+        parseInt(props.weeklyNutrient.intake.natrium)
+      ),
+      element(
+        parseInt(props.weeklyNutrient.recommend.sugars),
+        parseInt(props.weeklyNutrient.intake.sugars)
+      ),
+    ],
   ];
+
+  const sugarsProgress =
+    props.weeklyNutrient.intake.sugars / props.weeklyNutrient.recommend.sugars;
+
+  const natriumProgress =
+    props.weeklyNutrient.intake.natrium /
+    props.weeklyNutrient.recommend.natrium;
 
   return (
     <View style={props.styles.box}>
@@ -86,7 +163,9 @@ const NutrientCompo = (props) => {
             innerRadius="70%"
           />
           <View style={styles.calText}>
-            <Text style={{ fontSize: 20 }}>1856</Text>
+            <Text style={{ fontSize: 20 }}>
+              {parseInt(props.weeklyNutrient.recommend.kcal)}
+            </Text>
             <Text>kcal</Text>
           </View>
         </View>
@@ -94,11 +173,13 @@ const NutrientCompo = (props) => {
           <Text style={styles.graphTitle}>{props.now} 섭취 비율</Text>
           <PieChart
             style={{ height: 120, width: 110 }}
-            data={pieData}
+            data={pieData2}
             innerRadius="70%"
           />
           <View style={styles.calText}>
-            <Text style={{ fontSize: 20 }}>1856</Text>
+            <Text style={{ fontSize: 20 }}>
+              {parseInt(props.weeklyNutrient.intake.kcal)}
+            </Text>
             <Text>kcal</Text>
           </View>
         </View>
@@ -136,7 +217,7 @@ const NutrientCompo = (props) => {
       </View>
       <View style={styles.graphView}>
         <Progress.Bar
-          progress={0.3}
+          progress={natriumProgress}
           animated={false}
           color="#1F77B4"
           borderColor="rgba(0, 122, 255, 0)"
@@ -144,7 +225,7 @@ const NutrientCompo = (props) => {
           height={10}
         />
         <Progress.Bar
-          progress={0.3}
+          progress={sugarsProgress}
           animated={false}
           color="#FF0E9F"
           borderColor="rgba(0, 122, 255, 0)"
@@ -189,7 +270,7 @@ const NutrientCompo = (props) => {
   );
 };
 
-export default NutrientCompo;
+export default WeeklyNutrientCompo;
 
 const styles = StyleSheet.create({
   graphView: {
@@ -206,12 +287,30 @@ const styles = StyleSheet.create({
     height: 30,
   },
   text: { margin: 6, textAlign: "center" },
-  btn: {
+  btnUpText: {
+    textAlign: "center",
+    color: "red",
+    textAlign: "center",
     backgroundColor: "rgba(255,0,0,0.2)",
     borderRadius: 30,
-    marginHorizontal: screenSize.width * 0.03,
+    width: 60,
   },
-  btnText: { textAlign: "center", color: "red" },
+  btnDownText: {
+    textAlign: "center",
+    color: "blue",
+    textAlign: "center",
+    backgroundColor: "rgba(0,56,255,0.2)",
+    borderRadius: 30,
+    width: 60,
+  },
+  btnText: {
+    textAlign: "center",
+    color: "black",
+    textAlign: "center",
+    backgroundColor: "rgba(0,0,0,0.2)",
+    borderRadius: 30,
+    width: 60,
+  },
   timeText: {
     color: "white",
     fontWeight: "bold",
