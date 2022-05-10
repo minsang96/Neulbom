@@ -22,8 +22,7 @@ public class ChatRoomController {
 
 //	private final ChatRoomRepository chatRoomRepository;
 	
-	@Autowired
-	
+	@Autowired	
 	ChatRoomService chatRoomService;
 	
 	// 채팅 리스트 화면
