@@ -28,13 +28,12 @@ const UserMypageUpdate = (props) => {
   const dispatch = useDispatch();
   // 수정하기-건강수치 부분(현정)
 
-  // console.log(userInfo);
-  // 수정하기-함수 구현(현정)
   console.log(userSeq);
   console.log(accessToken);
 
+  // 수정하기-409error(현정)
   const updateUserInfo = async () => {
-    const params = {
+    const data = {
       desc: memberDesc,
       height: memberHeight,
       img: "https://notion-emojis.s3-us-west-2.amazonaws.com/prod/svg-twitter/1f331.svg",
@@ -47,11 +46,13 @@ const UserMypageUpdate = (props) => {
     };
 
     try {
-      const response = await axios.post(
+      const response = await axios.put(
         "https://k6a104.p.ssafy.io/api/member/modify",
         {
+          memberModifyDto: data,
+        },
+        {
           headers: { Authorization: accessToken },
-          params: { memberModifyDto: params },
         }
       );
       dispatch(userSlice.actions.setUserInfo(response));

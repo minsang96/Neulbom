@@ -16,11 +16,15 @@ const Intake = (props) => {
         </View>
         <View style={props.styles.userInfoItem}>
           <Text>권장 나트륨</Text>
-          <Text style={props.styles.userInfoItemContent}>350</Text>
+          <Text style={props.styles.userInfoItemContent}>
+            {userInfo.memberNatrium}
+          </Text>
         </View>
         <View style={props.styles.userInfoItem}>
           <Text>권장 당류</Text>
-          <Text style={props.styles.userInfoItemContent}>400</Text>
+          <Text style={props.styles.userInfoItemContent}>
+            {userInfo.memberSugar}
+          </Text>
         </View>
       </View>
     </View>

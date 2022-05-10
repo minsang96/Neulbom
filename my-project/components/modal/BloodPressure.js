@@ -53,9 +53,6 @@ const BloodPressure = (props) => {
     new Date().toTimeString().split(" ")[0].slice(0, 5)
   );
 
-  // 수정하기-현정 지금 할 일 ===> 시간 설정 왜 이따위 ?? 진짜 화가 많이 남 ^____^
-  // .toTimeString().split(" ")[0]
-
   // 라디오 버튼 관련 함수
   const onPressRadioButton = (radioButtonsArray) => {
     let i = 0;
@@ -151,10 +148,7 @@ const BloodPressure = (props) => {
         <Text style={styles.subtitleText}>측정 시간</Text>
         <Text style={styles.dateTime}>
           <Pressable onPress={showTimePicker}>
-            <Text style={styles.dateTimeText}>
-              {isTime}
-              {/* {format(new Date(isTime), "a p", { locale: ko })} */}
-            </Text>
+            <Text style={styles.dateTimeText}>{isTime}</Text>
           </Pressable>
         </Text>
         <DateTimePickerModal
