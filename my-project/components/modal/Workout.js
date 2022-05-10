@@ -6,12 +6,16 @@ import ButtonCompo from "../button/ButtonCompo";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
+import { useSelector } from "react-redux";
 
 const Workout = (props) => {
-  const [isDate, setIsDate] = useState(new Date());
-  const [isTime, setIsTime] = useState(new Date());
+  const [isDate, setIsDate] = useState(format(new Date(), "yyyy-MM-dd"));
+  const [isTime, setIsTime] = useState(
+    new Date().toTimeString().split(" ")[0].slice(0, 5)
+  );
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
+  const userSeq = useSelector((state) => state.user.userSeq);
 
   // 날짜 관련 함수
   const showDatePicker = () => {
@@ -21,7 +25,7 @@ const Workout = (props) => {
     setDatePickerVisibility(false);
   };
   const handleConfirm = (date) => {
-    setIsDate(date);
+    setIsDate(format(date, "yyyy-MM-dd"));
     hideDatePicker();
   };
 
@@ -33,17 +37,16 @@ const Workout = (props) => {
     setTimePickerVisibility(false);
   };
   const handleTimeConfirm = (time) => {
-    setIsTime(time);
-    hideTimePicker();
+    setIsTime(time.toTimeString().split(" ")[0].slice(0, 5));
+    showTimePicker();
   };
 
-  // 수정하기-api(현정)
   const addExerciseRecodeFunction = () => {
     const otherDto = {
       code: "exercise",
-      otherDate: "2022-05-04",
-      otherTime: "13:22",
-      userSeq: 14,
+      otherDate: isDate,
+      otherTime: isTime,
+      userSeq: userSeq,
     };
     try {
       addOtherRecodeFunction(otherDto);
@@ -92,9 +95,7 @@ const Workout = (props) => {
         <Text style={styles.subtitleText}>운동 시간</Text>
         <Text style={styles.dateTime}>
           <Pressable onPress={showTimePicker}>
-            <Text style={styles.dateTimeText}>
-              {format(new Date(isTime), "a p", { locale: ko })}
-            </Text>
+            <Text style={styles.dateTimeText}>{isTime}</Text>
           </Pressable>
         </Text>
         <DateTimePickerModal

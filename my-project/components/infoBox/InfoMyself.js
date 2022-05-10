@@ -12,6 +12,7 @@ const InfoMyself = (props) => {
       return <Text>👩</Text>;
     }
   };
+
   const year = new Date().getFullYear() - userInfo.memberYear + 1;
   return (
     <View style={props.styles.box}>
