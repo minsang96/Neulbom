@@ -3,10 +3,11 @@ import { View, Image, Text } from "react-native";
 import styled from "styled-components/native";
 import palette from "../palette";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, NavigationContext } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import { useDispatch, useSelector } from "react-redux";
 import imagesSlice from "../../slices/images";
+import UploadMode from "../modal/UploadMode";
 
 const Column = styled.View`
   flex-direction: row;
@@ -40,46 +41,29 @@ const Plus = styled.TouchableOpacity`
   elevation: 5;
 `;
 
-const Diet = ({ kind, kcal, meal, total_meal }) => {
+const Diet = ({ kind, current, kcal, meal, total_meal }) => {
   const navigation = useNavigation();
   const [image, setImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
 
   const getMealDetail = async () => {
-    navigation.navigate("Stack", { screen: "FoodWrite" });
-  };
-
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
+    console.log("getMealDetail");
+    navigation.navigate("Stack", {
+      screen: "FoodWrite",
+      params: { current: current },
     });
-    console.log(result);
-
-    if (!result.cancelled) {
-      setImage(result.uri);
-      dispatch(imagesSlice.actions.add(result.uri));
-    }
-    navigation.navigate("Stack", { screen: "FoodWrite" });
   };
 
   return (
     <>
       <Box>
+        <Text>{current}</Text>
         <Column>
           <Content style={{ flex: 1 }}>{kind}</Content>
           <Content style={{ color: `${palette.green}` }}>{kcal} kcal</Content>
-          {/* <Plus onPress={pickImage}> */}
+
           <Plus onPress={getMealDetail}>
-            {/* <Plus
-            onPress={() => {
-              setModalVisible(true);
-            }}
-          > */}
             <Ionicons name="add" color="white" size={30} />
           </Plus>
         </Column>
