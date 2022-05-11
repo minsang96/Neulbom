@@ -34,7 +34,7 @@ const UserMypageUpdate = (props) => {
     const data = {
       desc: memberDesc,
       height: memberHeight,
-      img: memberImg,
+      img: "https://notion-emojis.s3-us-west-2.jpg",
       setting: {
         bloodPressure: true,
         bloodSugar: false,
@@ -44,11 +44,17 @@ const UserMypageUpdate = (props) => {
     };
 
     try {
-      const hey = await updateMemeberInfo(accessToken, data);
-      console.log(hey);
-      const res = await getMemeberInfo(accessToken, userSeq);
-      dispatch(userSlice.actions.setUserInfo(res));
-      console.log(res);
+      const response = await axios.put(
+        "https://k6a104.p.ssafy.io/api/member/modify",
+        data,
+        {
+          headers: {
+            Authorization: accessToken,
+          },
+        }
+      );
+      // dispatch(userSlice.actions.setUserInfo(response));
+      console.log(response);
     } catch (err) {
       console.log(err);
     }

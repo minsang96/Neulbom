@@ -57,8 +57,8 @@
                 messages: []
             },
             created() {
-                this.roomId = localStorage.getItem('wschat.roomId');
-                this.sender = localStorage.getItem('wschat.sender');
+                this.roomId = 23;
+                this.sender = 23;
                 this.findRoom();
             },
             methods: {
@@ -70,6 +70,7 @@
                     this.message = '';
                 },
                 recvMessage: function(recv) {
+                	console.log("내가 보낸 거 ", recv.message);
                     this.messages.unshift({"type":recv.type,"sender":recv.type=='ENTER'?'[알림]':recv.sender,"message":recv.message})
                 }
             }
