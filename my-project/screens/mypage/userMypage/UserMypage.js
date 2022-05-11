@@ -15,11 +15,26 @@ import SelectBox from "../../../components/infoBox/SelectBox";
 import Infomation from "../../../components/infoBox/Infomation";
 import { useNavigation } from "@react-navigation/native";
 import { Dimensions } from "react-native";
+import { useDispatch } from "react-redux";
+import userSlice from "../../../slices/user";
 
 const screenSize = Dimensions.get("screen");
 
 const UserMypage = (props) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const logout = () => {
+    async function removeUserSession() {
+      try {
+        await EncryptedStorage.removeItem("user_session");
+      } catch (error) {
+        console.log(error.code);
+      }
+    }
+    dispatch(userSlice.actions.logout());
+    removeUserSession();
+  };
+  // 수정하기-건강 수치(현정)
   return (
     <ScrollView style={styles.background}>
       <TouchableOpacity
@@ -42,7 +57,10 @@ const UserMypage = (props) => {
       <InfoMyDisease styles={styles}></InfoMyDisease>
       <Text style={styles.title}>이용 안내 ✨</Text>
       <Infomation styles={styles}></Infomation>
-      <ButtonCompo buttonName="로그아웃"></ButtonCompo>
+      <ButtonCompo
+        onPressButton={() => logout()}
+        buttonName="로그아웃"
+      ></ButtonCompo>
     </ScrollView>
   );
 };

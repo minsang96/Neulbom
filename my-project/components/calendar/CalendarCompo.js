@@ -1,70 +1,98 @@
 import React, { useState, useEffect } from "react";
-import { Calendar, CalendarList, Agenda } from "react-native-calendars";
-import { View, Text } from "react-native";
+import { Calendar } from "react-native-calendars";
+import { Text, View } from "react-native";
 import { format } from "date-fns";
-import { ko } from "date-fns/locale";
+import { getCalendarList } from "../../api/reports";
+// import { ko } from "date-fns/locale";
 
 const CalendarCompo = () => {
-  const [clickDay, setClickDay] = useState("");
+  const bloodPressure = { key: "bloodPressure", color: "red" };
+  const alcohol = { key: "alcohol", color: "blue" };
+  const bloodSugar = { key: "bloodSugar", color: "green" };
+  const coffee = { key: "coffee", color: "black" };
+  const exercise = { key: "exercise", color: "yellow" };
+  const [click, isClick] = useState(false);
+  const [calendarList, setCalendarList] = useState([]);
+  const [loading, isLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(
     format(new Date(), "yyyy-MM-dd")
   );
-  const markedDates = {
-    // "2022-05-17": {
-    //   selected: true,
-    // },
-    "2022-05-18": {
-      marked: true,
-    },
-    "2022-05-19": {
-      marked: true,
-    },
+
+  // !수정하기 = 달력 내용 보이게 하기(현정)
+  useEffect(() => {
+    const getCalendarListFunction = async () => {
+      try {
+        const response = await getCalendarList("2022-05", 14);
+        setCalendarList(response);
+        isLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getCalendarListFunction();
+  }, []);
+
+  let markedDates = {};
+  for (const date in calendarList) {
+    const dot = [];
+    for (let i in calendarList[date]["dots"]) {
+      if (calendarList[date]["dots"][i] === "alcohol") {
+        dot.push(alcohol);
+      } else if (calendarList[date]["dots"][i] === "bloodPressure") {
+        dot.push(bloodPressure);
+      } else if (calendarList[date]["dots"][i] === "bloodSugar") {
+        dot.push(bloodSugar);
+      } else if (calendarList[date]["dots"][i] === "coffee") {
+        dot.push(coffee);
+      } else if (calendarList[date]["dots"][i] === "exercise") {
+        dot.push(exercise);
+      }
+    }
+    markedDates[date] = { dots: dot };
+  }
+  console.log("---------------");
+  const picker = (date) => {
+    console.log(calendarList[date]);
+    // for (let i in calendarList[date]) {
+    //   console.log(calendarList[date][i]);
+    // }
   };
 
   return (
     <View>
-      {/* 달력 사용법 아직 확실히 모르겠습니다 */}
-      {/* https://github.com/wix/react-native-calendars */}
-
-      {/* <Calendar
-        markedDates={{
-          "2022-04-16": { marked: true },
-          "2022-04-17": { marked: true },
-          "2022-04-18": { marked: true, dotColor: "red" },
-        }}
-        onDayPress={(day) => {
-          setClickDay(day.dateString);
-          console.log(clickDay);
-        }}
-        theme={{
-          selectedDayBackgroundColor: "#009688",
-          arrowColor: "#009688",
-          dotColor: "#009688",
-          todayTextColor: "#009688",
-        }}
-      ></Calendar> */}
-      <Calendar
-        markedDates={markedDates}
-        selectedDate={selectedDate}
-        onSelectDate={setSelectedDate}
-        theme={{
-          selectedDayBackgroundColor: "#009688",
-          arrowColor: "#009688",
-          dotColor: "#009688",
-          todayTextColor: "#009688",
-        }}
-      />
-      {/* <Agenda></Agenda> */}
-      {/* 만약 agenda 진짜 모르겠으면 쓸 코드 */}
-      {/* {clickDay ? (
-        <View>
-          <Text>{clickDay}</Text>
-        </View>
+      {loading ? (
+        <Text>Loading...</Text>
       ) : (
         <View>
-          <Text>없지롱</Text>
+          <Calendar
+            markingType={"multi-dot"}
+            // markedDates={{
+            //   "2022-05-25": {
+            //     dots: [bloodPressure, alcohol, bloodSugar],
+            //     selected: true,
+            //     selectedColor: "yellow",
+            //   },
+            //   "2022-05-26": { dots: [alcohol, bloodSugar] },
+            // }}
+            markedDates={markedDates}
+            selectedDate={selectedDate}
+            onDayPress={(data) => {
+              setSelectedDate(data.dateString);
+              isClick(true);
+              picker(selectedDate);
+            }}
+            theme={{
+              selectedDayBackgroundColor: "#009688",
+              todayTextColor: "#009688",
+            }}
+          />
+          {click ? (
+            <View>
+              <Text>{calendarList[selectedDate]["exercise"]}</Text>
+            </View>
+          ) : null}
         </View>
-      )} */}
+      )}
     </View>
   );
 };

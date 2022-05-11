@@ -1,6 +1,5 @@
+import { useState } from "react";
 import client from "./client";
-import { useDispatch, useSelector } from "react-redux";
-import dietdailySlice from "../slices/dietdaily";
 
 export async function getDiet(dietDate, userSeq) {
   // const dietdaily = useSelector((state) => state.dietdaily);
@@ -39,4 +38,46 @@ export async function getDinner(dietDate, userSeq) {
     params: { dietDate, userSeq },
   });
   return response.data.data.dinner;
+}
+
+export async function searchDiet(keyword) {
+  const response = await client({
+    method: "get",
+    url: "diet/search",
+    params: { keyword, page: 1, size: 10 },
+  });
+  return response.data.data;
+}
+
+// 음식 인식 temp 함수
+export async function getInfoAI() {
+  // const response = await client({
+
+  // })
+  return false;
+}
+
+// 식단 저장
+
+export async function recordDiet(diets) {
+  console.log("input", diets);
+  const response = await client({
+    method: "post",
+    url: "/diet/record",
+    data: diets,
+  }).then(console.log(diets));
+  return response.data;
+}
+
+export async function uploadS3(file) {
+  const response = await client({
+    method: "post",
+    url: "/s3/upload",
+    params: { category: "Diet", userSeq: 1 },
+    data: file,
+    headers: {
+      "content-type": "multipart/form-data",
+    },
+  });
+  return response;
 }

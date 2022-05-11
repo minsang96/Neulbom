@@ -1,19 +1,67 @@
-import React from "react";
-import { Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import React, { useState } from "react";
+import {
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  TextInput,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 import ButtonCompo from "../../../components/button/ButtonCompo";
-import AlarmSetting from "../../../components/infoBox/AlarmSetting";
-import InfoMyDisease from "../../../components/infoBox/InfoMyDisease";
-import InfoMyself from "../../../components/infoBox/InfoMyself";
-import Intake from "../../../components/infoBox/Intake";
-import SelectBox from "../../../components/infoBox/SelectBox";
-import Infomation from "../../../components/infoBox/Infomation";
+import { useDispatch, useSelector } from "react-redux";
+import userSlice from "../../../slices/user";
+import axios from "axios";
 
 const screenSize = Dimensions.get("screen");
 
+// 수정하기-CSS(현정)
 const UserMypageUpdate = (props) => {
+  const userInfo = useSelector((state) => state.user.userInfo);
+  const userSeq = useSelector((state) => state.user.userSeq);
+  const accessToken = useSelector((state) => state.user.accessToken);
   const navigation = useNavigation();
+  const [memberNickname, setMemberNickname] = useState(userInfo.memberNickname);
+  const [memberHeight, setMemberHeight] = useState(userInfo.memberHeight);
+  const [memberWeight, setMemberWeight] = useState(userInfo.memberWeight);
+  const [memberDesc, setMemberDesc] = useState(userInfo.memberDesc);
+  const dispatch = useDispatch();
+  // 수정하기-건강수치 부분(현정)
+
+  console.log(userSeq);
+  console.log(accessToken);
+
+  // 수정하기-409error(현정)
+  const updateUserInfo = async () => {
+    const data = {
+      desc: memberDesc,
+      height: memberHeight,
+      img: "https://notion-emojis.s3-us-west-2.jpg",
+      setting: {
+        bloodPressure: true,
+        bloodSugar: false,
+      },
+      userSeq: userSeq,
+      weight: memberWeight,
+    };
+
+    try {
+      const response = await axios.put(
+        "https://k6a104.p.ssafy.io/api/member/modify",
+        data,
+        {
+          headers: {
+            Authorization: accessToken,
+          },
+        }
+      );
+      // dispatch(userSlice.actions.setUserInfo(response));
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <ScrollView style={styles.background}>
       <TouchableOpacity
@@ -23,17 +71,44 @@ const UserMypageUpdate = (props) => {
       >
         <Text>뒤로가기</Text>
       </TouchableOpacity>
-      <Text style={styles.title}>내 소개 😊</Text>
-      <InfoMyself styles={styles}></InfoMyself>
-      <Text style={styles.title}>권장 섭취량 ✨</Text>
-      <Intake styles={styles}></Intake>
-      <Text style={styles.title}>건강 수치 ✨</Text>
-      <SelectBox styles={styles}></SelectBox>
-      <Text style={styles.title}>알림 설정 ✨</Text>
-      <AlarmSetting styles={styles}></AlarmSetting>
-      <Text style={styles.title}>질병 소개 ✨</Text>
-      <InfoMyDisease styles={styles}></InfoMyDisease>
-      <ButtonCompo buttonName="수정 완료"></ButtonCompo>
+      <Text>사진 변경</Text>
+      <Text>닉네임</Text>
+      <TextInput
+        onChangeText={(text) => {
+          setMemberNickname(text);
+        }}
+      >
+        {memberNickname}
+      </TextInput>
+      <Text>키</Text>
+      <TextInput
+        onChangeText={(text) => {
+          setMemberHeight(text);
+        }}
+      >
+        {memberHeight}
+      </TextInput>
+      <Text>몸무게</Text>
+      <TextInput
+        onChangeText={(text) => {
+          setMemberWeight(text);
+        }}
+      >
+        {memberWeight}
+      </TextInput>
+      <Text>건강 수치</Text>
+      <Text>질병 소개</Text>
+      <TextInput
+        onChangeText={(text) => {
+          setMemberDesc(text);
+        }}
+      >
+        {memberDesc}
+      </TextInput>
+      <ButtonCompo
+        buttonName="수정 완료"
+        onPressButton={() => updateUserInfo()}
+      ></ButtonCompo>
     </ScrollView>
   );
 };

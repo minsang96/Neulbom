@@ -1,17 +1,19 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, Image } from "react-native";
+import { useSelector } from "react-redux";
 
 const InfoMyself = (props) => {
-  // if 성별 줄 함수 고쳐야함 !!!!!!!!!!
-  const userGender = "남";
+  const userInfo = useSelector((state) => state.user.userInfo);
+
   const whatsUserGender = () => {
-    if (userGender === "여") {
-      return <Text>👩</Text>;
-    } else {
+    if (userInfo.memberGender === "m") {
       return <Text>🧑</Text>;
+    } else {
+      return <Text>👩</Text>;
     }
   };
 
+  const year = new Date().getFullYear() - userInfo.memberYear + 1;
   return (
     <View style={props.styles.box}>
       <View style={props.styles.flexDirectionRow}>
@@ -21,24 +23,28 @@ const InfoMyself = (props) => {
         ></Image>
         <View>
           <Text style={props.styles.userName}>
-            건강하게삽시다 {whatsUserGender()}
+            {userInfo.memberNickname} {whatsUserGender()}
           </Text>
-          <Text style={props.styles.email}>ssafy104@naver.com</Text>
+          <Text style={props.styles.email}>{userInfo.memberEmail}</Text>
         </View>
       </View>
 
       <View style={props.styles.userInfo}>
         <View style={props.styles.userInfoItem}>
           <Text>나이</Text>
-          <Text style={props.styles.userInfoItemContent}>35</Text>
+          <Text style={props.styles.userInfoItemContent}>{year}</Text>
         </View>
         <View style={props.styles.userInfoItem}>
           <Text>키</Text>
-          <Text style={props.styles.userInfoItemContent}>165cm</Text>
+          <Text style={props.styles.userInfoItemContent}>
+            {userInfo.memberHeight}cm
+          </Text>
         </View>
         <View style={props.styles.userInfoItem}>
           <Text>몸무게</Text>
-          <Text style={props.styles.userInfoItemContent}>55kg</Text>
+          <Text style={props.styles.userInfoItemContent}>
+            {userInfo.memberWeight}kg
+          </Text>
         </View>
       </View>
     </View>

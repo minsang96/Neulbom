@@ -11,7 +11,6 @@ const Mypage = () => {
   const [update, setUpdate] = useState(false);
   const onClick = () => {
     setUpdate(!update);
-    console.log(update);
   };
 
   return (
@@ -22,16 +21,16 @@ const Mypage = () => {
       }}
     >
       {/* 일반 회원 */}
-      {/* <NativeStack.Screen name="Mypage">
+      <NativeStack.Screen name="Mypage">
         {(props) => <UserMypage {...props} onClick={onClick} update={update} />}
       </NativeStack.Screen>
       <NativeStack.Screen name="MypageUpdate">
         {(props) => (
           <UserMypageUpdate {...props} onClick={onClick} update={update} />
         )}
-      </NativeStack.Screen> */}
+      </NativeStack.Screen>
       {/* 전문가 회원 */}
-      <NativeStack.Screen name="ConsultantMypage">
+      {/* <NativeStack.Screen name="ConsultantMypage">
         {(props) => (
           <ConsultantMypage {...props} onClick={onClick} update={update} />
         )}
@@ -44,7 +43,7 @@ const Mypage = () => {
             update={update}
           />
         )}
-      </NativeStack.Screen>
+      </NativeStack.Screen> */}
     </NativeStack.Navigator>
   );
 };
