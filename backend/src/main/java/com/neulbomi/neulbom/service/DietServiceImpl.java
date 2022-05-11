@@ -1,5 +1,6 @@
 package com.neulbomi.neulbom.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,14 +10,23 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.neulbomi.neulbom.dto.DietDto;
 import com.neulbomi.neulbom.entity.Diet;
 import com.neulbomi.neulbom.entity.Food;
 import com.neulbomi.neulbom.entity.Member;
 import com.neulbomi.neulbom.entity.Other;
 import com.neulbomi.neulbom.entity.User;
+import com.neulbomi.neulbom.exception.FailAnalyzeFoodException;
 import com.neulbomi.neulbom.exception.NotExistsUserException;
 import com.neulbomi.neulbom.repository.DietRepository;
 import com.neulbomi.neulbom.repository.FoodRepository;
@@ -284,5 +294,76 @@ public class DietServiceImpl implements DietService {
 		}
 		
 		return dayMap;
+	}
+
+	private static final RestTemplate REST_TEMPLATE;
+
+	static {
+		// RestTemplate 기본 설정을 위한 Factory 생성
+		SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+		factory.setConnectTimeout(3000);
+		factory.setReadTimeout(3000);
+		factory.setBufferRequestBody(false); // 파일 전송은 이 설정을 꼭 해주자.
+		REST_TEMPLATE = new RestTemplate(factory);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public JSONObject foodAnalyze(int userSeq, MultipartFile file) {
+		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
+		
+		// 파라미터 담기
+		LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+		JsonNode response;
+
+		try {
+			if (!file.isEmpty()) {
+				map.add("user_img", new MultipartInputStreamFileResource(file.getInputStream(), file.getOriginalFilename()));
+				// 최근 Spring 버전을 쓴다면 map.add("files", file.getResource()); 로 변경
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		map.add("userSeq", userSeq);
+		
+		
+		HttpHeaders headers = new HttpHeaders();
+		// Multipart Form Data 사용
+		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+		
+		// 요청 보내기
+		String url = "http://k6a104.p.ssafy.io:5000/cf";
+		HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(map, headers);
+		response = REST_TEMPLATE.postForObject(url, requestEntity, JsonNode.class);
+		
+		// 분석한 음식 코드
+		String code = response.get("code").asText();
+		
+		// 분석한 음식
+		Food food = foodRepository.findFood(code);
+		if(food == null) throw new FailAnalyzeFoodException();
+		
+		JSONObject obj = new JSONObject();
+		obj.put("foodSeq", food.getFoodSeq());
+		obj.put("foodCode", food.getFoodCode());
+		obj.put("foodName", food.getFoodName());
+		obj.put("foodAmount", food.getFoodAmount());
+		obj.put("foodKcal", food.getFoodKcal());
+		obj.put("foodCarbohydrate", food.getFoodCarbohydrate());
+		obj.put("foodProtein", food.getFoodProtein());
+		obj.put("foodFat", food.getFoodFat());
+		obj.put("foodNatrium", food.getFoodNatrium());
+		obj.put("foodSugars", food.getFoodSugars());
+		obj.put("foodCalcium", food.getFoodCalcium());
+		obj.put("foodPhosphorus", food.getFoodPhosphorus());
+		obj.put("foodKalium", food.getFoodKalium());
+		obj.put("foodMagnesium", food.getFoodMagnesium());
+		obj.put("foodIron", food.getFoodIron());
+		obj.put("foodZinc", food.getFoodZinc());
+		obj.put("foodCholesterol", food.getFoodCholesterol());
+		obj.put("foodTransfat", food.getFoodTransfat());
+	 
+		return obj;
+	 
 	}
 }
