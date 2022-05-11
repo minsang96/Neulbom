@@ -39,16 +39,23 @@ const FoodWrite = () => {
   const current = useNavigationState((state) => state.routes[0].params.current);
 
   useEffect(() => {
+    setImagesLength(images.breakfast.length);
+    setImageLength(images.add.length);
     console.log("current", current);
-    console.log("current", images[current][imagesLength - 1]);
+    console.log("here", images[current].length);
+
     if (images[current].length == 0) {
       setData(false);
       setModalVisible(true);
     }
+
     return () => dispatch(imagesSlice.actions.clear());
   }, []);
+
   useEffect(() => {
-    setImagesLength(images.breakfast.length);
+    console.log(imageLength);
+    console.log(imagesLength);
+    setImagesLength(images[current].length);
     setImageLength(images.add.length);
     if (images.add > 0 || images[current] > 0) {
       setData(true);
@@ -128,7 +135,7 @@ const FoodWrite = () => {
         return {
           dietDate: formatted,
           dietImg: response.data.data[idx],
-          dietTime: "breakfast",
+          dietTime: current,
           foodAmount: foodInfo.food.foodAmount,
           foodCode: foodInfo.food.foodCode,
           userSeq: 1,
@@ -156,7 +163,7 @@ const FoodWrite = () => {
     }
   };
   const onPress = () => {
-    console.log(images);
+    console.log(images.lunch);
   };
 
   return (

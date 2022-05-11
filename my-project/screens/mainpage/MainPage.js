@@ -30,7 +30,7 @@ const MainPage = ({ navigation: { navigate } }) => {
   // 첫 화면을 그릴 때 일일 영양 섭취량 정보를 리덕스에 저장
   const getMyDiet = async () => {
     try {
-      const response = await getDiet("2022-04-26", "1");
+      const response = await getDiet("2022-05-11", "1");
       dispatch(dietdailySlice.actions.set_diet(response));
       dispatch(imagesSlice.actions.set(response));
     } catch (error) {
