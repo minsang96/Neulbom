@@ -4,6 +4,7 @@ import { Text, View, TouchableOpacity } from "react-native";
 import FoodWrite from "../screens/mainpage/foodCamera/FoodWrite";
 import Diet from "../components/diets/Diet";
 import SnackWrite from "../screens/mainpage/foodCamera/SnackWrite";
+import FoodSearch from "../screens/mainpage/foodCamera/FoodSearch";
 
 const ScreenOne = ({ navigation: { navigate } }) => (
   <TouchableOpacity onPress={() => navigate("Two")}>
@@ -35,6 +36,7 @@ const Stack = () => (
     <NativeStack.Screen name="FoodWrite" component={FoodWrite} />
     <NativeStack.Screen name="SnackWrite" component={SnackWrite} />
     <NativeStack.Screen name="Diet" component={Diet} />
+    <NativeStack.Screen name="FoodSearch" component={FoodSearch} />
   </NativeStack.Navigator>
 );
 

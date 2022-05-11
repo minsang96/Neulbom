@@ -40,3 +40,44 @@ export async function getDinner(dietDate, userSeq) {
   });
   return response.data.data.dinner;
 }
+
+export async function searchDiet(keyword) {
+  const response = await client({
+    method: "get",
+    url: "diet/search",
+    params: { keyword, page: 1, size: 10 },
+  });
+  return response.data.data;
+}
+
+// 음식 인식 temp 함수
+export async function getInfoAI() {
+  // const response = await client({
+
+  // })
+  return false;
+}
+
+// 식단 저장
+export async function recordDiet(diets) {
+  const response = await client({
+    method: "post",
+    url: "/diet/record",
+    data: diets,
+  });
+  return response.data;
+}
+
+export async function uploadS3(file) {
+  console.log(file);
+  const response = await client({
+    method: "post",
+    url: "/s3/upload",
+    params: { category: "Diet", userSeq: 1 },
+    data: file,
+    headers: {
+      "content-type": "multipart/form-data",
+    },
+  });
+  return response.data;
+}

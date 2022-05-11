@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 import CalendarCompo from "../../../components/calendar/CalendarCompo";
 import ButtonCompo from "../../../components/button/ButtonCompo";
 import AddTodayRecord from "./component/AddTodayRecord";
+import { getCalendarList } from "../../../api/reports";
+import { useDispatch, useSelector } from "react-redux";
+import calendarSlice from "../../../slices/calendar";
 
 const CalendarTab = () => {
+  const dispatch = useDispatch();
   const [isModalVisible, setModalVisible] = useState(false);
 
-  let onPressButton = () => {
+  // const calendarList = useSelector((state) => {
+  //   state.calendar.calendarList;
+  // });
+
+  const onPressButton = () => {
     setModalVisible(!isModalVisible);
   };
 

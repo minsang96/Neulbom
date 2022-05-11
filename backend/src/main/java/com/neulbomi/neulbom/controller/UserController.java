@@ -60,6 +60,7 @@ public class UserController {
 	        Map<String, Object> result = new HashMap<>();
 	        result.put("accessToken",jwtTokenProvider.createToken(user.getUserEmail(),auth));
 	        result.put("userSeq", user.getUserSeq());
+	        result.put("userType", user.getUserType());
 	        return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "로그인 성공", result));
 		}
 		catch(NotExistsUserException e) {

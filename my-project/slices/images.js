@@ -8,7 +8,10 @@ const initialState = {
   total_lunch: [],
   dinner: [],
   total_dinner: [],
+  add: [],
 };
+
+let nextId = 1;
 const imagesSlice = createSlice({
   name: "images",
   initialState,
@@ -23,7 +26,8 @@ const imagesSlice = createSlice({
       state.total_dinner = action.payload.dinner.total;
     },
     add: (state, action) => {
-      state.imageurls.push({ imageurls: action.payload, id: Date.now() });
+      state.add.push({ food: action.payload, id: nextId });
+      nextId += 1;
     },
     remove: (state, action) =>
       state.imageurls.filter((image) => image.id !== action.payload),

@@ -2,10 +2,11 @@ import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
 
-const CalorieCompo = (props) => {
-  const calorie = useSelector((state) => state.dailyReport.calorie);
-  const beforeCal = parseInt(calorie.yesterday);
-  const afterCal = parseInt(calorie.today);
+// 수정하기-주간 칼로리 compo로 수정하기
+const CalorieWeeklyCompo = (props) => {
+  const calorie = useSelector((state) => state.weeklyReport.weeklyCalorie);
+  const beforeCal = parseInt(calorie[0].last);
+  const afterCal = parseInt(calorie[0].this);
 
   return (
     <View style={props.styles.box}>
@@ -34,7 +35,7 @@ const CalorieCompo = (props) => {
   );
 };
 
-export default CalorieCompo;
+export default CalorieWeeklyCompo;
 
 const styles = StyleSheet.create({
   calorieView: {

@@ -1,6 +1,7 @@
 package com.neulbomi.neulbom.service;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -58,6 +59,7 @@ public class CalendarServiceImpl implements CalendarService {
 				record.put("exercise", new JSONArray());
 				record.put("coffee", new JSONArray());
 				record.put("alcohol", new JSONArray());
+				record.put("dots", new HashSet<String>());
 			}
 			
 			JSONObject record = result.get(bloodSugar.getBsDate());
@@ -70,6 +72,10 @@ public class CalendarServiceImpl implements CalendarService {
 			obj.put("bsCode", bloodSugar.getBsCode());
 			obj.put("bsLevel", bloodSugar.getBsLevel());
 			obj.put("bsTime", bloodSugar.getBsTime());
+			
+			HashSet<String> otherSet = (HashSet<String>) record.get("dots");
+			if(otherSet == null) otherSet = new HashSet<String>();
+			otherSet.add("bloodSugar");
 			
 			bloodSugarList.add(obj);
 			record.put("bloodSugar", bloodSugarList);
@@ -86,6 +92,7 @@ public class CalendarServiceImpl implements CalendarService {
 				record.put("exercise", new JSONArray());
 				record.put("coffee", new JSONArray());
 				record.put("alcohol", new JSONArray());
+				record.put("dots", new HashSet<String>());
 			}
 			
 			JSONObject record = result.get(bloodPressure.getBpDate());
@@ -99,6 +106,10 @@ public class CalendarServiceImpl implements CalendarService {
 			obj.put("bpHigh", bloodPressure.getBpHigh());
 			obj.put("bpLow", bloodPressure.getBpLow());
 			obj.put("bpTime", bloodPressure.getBpTime());
+			
+			HashSet<String> otherSet = (HashSet<String>) record.get("dots");
+			if(otherSet == null) otherSet = new HashSet<String>();
+			otherSet.add("bloodPressure");
 			
 			bloodPressureList.add(obj);
 			record.put("bloodPressure", bloodPressureList);
@@ -115,6 +126,7 @@ public class CalendarServiceImpl implements CalendarService {
 				record.put("exercise", new JSONArray());
 				record.put("coffee", new JSONArray());
 				record.put("alcohol", new JSONArray());
+				record.put("dots", new HashSet<String>());
 			}
 			
 			JSONObject record = result.get(other.getOtherDate());
@@ -127,8 +139,13 @@ public class CalendarServiceImpl implements CalendarService {
 			obj.put("code", other.getCode());
 			obj.put("otherTime", other.getOtherTime());
 			
+			HashSet<String> otherSet = (HashSet<String>) record.get("dots");
+			if(otherSet == null) otherSet = new HashSet<String>();
+			otherSet.add(other.getCode());
+			
 			otherList.add(obj);
 			record.put(other.getCode(), otherList);
+			record.put("dots", otherSet);
 		}
 		
 		
