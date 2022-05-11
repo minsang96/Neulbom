@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.json.simple.JSONObject;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.neulbomi.neulbom.dto.DietDto;
 
@@ -25,4 +26,6 @@ public interface DietService {
 	// 일주일 식단, 기록 조회
 	public HashMap<String, HashMap<String, ArrayList<String>>> dietWeekly(int userSeq, String date) throws Exception;
 
+	// 음식 분석 - AI
+	public JSONObject foodAnalyze(int userSeq, MultipartFile pic);
 }
