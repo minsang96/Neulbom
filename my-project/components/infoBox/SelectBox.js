@@ -1,23 +1,63 @@
-import React, { useState } from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
 import { Dimensions } from "react-native";
 
 const SelectBox = (props) => {
-  // 수정하기-클릭하면 어떻게 어떻게 되는걸로 고쳐야 함(현정)
   const userInfo = useSelector((state) => state.user.userInfo);
-  console.log(userInfo.setting);
-  // for (let i in userInfo.setting) {
-  //   if (userInfo.setting[i] === "bloodPressure") {}
-  // }
+  const [loading, setLoading] = useState(true);
+  const [BPColor, setBPColor] = useState(false);
+  const [BSColor, setBSColor] = useState(false);
+
+  useEffect(() => {
+    for (let i in userInfo.setting) {
+      if (userInfo.setting[i] === "bloodPressure") {
+        setBPColor(true);
+      } else if (userInfo.setting[i] === "bloodSugar") {
+        setBSColor(true);
+      }
+    }
+    setLoading(false);
+  }, []);
+
   return (
-    <View style={props.styles.boxRow}>
-      <View style={styles.button}>
-        <Text style={{ color: "white", fontSize: 16 }}>혈압</Text>
-      </View>
-      <View style={styles.button}>
-        <Text style={{ color: "white", fontSize: 16 }}>혈당</Text>
-      </View>
+    <View>
+      {loading === true ? (
+        <Text>loading...</Text>
+      ) : (
+        <View style={props.styles.boxRow}>
+          <View
+            style={[
+              styles.button,
+              { backgroundColor: BPColor === true ? "#09BC8A" : "white" },
+            ]}
+          >
+            <Text
+              style={{
+                color: BPColor === true ? "white" : "black",
+                fontSize: 16,
+              }}
+            >
+              혈압
+            </Text>
+          </View>
+          <View
+            style={[
+              styles.button,
+              { backgroundColor: BSColor === true ? "#09BC8A" : "white" },
+            ]}
+          >
+            <Text
+              style={{
+                color: BSColor === true ? "white" : "black",
+                fontSize: 16,
+              }}
+            >
+              혈당
+            </Text>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
@@ -35,5 +75,6 @@ const styles = StyleSheet.create({
       Dimensions.get("screen").width * 0.15,
     alignItems: "center",
     borderRadius: 10,
+    elevation: 3,
   },
 });

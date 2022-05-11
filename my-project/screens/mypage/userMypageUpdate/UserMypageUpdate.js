@@ -5,13 +5,14 @@ import {
   StyleSheet,
   ScrollView,
   TextInput,
+  View,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 import ButtonCompo from "../../../components/button/ButtonCompo";
 import { useDispatch, useSelector } from "react-redux";
-import userSlice from "../../../slices/user";
-import axios from "axios";
+import { updateMemeberInfo } from "../../../api/updateUserInfo";
+import { getMemeberInfo } from "../../../api/getUserInfo";
 
 const screenSize = Dimensions.get("screen");
 
@@ -21,22 +22,19 @@ const UserMypageUpdate = (props) => {
   const userSeq = useSelector((state) => state.user.userSeq);
   const accessToken = useSelector((state) => state.user.accessToken);
   const navigation = useNavigation();
-  const [memberNickname, setMemberNickname] = useState(userInfo.memberNickname);
   const [memberHeight, setMemberHeight] = useState(userInfo.memberHeight);
   const [memberWeight, setMemberWeight] = useState(userInfo.memberWeight);
   const [memberDesc, setMemberDesc] = useState(userInfo.memberDesc);
+  const [memberImg, setMemberImg] = useState(userInfo.memberImg);
   const dispatch = useDispatch();
   // 수정하기-건강수치 부분(현정)
 
-  console.log(userSeq);
-  console.log(accessToken);
-
-  // 수정하기-409error(현정)
+  // 수정하기-img url(현정)
   const updateUserInfo = async () => {
     const data = {
       desc: memberDesc,
       height: memberHeight,
-      img: "https://notion-emojis.s3-us-west-2.amazonaws.com/prod/svg-twitter/1f331.svg",
+      img: memberImg,
       setting: {
         bloodPressure: true,
         bloodSugar: false,
@@ -46,16 +44,11 @@ const UserMypageUpdate = (props) => {
     };
 
     try {
-      const response = await axios.put(
-        "https://k6a104.p.ssafy.io/api/member/modify",
-        {
-          memberModifyDto: data,
-        },
-        {
-          headers: { Authorization: accessToken },
-        }
-      );
-      dispatch(userSlice.actions.setUserInfo(response));
+      const hey = await updateMemeberInfo(accessToken, data);
+      console.log(hey);
+      const res = await getMemeberInfo(accessToken, userSeq);
+      dispatch(userSlice.actions.setUserInfo(res));
+      console.log(res);
     } catch (err) {
       console.log(err);
     }
@@ -71,42 +64,42 @@ const UserMypageUpdate = (props) => {
         <Text>뒤로가기</Text>
       </TouchableOpacity>
       <Text>사진 변경</Text>
-      <Text>닉네임</Text>
-      <TextInput
-        onChangeText={(text) => {
-          setMemberNickname(text);
-        }}
-      >
-        {memberNickname}
-      </TextInput>
-      <Text>키</Text>
-      <TextInput
-        onChangeText={(text) => {
-          setMemberHeight(text);
-        }}
-      >
-        {memberHeight}
-      </TextInput>
-      <Text>몸무게</Text>
-      <TextInput
-        onChangeText={(text) => {
-          setMemberWeight(text);
-        }}
-      >
-        {memberWeight}
-      </TextInput>
-      <Text>건강 수치</Text>
-      <Text>질병 소개</Text>
-      <TextInput
-        onChangeText={(text) => {
-          setMemberDesc(text);
-        }}
-      >
-        {memberDesc}
-      </TextInput>
+      <View style={styles.box}>
+        <Text>키</Text>
+        <TextInput
+          onChangeText={(text) => {
+            setMemberHeight(text);
+          }}
+        >
+          {memberHeight}
+        </TextInput>
+        <Text>몸무게</Text>
+        <TextInput
+          onChangeText={(text) => {
+            setMemberWeight(text);
+          }}
+        >
+          {memberWeight}
+        </TextInput>
+      </View>
+      <View style={styles.box}>
+        <Text>건강 수치</Text>
+      </View>
+      <View style={styles.box}>
+        <Text>질병 소개</Text>
+        <TextInput
+          onChangeText={(text) => {
+            setMemberDesc(text);
+          }}
+        >
+          {memberDesc}
+        </TextInput>
+      </View>
       <ButtonCompo
         buttonName="수정 완료"
-        onPressButton={() => updateUserInfo()}
+        onPressButton={() => {
+          updateUserInfo(), navigation.navigate("Mypage"), props.onClick();
+        }}
       ></ButtonCompo>
     </ScrollView>
   );

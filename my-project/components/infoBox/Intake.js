@@ -11,19 +11,19 @@ const Intake = (props) => {
         <View style={props.styles.userInfoItem}>
           <Text>권장 칼로리</Text>
           <Text style={props.styles.userInfoItemContent}>
-            {userInfo.memberKcal}
+            {parseInt(userInfo.memberKcal)}
           </Text>
         </View>
         <View style={props.styles.userInfoItem}>
           <Text>권장 나트륨</Text>
           <Text style={props.styles.userInfoItemContent}>
-            {userInfo.memberNatrium}
+            {parseInt(userInfo.memberNatrium)}
           </Text>
         </View>
         <View style={props.styles.userInfoItem}>
           <Text>권장 당류</Text>
           <Text style={props.styles.userInfoItemContent}>
-            {userInfo.memberSugar}
+            {parseInt(userInfo.memberSugar)}
           </Text>
         </View>
       </View>
