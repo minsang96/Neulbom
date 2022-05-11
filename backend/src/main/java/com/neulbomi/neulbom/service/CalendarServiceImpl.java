@@ -16,7 +16,6 @@ import com.neulbomi.neulbom.entity.Member;
 import com.neulbomi.neulbom.entity.Other;
 import com.neulbomi.neulbom.exception.NotExistsUserException;
 import com.neulbomi.neulbom.exception.WrongDateException;
-import com.neulbomi.neulbom.exception.WrongTimeException;
 import com.neulbomi.neulbom.repository.BloodPressureRepository;
 import com.neulbomi.neulbom.repository.BloodSugarRepository;
 import com.neulbomi.neulbom.repository.MemberRepository;
@@ -42,8 +41,7 @@ public class CalendarServiceImpl implements CalendarService {
 	public HashMap<String, JSONObject> getCalendarMonthRecord(int userSeq, String date) {
 		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
 		
-		if(!Pattern.matches("^(19|20)\\d{2}-(0[1-9]|1[012])$", date))
-			throw new WrongDateException();
+		if(!Pattern.matches("^(19|20)\\d{2}-(0[1-9]|1[012])$", date)) throw new WrongDateException();
 		
 		// date : 2022-05
 		
@@ -53,13 +51,6 @@ public class CalendarServiceImpl implements CalendarService {
 		for (BloodSugar bloodSugar : list) {
 			if(result.get(bloodSugar.getBsDate()) == null) {
 				result.put(bloodSugar.getBsDate(), new JSONObject());
-				JSONObject record = result.get(bloodSugar.getBsDate());
-				record.put("bloodSugar", new JSONArray());
-				record.put("bloodPressure", new JSONArray());
-				record.put("exercise", new JSONArray());
-				record.put("coffee", new JSONArray());
-				record.put("alcohol", new JSONArray());
-				record.put("dots", new HashSet<String>());
 			}
 			
 			JSONObject record = result.get(bloodSugar.getBsDate());
@@ -79,6 +70,7 @@ public class CalendarServiceImpl implements CalendarService {
 			
 			bloodSugarList.add(obj);
 			record.put("bloodSugar", bloodSugarList);
+			record.put("dots", otherSet);
 		}
 		
 		// 2. 혈압 기록 불러오기
@@ -86,13 +78,6 @@ public class CalendarServiceImpl implements CalendarService {
 		for (BloodPressure bloodPressure : bloodPressures) {
 			if(result.get(bloodPressure.getBpDate()) == null) {
 				result.put(bloodPressure.getBpDate(), new JSONObject());
-				JSONObject record = result.get(bloodPressure.getBpDate());
-				record.put("bloodSugar", new JSONArray());
-				record.put("bloodPressure", new JSONArray());
-				record.put("exercise", new JSONArray());
-				record.put("coffee", new JSONArray());
-				record.put("alcohol", new JSONArray());
-				record.put("dots", new HashSet<String>());
 			}
 			
 			JSONObject record = result.get(bloodPressure.getBpDate());
@@ -113,6 +98,7 @@ public class CalendarServiceImpl implements CalendarService {
 			
 			bloodPressureList.add(obj);
 			record.put("bloodPressure", bloodPressureList);
+			record.put("dots", otherSet);
 		}
 		
 		// 3. 다른 기록 불러오기
@@ -120,13 +106,6 @@ public class CalendarServiceImpl implements CalendarService {
 		for (Other other : alcohols) {
 			if(result.get(other.getOtherDate()) == null) {
 				result.put(other.getOtherDate(), new JSONObject());
-				JSONObject record = result.get(other.getOtherDate());
-				record.put("bloodSugar", new JSONArray());
-				record.put("bloodPressure", new JSONArray());
-				record.put("exercise", new JSONArray());
-				record.put("coffee", new JSONArray());
-				record.put("alcohol", new JSONArray());
-				record.put("dots", new HashSet<String>());
 			}
 			
 			JSONObject record = result.get(other.getOtherDate());
@@ -147,7 +126,6 @@ public class CalendarServiceImpl implements CalendarService {
 			record.put(other.getCode(), otherList);
 			record.put("dots", otherSet);
 		}
-		
 		
 		return result;
 	}
