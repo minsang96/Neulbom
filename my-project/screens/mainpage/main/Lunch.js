@@ -19,6 +19,7 @@ const Lunch = () => {
       ) : (
         <Diet
           kind="점심"
+          current="lunch"
           kcal={total_lunch.kcal}
           meal={lunch}
           total_meal={total_lunch}

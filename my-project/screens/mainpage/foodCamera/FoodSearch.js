@@ -44,7 +44,7 @@ const FoodSearch = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log("selected tempFood", tempFood);
+    console.log("selected tempFood");
   }, [tempFood]);
   const onSearch = async (text) => {
     try {
@@ -53,7 +53,6 @@ const FoodSearch = () => {
       setLoading(false);
     } catch (error) {
       console.log(error);
-      console.log("FoodSearch.js");
     } finally {
       console.log("diet/search");
     }

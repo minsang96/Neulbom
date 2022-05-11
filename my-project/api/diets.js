@@ -1,6 +1,5 @@
+import { useState } from "react";
 import client from "./client";
-import { useDispatch, useSelector } from "react-redux";
-import dietdailySlice from "../slices/dietdaily";
 
 export async function getDiet(dietDate, userSeq) {
   // const dietdaily = useSelector((state) => state.dietdaily);
@@ -59,17 +58,18 @@ export async function getInfoAI() {
 }
 
 // 식단 저장
+
 export async function recordDiet(diets) {
+  console.log("input", diets);
   const response = await client({
     method: "post",
     url: "/diet/record",
     data: diets,
-  });
+  }).then(console.log(diets));
   return response.data;
 }
 
 export async function uploadS3(file) {
-  console.log(file);
   const response = await client({
     method: "post",
     url: "/s3/upload",
@@ -79,5 +79,5 @@ export async function uploadS3(file) {
       "content-type": "multipart/form-data",
     },
   });
-  return response.data;
+  return response;
 }
