@@ -46,7 +46,6 @@ const Diet = ({ kind, current, kcal, meal, total_meal }) => {
   const [image, setImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
-
   const getMealDetail = async () => {
     console.log("getMealDetail");
     navigation.navigate("Stack", {

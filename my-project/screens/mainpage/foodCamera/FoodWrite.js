@@ -29,6 +29,7 @@ const FoodWrite = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const images = useSelector((state) => state.images);
+  // const total_meal = useSelector((state) => state.images[`total_${current}`]);
   const [imagesLength, setImagesLength] = useState(0);
   const [image, setImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -43,7 +44,7 @@ const FoodWrite = () => {
     setImageLength(images.add.length);
     console.log("current", current);
     console.log("here", images[current].length);
-
+    console.log("여기", images[`total_${current}`]);
     if (images[current].length == 0) {
       setData(false);
       setModalVisible(true);
@@ -163,7 +164,7 @@ const FoodWrite = () => {
     }
   };
   const onPress = () => {
-    console.log(images.lunch);
+    console.log(images.total);
   };
 
   return (
@@ -266,6 +267,7 @@ const FoodWrite = () => {
                 onPressButton={() =>
                   navigation.navigate("Stack", {
                     screen: "FoodSearch",
+                    params: { current: current },
                   })
                 }
               ></ButtonCompo>
@@ -307,7 +309,9 @@ const FoodWrite = () => {
         </View>
         <View>
           <Text>{current} 섭취 량</Text>
-          <Text>{images[`total_${current}`].kcal} kcal</Text>
+          <Text>칼로리: {images[`total_${current}`].kcal} kcal</Text>
+          <Text>나트륨: {images[`total_${current}`].natrium} mg</Text>
+          <Text>당류: {images[`total_${current}`].sugars} g</Text>
         </View>
         <ButtonCompo
           buttonName="식단 저장"
