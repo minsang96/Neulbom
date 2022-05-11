@@ -70,6 +70,7 @@
                     this.message = '';
                 },
                 recvMessage: function(recv) {
+                	console.log("내가 보낸 거 ", recv.message);
                     this.messages.unshift({"type":recv.type,"sender":recv.type=='ENTER'?'[알림]':recv.sender,"message":recv.message})
                 }
             }
