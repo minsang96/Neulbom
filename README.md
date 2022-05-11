@@ -69,10 +69,11 @@
 <br>
 <img src ="/uploads/b1df36d94cdd894d461c3c4fa51c86fd/아키텍쳐.jpg" alt="아키텍쳐" width="60%">
 <br>
-- `FrontEnd` : React Native, JavaScript
-- `BackEnd` : Springboot, JPA, Lombook, MySQL, Flask, AWS S3
-- `DevOps` : GitLab, Jenkins, Docker, JIRA, AWS EC2
-- `UI` :
+
+- `FrontEnd` : React Native, JavaScript<br>
+- `BackEnd` : Springboot, JPA, Lombook, MySQL, Flask, AWS S3<br>
+- `DevOps` : GitLab, Jenkins, Docker, JIRA, AWS EC2<br>
+
 
 ### 4️⃣ 프로젝트 구조
 
