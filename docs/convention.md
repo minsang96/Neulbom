@@ -14,7 +14,7 @@
 
    ```bash
    git commit -m
-   	"⚡ Fix: Fix code version issue
+   "⚡ Fix: Fix code version issue
 
     Enter commit detail
     "
@@ -62,11 +62,11 @@
 
 7. 그 외
 
-   | 구분                                               | 태그 이름 | 이모지 | 코드    |
-   | -------------------------------------------------- | --------- | ------ | ------- |
-   | 파일 혹은 폴더명을 수정하거나 옮기는 작업만인 경우 | Rename    | 🚚     | :truck: |
-   | 파일을 삭제하는 작업만 수행한 경우                 | Remove    | 🔥     | :fire:  |
+   | 구분                                               | 태그 이름 | 코드    |
+   | -------------------------------------------------- | --------- | ------- |
+   | 파일 혹은 폴더명을 수정하거나 옮기는 작업만인 경우 | Rename    | :truck: |
+   | 파일을 삭제하는 작업만 수행한 경우                 | Remove   | :fire:  |
 
 ---
 
-<div align="center"><img src ="/uploads/3d5a8efe1ace857f8c6a6926616f9e44/git.png" alt="git" width="60%"></div>
+<div align="center"><img src ="/uploads/3d5a8efe1ace857f8c6a6926616f9e44/git.png" alt="git" width="30%"></div>
