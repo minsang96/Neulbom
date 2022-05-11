@@ -81,7 +81,7 @@ public class MemberController {
 		return ResponseEntity.status(201).body(BaseResponseBody.of(201, "회원가입 성공"));
 	}
 	
-	@PutMapping("/modify")
+	@PostMapping("/modify")
 	@ApiOperation(value = "일반회원 회원 정보 수정", notes = "해당 유저 시퀀스를 가진 회원의 정보를 수정한다.", response = BaseResponseBody.class)
 	@ApiResponses(
 			{ @ApiResponse(code = 201, message = "회원정보 수정 성공"),
@@ -94,11 +94,11 @@ public class MemberController {
 		
 		try {
 			if(!userService.getUserByUserSeq(memberModifyDto.getUserSeq()).getUserEmail().equals(jwtTokenProvider.getUserPk(Authorization)))
-				return ResponseEntity.status(407).body(BaseResponseBody.of(407, "잘못된 토큰입니다."));
+				return ResponseEntity.status(409).body(BaseResponseBody.of(409, "잘못된 토큰입니다."));
 			memberService.modify(memberModifyDto);
 		}
 		catch(NotExistsUserException e) {
-			return ResponseEntity.status(408).body(BaseResponseBody.of(408, "계정 정보를 조회할 수 없습니다."));
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "계정 정보를 조회할 수 없습니다."));
 		}
 		catch(NotExistsSettingException e) {
 			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "설정 정보를 조회할 수 없습니다."));
