@@ -13,17 +13,17 @@ import { Dimensions } from "react-native";
 
 const screenSize = Dimensions.get("screen");
 
-const NutrientCompo = (props) => {
+const WeeklyNutrientCompo = (props) => {
   // 탄단지 그래프 그리기
   const data1 = [
-    parseInt(props.recommendNutrient.carbohydrate),
-    parseInt(props.recommendNutrient.protein),
-    parseInt(props.recommendNutrient.fat),
+    parseInt(props.weeklyNutrient.recommend.carbohydrate),
+    parseInt(props.weeklyNutrient.recommend.protein),
+    parseInt(props.weeklyNutrient.recommend.fat),
   ];
   const data2 = [
-    parseInt(props.intakeNutrient.carbohydrate),
-    parseInt(props.intakeNutrient.protein),
-    parseInt(props.intakeNutrient.fat),
+    parseInt(props.weeklyNutrient.intake.carbohydrate),
+    parseInt(props.weeklyNutrient.intake.protein),
+    parseInt(props.weeklyNutrient.intake.fat),
   ];
   const tandanjiColor = ["#FF6107", "#7ED320", "#FFD302"];
   const pieData = data1
@@ -45,13 +45,16 @@ const NutrientCompo = (props) => {
       key: index,
     }));
 
-  // 수정하기-계산(현정)
-  const beforeEat = 130 - 120;
-
-  const element = () => {
+  const element = (before, after) => {
     return (
-      <View style={styles.btn}>
-        <Text style={styles.btnText}>▲{beforeEat}</Text>
+      <View style={{ alignItems: "center" }}>
+        {before - after === 0 ? (
+          <Text style={styles.btnText}>0</Text>
+        ) : before > after ? (
+          <Text style={styles.btnDownText}>▼{before - after}</Text>
+        ) : (
+          <Text style={styles.btnUpText}>▲{after - before}</Text>
+        )}
       </View>
     );
   };
@@ -80,17 +83,32 @@ const NutrientCompo = (props) => {
   const tableData1 = [
     [
       "권장",
-      parseInt(props.recommendNutrient.carbohydrate),
-      parseInt(props.recommendNutrient.protein),
-      parseInt(props.recommendNutrient.fat),
+      parseInt(props.weeklyNutrient.recommend.carbohydrate),
+      parseInt(props.weeklyNutrient.recommend.protein),
+      parseInt(props.weeklyNutrient.recommend.fat),
     ],
     [
       `${props.now}`,
-      parseInt(props.intakeNutrient.carbohydrate),
-      parseInt(props.intakeNutrient.protein),
-      parseInt(props.intakeNutrient.fat),
+      parseInt(props.weeklyNutrient.intake.carbohydrate),
+      parseInt(props.weeklyNutrient.intake.protein),
+      parseInt(props.weeklyNutrient.intake.fat),
     ],
-    [" ", element(), "-", "-"],
+    [
+      " ",
+      element(
+        parseInt(props.weeklyNutrient.recommend.carbohydrate),
+        parseInt(props.weeklyNutrient.intake.carbohydrate)
+      ),
+      element(
+        parseInt(props.weeklyNutrient.recommend.protein),
+        parseInt(props.weeklyNutrient.intake.protein)
+      ),
+      element(
+        parseInt(props.weeklyNutrient.recommend.fat),
+        parseInt(props.weeklyNutrient.intake.fat)
+      ),
+      ,
+    ],
   ];
 
   const circleText2 = [circleView(3), circleView(4)];
@@ -98,24 +116,35 @@ const NutrientCompo = (props) => {
   const tableData2 = [
     [
       "권장",
-      parseInt(props.recommendNutrient.natrium),
+      parseInt(props.weeklyNutrient.recommend.natrium),
       ,
-      parseInt(props.recommendNutrient.sugars),
+      parseInt(props.weeklyNutrient.recommend.sugars),
     ],
     [
       `${props.now}`,
-      parseInt(props.intakeNutrient.natrium),
+      parseInt(props.weeklyNutrient.intake.natrium),
       ,
-      parseInt(props.intakeNutrient.sugars),
+      parseInt(props.weeklyNutrient.intake.sugars),
     ],
-    [" ", element(), "-"],
+    [
+      " ",
+      element(
+        parseInt(props.weeklyNutrient.recommend.natrium),
+        parseInt(props.weeklyNutrient.intake.natrium)
+      ),
+      element(
+        parseInt(props.weeklyNutrient.recommend.sugars),
+        parseInt(props.weeklyNutrient.intake.sugars)
+      ),
+    ],
   ];
 
   const sugarsProgress =
-    props.intakeNutrient.sugars / props.recommendNutrient.sugars;
+    props.weeklyNutrient.intake.sugars / props.weeklyNutrient.recommend.sugars;
 
   const natriumProgress =
-    props.intakeNutrient.natrium / props.recommendNutrient.natrium;
+    props.weeklyNutrient.intake.natrium /
+    props.weeklyNutrient.recommend.natrium;
 
   return (
     <View style={props.styles.box}>
@@ -133,7 +162,7 @@ const NutrientCompo = (props) => {
           />
           <View style={styles.calText}>
             <Text style={{ fontSize: 20 }}>
-              {parseInt(props.recommendNutrient.kcal)}
+              {parseInt(props.weeklyNutrient.recommend.kcal)}
             </Text>
             <Text>kcal</Text>
           </View>
@@ -147,7 +176,7 @@ const NutrientCompo = (props) => {
           />
           <View style={styles.calText}>
             <Text style={{ fontSize: 20 }}>
-              {parseInt(props.intakeNutrient.kcal)}
+              {parseInt(props.weeklyNutrient.intake.kcal)}
             </Text>
             <Text>kcal</Text>
           </View>
@@ -239,7 +268,7 @@ const NutrientCompo = (props) => {
   );
 };
 
-export default NutrientCompo;
+export default WeeklyNutrientCompo;
 
 const styles = StyleSheet.create({
   graphView: {
@@ -256,12 +285,30 @@ const styles = StyleSheet.create({
     height: 30,
   },
   text: { margin: 6, textAlign: "center" },
-  btn: {
+  btnUpText: {
+    textAlign: "center",
+    color: "red",
+    textAlign: "center",
     backgroundColor: "rgba(255,0,0,0.2)",
     borderRadius: 30,
-    marginHorizontal: screenSize.width * 0.03,
+    width: 60,
   },
-  btnText: { textAlign: "center", color: "red" },
+  btnDownText: {
+    textAlign: "center",
+    color: "blue",
+    textAlign: "center",
+    backgroundColor: "rgba(0,56,255,0.2)",
+    borderRadius: 30,
+    width: 60,
+  },
+  btnText: {
+    textAlign: "center",
+    color: "black",
+    textAlign: "center",
+    backgroundColor: "rgba(0,0,0,0.2)",
+    borderRadius: 30,
+    width: 60,
+  },
   timeText: {
     color: "white",
     fontWeight: "bold",

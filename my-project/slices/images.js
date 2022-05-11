@@ -1,14 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  imageurls: [],
   breakfast: [],
   total_breakfast: [],
   lunch: [],
   total_lunch: [],
   dinner: [],
   total_dinner: [],
+  imageurls: [],
+  add: [],
 };
+
+let nextId = 1;
+let nextId_image = 1;
 const imagesSlice = createSlice({
   name: "images",
   initialState,
@@ -23,13 +27,45 @@ const imagesSlice = createSlice({
       state.total_dinner = action.payload.dinner.total;
     },
     add: (state, action) => {
-      state.imageurls.push({ imageurls: action.payload, id: Date.now() });
+      state.add.push({ food: action.payload, id: nextId });
+      nextId += 1;
+      // return {
+      //   ...state,
+      //   imageurls: [
+      //     state.imageurls.map((myimage, index) => {
+      //       if (index == state.imageurls.length - 1) {
+      //         return { ...myimage, food: action.payload };
+      //       }
+      //     }),
+      //   ],
+      // };
     },
+    addS3url: (state, action) => {
+      return {
+        ...state,
+        add: [
+          state.add.map((myimage, index) => {
+            return { ...myimage, dietImg: action.payload[index] };
+          }),
+        ],
+      };
+    },
+    addImageUrls: (state, action) => {
+      state.imageurls.push({ imageurl: action.payload, id: nextId_image });
+      nextId_image += 1;
+    },
+
     remove: (state, action) =>
       state.imageurls.filter((image) => image.id !== action.payload),
+    clear: (state, action) => {
+      state.imageurls = [];
+      state.add = [];
+      state.remove = [];
+    },
   },
 });
 
-export const { set, add, remove } = imagesSlice.actions;
+export const { set, add, addImageUrls, remove, clear, addS3url } =
+  imagesSlice.actions;
 
 export default imagesSlice;
