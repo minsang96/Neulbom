@@ -1,19 +1,65 @@
-import React from "react";
-import { Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import React, { useState } from "react";
+import {
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  TextInput,
+  View,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 import ButtonCompo from "../../../components/button/ButtonCompo";
-import AlarmSetting from "../../../components/infoBox/AlarmSetting";
-import InfoMyDisease from "../../../components/infoBox/InfoMyDisease";
-import InfoMyself from "../../../components/infoBox/InfoMyself";
-import Intake from "../../../components/infoBox/Intake";
-import SelectBox from "../../../components/infoBox/SelectBox";
-import Infomation from "../../../components/infoBox/Infomation";
+import { useDispatch, useSelector } from "react-redux";
+import { updateMemeberInfo } from "../../../api/updateUserInfo";
+import { getMemeberInfo } from "../../../api/getUserInfo";
 
 const screenSize = Dimensions.get("screen");
 
+// 수정하기-CSS(현정)
 const UserMypageUpdate = (props) => {
+  const userInfo = useSelector((state) => state.user.userInfo);
+  const userSeq = useSelector((state) => state.user.userSeq);
+  const accessToken = useSelector((state) => state.user.accessToken);
   const navigation = useNavigation();
+  const [memberHeight, setMemberHeight] = useState(userInfo.memberHeight);
+  const [memberWeight, setMemberWeight] = useState(userInfo.memberWeight);
+  const [memberDesc, setMemberDesc] = useState(userInfo.memberDesc);
+  const [memberImg, setMemberImg] = useState(userInfo.memberImg);
+  const dispatch = useDispatch();
+  // 수정하기-건강수치 부분(현정)
+
+  // 수정하기-img url(현정)
+  const updateUserInfo = async () => {
+    const data = {
+      desc: memberDesc,
+      height: memberHeight,
+      img: "https://notion-emojis.s3-us-west-2.jpg",
+      setting: {
+        bloodPressure: true,
+        bloodSugar: false,
+      },
+      userSeq: userSeq,
+      weight: memberWeight,
+    };
+
+    try {
+      const response = await axios.put(
+        "https://k6a104.p.ssafy.io/api/member/modify",
+        data,
+        {
+          headers: {
+            Authorization: accessToken,
+          },
+        }
+      );
+      // dispatch(userSlice.actions.setUserInfo(response));
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <ScrollView style={styles.background}>
       <TouchableOpacity
@@ -23,17 +69,44 @@ const UserMypageUpdate = (props) => {
       >
         <Text>뒤로가기</Text>
       </TouchableOpacity>
-      <Text style={styles.title}>내 소개 😊</Text>
-      <InfoMyself styles={styles}></InfoMyself>
-      <Text style={styles.title}>권장 섭취량 ✨</Text>
-      <Intake styles={styles}></Intake>
-      <Text style={styles.title}>건강 수치 ✨</Text>
-      <SelectBox styles={styles}></SelectBox>
-      <Text style={styles.title}>알림 설정 ✨</Text>
-      <AlarmSetting styles={styles}></AlarmSetting>
-      <Text style={styles.title}>질병 소개 ✨</Text>
-      <InfoMyDisease styles={styles}></InfoMyDisease>
-      <ButtonCompo buttonName="수정 완료"></ButtonCompo>
+      <Text>사진 변경</Text>
+      <View style={styles.box}>
+        <Text>키</Text>
+        <TextInput
+          onChangeText={(text) => {
+            setMemberHeight(text);
+          }}
+        >
+          {memberHeight}
+        </TextInput>
+        <Text>몸무게</Text>
+        <TextInput
+          onChangeText={(text) => {
+            setMemberWeight(text);
+          }}
+        >
+          {memberWeight}
+        </TextInput>
+      </View>
+      <View style={styles.box}>
+        <Text>건강 수치</Text>
+      </View>
+      <View style={styles.box}>
+        <Text>질병 소개</Text>
+        <TextInput
+          onChangeText={(text) => {
+            setMemberDesc(text);
+          }}
+        >
+          {memberDesc}
+        </TextInput>
+      </View>
+      <ButtonCompo
+        buttonName="수정 완료"
+        onPressButton={() => {
+          updateUserInfo(), navigation.navigate("Mypage"), props.onClick();
+        }}
+      ></ButtonCompo>
     </ScrollView>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, Text, StyleSheet } from "react-native";
+import { ScrollView, Text, StyleSheet, Pressable, View } from "react-native";
 import CalorieCompo from "../../../components/calendar/report/CalorieCompo";
 import NutrientCompo from "../../../components/calendar/report/DailyNutrientCompo";
 import TodayReport from "../../../components/calendar/report/TodayReport";
@@ -8,6 +8,7 @@ import BloodSugarReport from "../../../components/calendar/report/BloodSugarRepo
 import { useDispatch, useSelector } from "react-redux";
 import { Dimensions } from "react-native";
 import dailyReportSlice from "../../../slices/dailyReport";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {
   getDailyBloodPressure,
   getDailyBloodSugar,
@@ -15,11 +16,26 @@ import {
   getDailyNutirent,
   getDailyOtherReport,
 } from "../../../api/reports";
+import { format } from "date-fns";
+import { ko } from "date-fns/locale";
 
 const screenSize = Dimensions.get("screen");
 
 const DailyReport = () => {
   const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.user.userInfo);
+  const userSeq = useSelector((state) => state.user.userSeq);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isDate, setIsDate] = useState(new Date().toISOString().split("T")[0]);
+  const showDatePicker = () => {
+    setDatePickerVisibility(!isDatePickerVisible);
+  };
+  const handleConfirm = (date) => {
+    const selectDate = new Date(date).toISOString().split("T")[0];
+    setIsDate(selectDate);
+    showDatePicker();
+  };
+
   const todayBloodPressure = useSelector(
     (state) => state.dailyReport.todayBloodPressure
   );
@@ -38,52 +54,49 @@ const DailyReport = () => {
   const intakeNutrient = useSelector(
     (state) => state.dailyReport.intakeNutrient
   );
+  const getDailyBloodpressureResult = async () => {
+    try {
+      const response = await getDailyBloodPressure(isDate, userSeq);
+      dispatch(dailyReportSlice.actions.setDailyBloodPressureReport(response));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getDailyBloodSugarResult = async () => {
+    try {
+      const response = await getDailyBloodSugar(isDate, userSeq);
+      dispatch(dailyReportSlice.actions.setDailyBloodSugarReport(response));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getCalorieResult = async () => {
+    try {
+      const response = await getDailyCalorie(isDate, userSeq);
+      dispatch(dailyReportSlice.actions.setDailyCalroieReport(response));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getDailyNutirentResult = async () => {
+    try {
+      const response = await getDailyNutirent(isDate, userSeq);
+      dispatch(dailyReportSlice.actions.setDailyNutrientReport(response));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getDailyOtherResult = async () => {
+    try {
+      const response = await getDailyOtherReport(isDate, userSeq);
+      dispatch(dailyReportSlice.actions.setDailyOtherReport(response));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  // 수정하기-api(현정)
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    const getDailyBloodpressureResult = async () => {
-      try {
-        const response = await getDailyBloodPressure("2022-04-26", "2");
-        dispatch(
-          dailyReportSlice.actions.setDailyBloodPressureReport(response)
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const getDailyBloodSugarResult = async () => {
-      try {
-        const response = await getDailyBloodSugar("2022-04-26", "2");
-        dispatch(dailyReportSlice.actions.setDailyBloodSugarReport(response));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const getCalorieResult = async () => {
-      try {
-        const response = await getDailyCalorie("2022-04-26", "1");
-        dispatch(dailyReportSlice.actions.setDailyCalroieReport(response));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const getDailyNutirentResult = async () => {
-      try {
-        const response = await getDailyNutirent("2022-04-26", "1");
-        dispatch(dailyReportSlice.actions.setDailyNutrientReport(response));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const getDailyOtherResult = async () => {
-      try {
-        const response = await getDailyOtherReport("2022-04-26", "1");
-        dispatch(dailyReportSlice.actions.setDailyOtherReport(response));
-      } catch (error) {
-        console.log(error);
-      }
-    };
     getDailyBloodpressureResult();
     getDailyBloodSugarResult();
     getCalorieResult();
@@ -101,9 +114,36 @@ const DailyReport = () => {
     }
   }, [yesterdayBloodSugar, todayBloodPressure, intakeNutrient]);
 
+  useEffect(() => {
+    getDailyBloodpressureResult();
+    getDailyBloodSugarResult();
+    getCalorieResult();
+    getDailyNutirentResult();
+    getDailyOtherResult();
+  }, [isDate]);
+
   return (
     <ScrollView style={styles.background}>
-      <Text style={styles.reportTitle}>정현정님의 일간 리포트</Text>
+      <View style={styles.center}>
+        <View style={styles.dateTime}>
+          <Pressable onPress={showDatePicker}>
+            <Text style={styles.dateTimeText}>
+              {format(new Date(isDate), "PPP", {
+                locale: ko,
+              })}
+            </Text>
+          </Pressable>
+        </View>
+      </View>
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirm}
+        onCancel={showDatePicker}
+      />
+      <Text style={styles.reportTitle}>
+        {userInfo.memberNickname}님의 일간 리포트
+      </Text>
       {loading ? (
         <Text>Loading...</Text>
       ) : (
@@ -150,9 +190,22 @@ const styles = StyleSheet.create({
   background: {
     paddingHorizontal: 20,
   },
+  center: { alignItems: "center" },
   reportTitle: {
     fontSize: 20,
-    marginVertical: 10,
+    marginBottom: 10,
+  },
+  dateTime: {
+    backgroundColor: "#09BC8A",
+    color: "white",
+    borderRadius: 10,
+    width: 150,
+    margin: 10,
+    padding: 5,
+    alignItems: "center",
+  },
+  dateTimeText: {
+    color: "white",
   },
   box: {
     backgroundColor: "white",

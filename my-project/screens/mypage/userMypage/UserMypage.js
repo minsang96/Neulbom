@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -15,22 +15,26 @@ import SelectBox from "../../../components/infoBox/SelectBox";
 import Infomation from "../../../components/infoBox/Infomation";
 import { useNavigation } from "@react-navigation/native";
 import { Dimensions } from "react-native";
+import { useDispatch } from "react-redux";
+import userSlice from "../../../slices/user";
 
 const screenSize = Dimensions.get("screen");
 
 const UserMypage = (props) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const logout = () => {
     async function removeUserSession() {
       try {
         await EncryptedStorage.removeItem("user_session");
-        // Congrats! You've just removed your first value!
       } catch (error) {
-        // There was an error on the native side
+        console.log(error.code);
       }
     }
-    navigation.navigate('login')
-  }
+    dispatch(userSlice.actions.logout());
+    removeUserSession();
+  };
+
   return (
     <ScrollView style={styles.background}>
       <TouchableOpacity
@@ -53,9 +57,10 @@ const UserMypage = (props) => {
       <InfoMyDisease styles={styles}></InfoMyDisease>
       <Text style={styles.title}>이용 안내 ✨</Text>
       <Infomation styles={styles}></Infomation>
-      <ButtonCompo 
+      <ButtonCompo
         onPressButton={() => logout()}
-        buttonName="로그아웃"></ButtonCompo>
+        buttonName="로그아웃"
+      ></ButtonCompo>
     </ScrollView>
   );
 };

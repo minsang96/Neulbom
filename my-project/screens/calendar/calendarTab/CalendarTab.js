@@ -10,36 +10,19 @@ import calendarSlice from "../../../slices/calendar";
 const CalendarTab = () => {
   const dispatch = useDispatch();
   const [isModalVisible, setModalVisible] = useState(false);
-  // const [calendarList, setCalendarList] = useState([]);
-  const calendarList = useSelector((state) => {
-    state.calendar.calendarList;
-  });
+
+  // const calendarList = useSelector((state) => {
+  //   state.calendar.calendarList;
+  // });
 
   const onPressButton = () => {
     setModalVisible(!isModalVisible);
   };
 
-  // 수정하기-뭐가 문제인지도 모르겠음(현정)
-  useEffect(() => {
-    const getCalendarListFunction = async () => {
-      try {
-        const response = await getCalendarList("2022-05", 14);
-        dispatch(calendarSlice.actions.setCalendar(response));
-        // console.log(response);
-        // setCalendarList(response);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getCalendarListFunction();
-  }, []);
-
-  console.log("hey" + calendarList);
-
   const todayList = ["혈당", "혈압", "술", "커피", "운동"];
   return (
     <View style={styles.background}>
-      <CalendarCompo calendarList={calendarList}></CalendarCompo>
+      <CalendarCompo></CalendarCompo>
       <ButtonCompo
         buttonName="오늘의 기록 등록하기"
         onPressButton={onPressButton}

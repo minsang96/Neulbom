@@ -45,8 +45,6 @@ const WeeklyNutrientCompo = (props) => {
       key: index,
     }));
 
-  // 수정하기-계산(현정)
-
   const element = (before, after) => {
     return (
       <View style={{ alignItems: "center" }}>

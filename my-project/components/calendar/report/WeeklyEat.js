@@ -33,10 +33,7 @@ const WeeklyEat = (props) => {
     <View style={props.styles.box}>
       <Text style={props.styles.title}>한 주의 기록</Text>
       <ScrollView style={styles.container} horizontal={true}>
-        <Table
-          style={{ flexDirection: "row" }}
-          borderStyle={{ borderWidth: 0 }}
-        >
+        <Table borderStyle={{ borderWidth: 0 }}>
           {/* Left Wrapper */}
           <TableWrapper style={{ width: 80 }}>
             {/* <Cell data="" style={styles.singleHead} /> */}

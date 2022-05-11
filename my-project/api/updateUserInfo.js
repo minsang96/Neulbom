@@ -1,11 +1,11 @@
 import client from "./client";
 
-export async function getMemeberInfo(headers, userSeq) {
+export async function updateMemeberInfo(headers, data) {
   const response = await client({
-    method: "get",
-    url: "/member/info",
+    method: "put",
+    url: "/member/modify",
     headers: { Authorization: headers },
-    params: { userSeq: userSeq },
+    data,
   });
   return response.data;
 }
