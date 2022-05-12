@@ -10,10 +10,14 @@ import { ScrollView } from "react-native-gesture-handler";
 const screenSize = Dimensions.get("screen");
 
 const CalendarCompo = () => {
+  const now = new Date();
+  const utcNow = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
+  const koreaTimeDiff = 9 * 60 * 60 * 1000;
+  const koreaNow = new Date(utcNow + koreaTimeDiff);
   const userSeq = useSelector((state) => state.user.userSeq);
-  const bloodPressure = { key: "bloodPressure", color: "#F4525F" };
-  const alcohol = { key: "alcohol", color: "#558BCF" };
-  const bloodSugar = { key: "bloodSugar", color: "#0E0F37" };
+  const bloodPressure = { key: "bloodPressure", color: "#558BCF" };
+  const alcohol = { key: "alcohol", color: "#0E0F37" };
+  const bloodSugar = { key: "bloodSugar", color: "#F4525F" };
   const coffee = { key: "coffee", color: "#FF7F00" };
   const exercise = { key: "exercise", color: "#09BC8A" };
   const [calendarList, setCalendarList] = useState([]);
@@ -30,7 +34,7 @@ const CalendarCompo = () => {
   const [coffeeClick, setCoffeeClick] = useState(false);
   const [exerciseClick, setExerciseClick] = useState(false);
   const [selectedDate, setSelectedDate] = useState(
-    format(new Date(), "yyyy-MM-dd")
+    format(koreaNow, "yyyy-MM-dd")
   );
 
   const getCalendarListFunction = async (month) => {
@@ -45,11 +49,17 @@ const CalendarCompo = () => {
 
   useEffect(() => {
     getCalendarListFunction(selectedDate.slice(0, 7), userSeq);
+    picker(selectedDate);
   }, []);
 
   useEffect(() => {
     picker(selectedDate);
   }, [selectedDate]);
+
+  useEffect(() => {
+    // getCalendarListFunction(selectedDate.slice(0, 7), userSeq);
+    // picker(selectedDate);
+  }, [calendarList]);
 
   let markedDates = {};
   for (const date in calendarList) {
@@ -69,9 +79,7 @@ const CalendarCompo = () => {
     }
     markedDates[date] = { dots: dot };
   }
-  console.log("---------------");
 
-  // 수정하기-왜 안될까요?(현정)
   const picker = (date) => {
     setBloodPressureList([]);
     setBloodSugarList([]);
@@ -199,10 +207,10 @@ const CalendarCompo = () => {
                     {bloodSugarList[0].map((data) => (
                       <View style={styles.boxSec}>
                         <View>
-                          <Text>{data.bsCode}</Text>
+                          <Text key={data.bsSeq}>{data.bsCode}</Text>
                         </View>
                         <View>
-                          <Text>{data.bsTime}</Text>
+                          <Text key={data.bsSeq}>{data.bsTime}</Text>
                         </View>
                         <View style={styles.row}>
                           <Text>혈당 수치 </Text>
@@ -220,10 +228,10 @@ const CalendarCompo = () => {
                     {bloodPressureList[0].map((data) => (
                       <View style={styles.boxSec}>
                         <View>
-                          <Text>{data.bpCode}</Text>
+                          <Text key={data.bpSeq}>{data.bpCode}</Text>
                         </View>
                         <View>
-                          <Text>{data.bpTime}</Text>
+                          <Text key={data.bpSeq}>{data.bpTime}</Text>
                         </View>
                         <View style={{ flexDirection: "row" }}>
                           <Text>최고 혈압 </Text>
@@ -247,7 +255,7 @@ const CalendarCompo = () => {
                     {alcoholList[0].map((data) => (
                       <View style={styles.boxSec}>
                         <View>
-                          <Text>{data.otherTime}</Text>
+                          <Text key={data.otherSeq}>{data.otherTime}</Text>
                         </View>
                         <View style={{ flexDirection: "row" }}>
                           <Text style={{ fontSize: 26, textAlign: "center" }}>
@@ -263,8 +271,8 @@ const CalendarCompo = () => {
                     <Text style={styles.title}>커피</Text>
                     {coffeeList[0].map((data) => (
                       <View style={styles.boxSec}>
-                        <View>
-                          <Text>{data.otherTime}</Text>
+                        <View key={data.otherSeq}>
+                          <Text key={data.otherSeq}>{data.otherTime}</Text>
                         </View>
                         <View style={{ flexDirection: "row" }}>
                           <Text style={{ fontSize: 26, textAlign: "center" }}>
@@ -281,7 +289,7 @@ const CalendarCompo = () => {
                     {exerciseList[0].map((data) => (
                       <View style={styles.boxSec}>
                         <View>
-                          <Text>{data.otherTime}</Text>
+                          <Text key={data.otherSeq}>{data.otherTime}</Text>
                         </View>
                         <View style={{ flexDirection: "row" }}>
                           <Text style={{ fontSize: 26, textAlign: "center" }}>
@@ -314,6 +322,7 @@ const styles = StyleSheet.create({
     marginVertical: screenSize.height * 0.02,
     borderRadius: 10,
     elevation: 3,
+    minWidth: screenSize.width * 0.88,
   },
   boxSec: {
     padding: 10,

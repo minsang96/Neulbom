@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Dimensions, ScrollView } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, Dimensions, ScrollView } from "react-native";
 import CalendarCompo from "../../../components/calendar/CalendarCompo";
 import ButtonCompo from "../../../components/button/ButtonCompo";
 import AddTodayRecord from "./component/AddTodayRecord";
-import { useDispatch, useSelector } from "react-redux";
 
 const CalendarTab = () => {
   const [isModalVisible, setModalVisible] = useState(false);

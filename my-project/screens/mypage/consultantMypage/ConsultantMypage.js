@@ -61,7 +61,6 @@ export default ConsultantMypage;
 
 const styles = StyleSheet.create({
   background: {
-    // backgroundColor: "white",
     paddingHorizontal: 20,
   },
   box: {
@@ -90,12 +89,12 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginRight: screenSize.width * 0.05,
   },
-  userName: { fontSize: 20, marginBottom: 5 },
+  userName: { fontSize: 18, marginBottom: 5 },
   flexDirectionRow: {
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: screenSize.height * 0.01,
-    justifyContent: "center",
+    paddingLeft: screenSize.width * 0.04,
   },
   userInfo: {
     flexDirection: "row",
