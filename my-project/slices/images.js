@@ -27,7 +27,19 @@ const imagesSlice = createSlice({
       state.total_dinner = action.payload.dinner.total;
     },
     add: (state, action) => {
-      state.add.push({ food: action.payload, id: nextId });
+      state.add.push({ food: action.payload.tempFood, id: nextId });
+      state[`total_${action.payload.current}`] = {
+        ...state[`total_${action.payload.current}`],
+        kcal:
+          state[`total_${action.payload.current}`].kcal +
+          action.payload.tempFood.foodKcal,
+        natrium:
+          state[`total_${action.payload.current}`].natrium +
+          action.payload.tempFood.foodNatrium,
+        sugars:
+          state[`total_${action.payload.current}`].sugars +
+          action.payload.tempFood.foodSugars,
+      };
       nextId += 1;
       // return {
       //   ...state,
