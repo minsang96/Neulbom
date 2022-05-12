@@ -7,9 +7,6 @@ import {
   Cols,
   Col,
 } from "react-native-table-component";
-import { Dimensions } from "react-native";
-
-const screenSize = Dimensions.get("screen");
 
 const BloodPressureReport = (props) => {
   const element = (before, after) => {
