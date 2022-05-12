@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -34,7 +34,7 @@ const UserMypage = (props) => {
     dispatch(userSlice.actions.logout());
     removeUserSession();
   };
-  // 수정하기-건강 수치(현정)
+
   return (
     <ScrollView style={styles.background}>
       <TouchableOpacity

@@ -42,7 +42,6 @@ const Coffee = (props) => {
     showTimePicker();
   };
 
-  // 수정하기-api(현정)
   const addCoffeeRecodeFunction = () => {
     const otherDto = {
       code: "coffee",
