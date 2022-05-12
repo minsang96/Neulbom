@@ -43,8 +43,11 @@
     <script>
         //alert(document.title);
         // websocket & stomp initialize
-        var sock = new SockJS("/api/ws-stomp");
+        var sock = new SockJS("http://localhost:3030/api/ws-stomp");
+      
         var ws = Stomp.over(sock);
+        console.log("ws", ws);
+        
         var reconnect = 0;
         // vue.js
         var vm = new Vue({
@@ -70,7 +73,6 @@
                     this.message = '';
                 },
                 recvMessage: function(recv) {
-                	console.log("내가 보낸 거 ", recv.message);
                     this.messages.unshift({"type":recv.type,"sender":recv.type=='ENTER'?'[알림]':recv.sender,"message":recv.message})
                 }
             }
