@@ -25,6 +25,17 @@ const Plus = styled.TouchableOpacity`
   border-radius: 30px;
   elevation: 5;
 `;
+const PlusDiet = styled.TouchableOpacity`
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  left: 320px;
+  height: 30px;
+  width: 30px;
+  background-color: ${palette.green};
+  border-radius: 30px;
+  elevation: 5;
+`;
 const FoodWrite = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -38,6 +49,7 @@ const FoodWrite = () => {
   const [diets, setDiets] = useState([]);
   const [data, setData] = useState(true);
   const current = useNavigationState((state) => state.routes[0].params.current);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     setImagesLength(images.breakfast.length);
@@ -139,7 +151,7 @@ const FoodWrite = () => {
           dietTime: current,
           foodAmount: foodInfo.food.foodAmount,
           foodCode: foodInfo.food.foodCode,
-          userSeq: 1,
+          userSeq: user.userSeq,
         };
       });
       setDiets(result);
@@ -166,7 +178,14 @@ const FoodWrite = () => {
   const onPress = () => {
     console.log(images.total);
   };
-
+  const onDelete = (dietSeq) => {
+    console.log(dietSeq);
+    console.log(user.accessToken);
+    console.log(user.userSeq);
+  };
+  const onDeleteDB = (dietSeq) => {
+    console.log(dietSeq);
+  };
   return (
     <>
       <Container style={{ backgroundColor: "white" }}>
@@ -284,27 +303,66 @@ const FoodWrite = () => {
                 style={{ width: 50, height: 50 }}
               />
             )} */}
-            {images.imageurls.map((food) => (
-              <Image
-                key={food.id}
-                source={{ uri: food.imageurl }}
-                style={{ width: 50, height: 50 }}
-              ></Image>
-            ))}
-            {images[current].map((food) => (
-              <Image
-                key={food.dietSeq}
-                source={{ uri: food.dietImg }}
-                style={{ width: 50, height: 50 }}
-              ></Image>
-            ))}
-            <Plus
+            {images.imageurls
+              .slice(0)
+              .reverse()
+              .map((food, idx) => (
+                <View>
+                  <Image
+                    key={food.id}
+                    source={{ uri: food.imageurl }}
+                    style={{ width: 50, height: 50 }}
+                  ></Image>
+                  <Plus
+                    style={{ marginRight: 5 }}
+                    onPress={() => {
+                      onDelete(food.foodSeq);
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 30,
+                        color: "white",
+                      }}
+                    >
+                      -
+                    </Text>
+                  </Plus>
+                </View>
+              ))}
+            {images[current]
+              .slice(0)
+              .reverse()
+              .map((food) => (
+                <View key={food.dietSeq}>
+                  <Image
+                    source={{ uri: food.dietImg }}
+                    style={{ width: 50, height: 50 }}
+                  ></Image>
+                  <Plus
+                    style={{ marginRight: 5 }}
+                    onPress={() => {
+                      onDeleteDB(food.foodSeq);
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 30,
+                        color: "white",
+                      }}
+                    >
+                      -
+                    </Text>
+                  </Plus>
+                </View>
+              ))}
+            <PlusDiet
               onPress={() => {
                 setModalVisible(true);
               }}
             >
               <Text>+</Text>
-            </Plus>
+            </PlusDiet>
           </View>
         </View>
         <View>
