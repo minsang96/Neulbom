@@ -117,6 +117,7 @@ const WeeklyReport = () => {
     getWeeklyNutirentResult();
     getWeeklyDietResult();
   }, [isDate]);
+
   return (
     <ScrollView style={styles.background}>
       <View style={styles.center}>
