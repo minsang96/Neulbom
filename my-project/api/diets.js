@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useSelector } from "react-redux";
 import client from "./client";
 
 export async function getDiet(dietDate, userSeq) {
   // const dietdaily = useSelector((state) => state.dietdaily);
+  console.log("input", dietDate, userSeq);
   const response = await client({
     method: "get",
     url: "/diet/daily",
