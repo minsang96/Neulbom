@@ -43,7 +43,8 @@
     <script>
         //alert(document.title);
         // websocket & stomp initialize
-        var sock = new SockJS("http://localhost:3030/api/ws-stomp");
+        var sock = new SockJS("/api/ws-stomp");
+        // var sock = new SockJS("http://localhost:3030/api/ws-stomp");
       
         var ws = Stomp.over(sock);
         console.log("ws", ws);
