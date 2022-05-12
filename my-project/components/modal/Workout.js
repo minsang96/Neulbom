@@ -7,11 +7,16 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { useSelector } from "react-redux";
+import { addOtherRecodeFunction } from "../../api/recode";
 
 const Workout = (props) => {
-  const [isDate, setIsDate] = useState(format(new Date(), "yyyy-MM-dd"));
+  const now = new Date();
+  const utcNow = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
+  const koreaTimeDiff = 9 * 60 * 60 * 1000;
+  const koreaNow = new Date(utcNow + koreaTimeDiff);
+  const [isDate, setIsDate] = useState(format(koreaNow, "yyyy-MM-dd"));
   const [isTime, setIsTime] = useState(
-    new Date().toTimeString().split(" ")[0].slice(0, 5)
+    koreaNow.toTimeString().split(" ")[0].slice(0, 5)
   );
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
@@ -105,7 +110,7 @@ const Workout = (props) => {
           onCancel={hideTimePicker}
         />
         <ButtonCompo
-          buttonName="음주 등록하기"
+          buttonName="운동 등록하기"
           onPressButton={() => {
             props.onPressWorkoutButton();
             addExerciseRecodeFunction();

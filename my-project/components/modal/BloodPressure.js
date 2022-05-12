@@ -8,8 +8,8 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { addBPRecodeFunction } from "../../api/recode";
+import { useSelector } from "react-redux";
 
-// isSecModalVisible로 통일
 const BloodPressure = (props) => {
   const radioButtonsData = [
     {
@@ -42,15 +42,22 @@ const BloodPressure = (props) => {
   ];
 
   // useState
+  const now = new Date();
+  const utcNow = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
+  const koreaTimeDiff = 9 * 60 * 60 * 1000;
+  const koreaNow = new Date(utcNow + koreaTimeDiff);
+  const userSeq = useSelector((state) => state.user.userSeq);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [radioButtons, setRadioButtons] = useState("");
   const [radioButtons2, setRadioButtons2] = useState("");
   const [radioButtonData, setRadioButtonData] = useState(radioButtonsData);
   const [radioButtonData2, setRadioButtonData2] = useState(radioButtonsData2);
-  const [isDate, setIsDate] = useState(new Date().toISOString().split("T")[0]);
+  const [BloodPressureHigh, setBloodPressureHigh] = useState(0);
+  const [BloodPressureLow, setBloodPressureLow] = useState(0);
+  const [isDate, setIsDate] = useState(koreaNow.toISOString().split("T")[0]);
   const [isTime, setIsTime] = useState(
-    new Date().toTimeString().split(" ")[0].slice(0, 5)
+    koreaNow.toTimeString().split(" ")[0].slice(0, 5)
   );
 
   // 라디오 버튼 관련 함수
@@ -92,15 +99,14 @@ const BloodPressure = (props) => {
     showTimePicker();
   };
 
-  // 수정하기-api(현정)
   const addBloodPressureRecodeFunction = () => {
     const bloodPressureDto = {
       bpCode: radioButtons2 + radioButtons,
       bpDate: isDate,
-      bpHigh: 120,
-      bpLow: 80,
+      bpHigh: BloodPressureHigh,
+      bpLow: BloodPressureLow,
       bpTime: isTime,
-      userSeq: 14,
+      userSeq: userSeq,
     };
     try {
       addBPRecodeFunction(bloodPressureDto);
@@ -178,12 +184,18 @@ const BloodPressure = (props) => {
           style={styles.input}
           placeholder="최고 혈압을 입력하세요"
           keyboardType="numeric"
+          onChangeText={(text) => {
+            setBloodPressureHigh(text);
+          }}
         ></TextInput>
         <Text style={styles.subtitleText}>최저 혈압</Text>
         <TextInput
           style={styles.input}
           placeholder="최저 혈압을 입력하세요"
           keyboardType="numeric"
+          onChangeText={(text) => {
+            setBloodPressureLow(text);
+          }}
         ></TextInput>
         <ButtonCompo
           buttonName="혈압 등록하기"

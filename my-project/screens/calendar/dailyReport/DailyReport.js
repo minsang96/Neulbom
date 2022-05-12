@@ -22,11 +22,15 @@ import { ko } from "date-fns/locale";
 const screenSize = Dimensions.get("screen");
 
 const DailyReport = () => {
+  const now = new Date();
+  const utcNow = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
+  const koreaTimeDiff = 9 * 60 * 60 * 1000;
+  const koreaNow = new Date(utcNow + koreaTimeDiff);
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.userInfo);
   const userSeq = useSelector((state) => state.user.userSeq);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [isDate, setIsDate] = useState(new Date().toISOString().split("T")[0]);
+  const [isDate, setIsDate] = useState(koreaNow.toISOString().split("T")[0]);
   const showDatePicker = () => {
     setDatePickerVisibility(!isDatePickerVisible);
   };
@@ -54,6 +58,7 @@ const DailyReport = () => {
   const intakeNutrient = useSelector(
     (state) => state.dailyReport.intakeNutrient
   );
+
   const getDailyBloodpressureResult = async () => {
     try {
       const response = await getDailyBloodPressure(isDate, userSeq);

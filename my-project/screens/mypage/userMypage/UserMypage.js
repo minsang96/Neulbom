@@ -15,12 +15,13 @@ import SelectBox from "../../../components/infoBox/SelectBox";
 import Infomation from "../../../components/infoBox/Infomation";
 import { useNavigation } from "@react-navigation/native";
 import { Dimensions } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import userSlice from "../../../slices/user";
 
 const screenSize = Dimensions.get("screen");
 
 const UserMypage = (props) => {
+  const userInfo = useSelector((state) => state.user.userInfo);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const logout = () => {
@@ -34,6 +35,8 @@ const UserMypage = (props) => {
     dispatch(userSlice.actions.logout());
     removeUserSession();
   };
+
+  useEffect(() => {}, [userInfo]);
 
   return (
     <ScrollView style={styles.background}>
@@ -69,7 +72,6 @@ export default UserMypage;
 
 const styles = StyleSheet.create({
   background: {
-    // backgroundColor: "white",
     paddingHorizontal: 20,
   },
   box: {
@@ -98,12 +100,12 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginRight: screenSize.width * 0.05,
   },
-  userName: { fontSize: 20, marginBottom: 5 },
+  userName: { fontSize: 18, marginBottom: 5 },
   flexDirectionRow: {
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: screenSize.height * 0.01,
-    justifyContent: "center",
+    paddingLeft: screenSize.width * 0.04,
   },
   userInfo: {
     flexDirection: "row",
