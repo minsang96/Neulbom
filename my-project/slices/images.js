@@ -9,10 +9,11 @@ const initialState = {
   total_dinner: [],
   imageurls: [],
   add: [],
+  remove: [],
 };
 
-let nextId = 1;
-let nextId_image = 1;
+let nextId = 0;
+let nextId_image = 0;
 const imagesSlice = createSlice({
   name: "images",
   initialState,
@@ -67,17 +68,54 @@ const imagesSlice = createSlice({
       nextId_image += 1;
     },
 
-    remove: (state, action) =>
-      state.imageurls.filter((image) => image.id !== action.payload),
+    remove: (state, action) => {
+      nextId -= 1;
+      nextId_image -= 1;
+      return {
+        ...state,
+        imageurls: state.imageurls.filter(
+          (image) => image.id !== action.payload
+        ),
+        add: state.add.filter((image) => image.id !== action.payload),
+      };
+    },
     clear: (state, action) => {
       state.imageurls = [];
       state.add = [];
       state.remove = [];
+      nextId = 0;
+      nextId_image = 0;
+    },
+
+    removeDB: (state, action) => {
+      state.remove.push(action.payload.dietSeq);
+      // if (action.payload.current == "breakfast") {
+      //   return {
+      //     ...state,
+      //     breakfast: state.breakfast.filter(
+      //       (food) => food.dietSeq !== action.payload.dietSeq
+      //     ),
+      //   };
+      // } else if (action.payload.current == "lunch") {
+      //   return {
+      //     ...state,
+      //     lunch: state.lunch.filter(
+      //       (food) => food.dietSeq !== action.payload.dietSeq
+      //     ),
+      //   };
+      // } else if (action.payload.current == "dinner") {
+      //   return {
+      //     ...state,
+      //     dinner: state.dinner.filter(
+      //       (food) => food.dietSeq !== action.payload.dietSeq
+      //     ),
+      //   };
+      // }
     },
   },
 });
 
-export const { set, add, addImageUrls, remove, clear, addS3url } =
+export const { set, add, addImageUrls, remove, clear, addS3url, removeDB } =
   imagesSlice.actions;
 
 export default imagesSlice;
