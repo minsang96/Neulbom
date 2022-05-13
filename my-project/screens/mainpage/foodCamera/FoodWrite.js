@@ -283,8 +283,8 @@ const FoodWrite = () => {
                     <Text>이미지 있고 인식 성공</Text>
                     <Text>인식 성공!</Text>
                     <Text>{analyze.foodName}</Text>
-                    <Text>{analyze.foodAmount}</Text>
-                    <Text>{analyze.foodKcal}</Text>
+                    <Text>{analyze.foodAmount}g</Text>
+                    <Text>{analyze.foodKcal}Kcal</Text>
                   </>
                 ) : (
                   <>

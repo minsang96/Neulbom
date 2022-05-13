@@ -101,12 +101,11 @@ const FoodSearch = () => {
           </ActionButtons>
         ))
       )}
-      <Pressable
+      <ButtonCompo
         style={{ backgroundColor: `${palette.green}` }}
-        onPress={onSelect}
-      >
-        <Text>선택한 음식 추가</Text>
-      </Pressable>
+        onPressButton={onSelect}
+        buttonName="선택한 음식 추가"
+      ></ButtonCompo>
     </View>
   );
 };
