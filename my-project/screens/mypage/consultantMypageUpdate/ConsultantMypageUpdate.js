@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Text,
   TouchableOpacity,
@@ -11,12 +11,42 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 import ButtonCompo from "../../../components/button/ButtonCompo";
+import { useSelector } from "react-redux";
 
 const screenSize = Dimensions.get("screen");
 
-// 수정하기-전체 다...(현정)
-// 수정하기-api연결 해야함(현정)
 const ConsultantMypageUpdate = (props) => {
+  const userInfo = useSelector((state) => state.user.userInfo);
+  const userSeq = useSelector((state) => state.user.userSeq);
+  const accessToken = useSelector((state) => state.user.accessToken);
+  console.log(userSeq);
+  console.log(accessToken);
+
+  // 수정하기-api 연결이 잘 안돼요(현정)
+  const updateUserInfo = async () => {
+    const data = {
+      career: ["싸피 병원 근무무", "싸피 보건소 근무"],
+      desc: "건강한 식습관 만들어요.",
+      expertImg:
+        "https://neulbom-s3-bucket.s3.ap-northeast-2.amazonaws.com/Profile/profile_1651121992083.jpg",
+      userSeq: userSeq,
+    };
+
+    try {
+      await axios.post("https://k6a104.p.ssafy.io/api/member/modify", data, {
+        headers: {
+          Authorization: accessToken,
+        },
+      });
+
+      const response = await getMemeberInfo(accessToken, userSeq);
+      dispatch(userSlice.actions.setUserInfo(response.data));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const [expertDesc, setExpertDesc] = useState(userInfo.expertDesc);
   const navigation = useNavigation();
   return (
     <ScrollView style={styles.background}>
@@ -29,8 +59,7 @@ const ConsultantMypageUpdate = (props) => {
       </TouchableOpacity>
       <View style={{ alignItems: "center", marginVertical: 10 }}>
         <Image
-          // source={{ uri: userInfo.memberImg }}
-          source={require("../assets/images/dog.jpg")}
+          source={{ uri: userInfo.expertImg }}
           style={styles.image}
         ></Image>
         <Text style={styles.changingText}>사진 변경</Text>
@@ -39,29 +68,38 @@ const ConsultantMypageUpdate = (props) => {
         <Text style={styles.title}>한 줄 소개</Text>
         <TextInput
           style={styles.titleInputBox}
-          // onChangeText={(text) => {
-          //   setMemberDesc(text);
-          // }}
+          onChangeText={(text) => {
+            setExpertDesc(text);
+          }}
         >
-          {/* {memberDesc}  */}
-          저는 양양사는 영양사입니다.
+          {expertDesc}
         </TextInput>
       </View>
       <View style={styles.box}>
         <Text style={styles.title}>이력 사항</Text>
-        {/* 수정하기-map 함수 쓰기(현정) */}
-        <TextInput style={styles.titleInputBox}>
-          안녕하세요ㅇㅇㅇㅇㅇㅇㅇ
-        </TextInput>
-        <TextInput style={styles.titleInputBox}>저는 말이죠</TextInput>
-        <TextInput style={styles.titleInputBox}></TextInput>
-        <Text style={styles.changingText}>+ 추가하기</Text>
+        {userInfo.expertCareer.map((data) => (
+          <View>
+            <TextInput key={data.careerSeq} style={styles.titleInputBox}>
+              {data.careerContent}
+            </TextInput>
+          </View>
+        ))}
+        {/* 수정하기-textinput 추가하기(현정) */}
+        <Text
+          style={styles.changingText}
+          onPress={() => {
+            // userInfo.expertCareer.push();
+          }}
+        >
+          + 추가하기
+        </Text>
       </View>
       <ButtonCompo
         buttonName="수정 완료"
         onPressButton={() => {
-          // updateUserInfo(),
-          navigation.navigate("ConsultantMypage"), props.onClick();
+          updateUserInfo(),
+            navigation.navigate("ConsultantMypage"),
+            props.onClick();
         }}
       ></ButtonCompo>
     </ScrollView>
