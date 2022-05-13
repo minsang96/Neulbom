@@ -16,6 +16,7 @@ import com.neulbomi.neulbom.entity.Member;
 import com.neulbomi.neulbom.entity.Setting;
 import com.neulbomi.neulbom.entity.User;
 import com.neulbomi.neulbom.exception.ExistsUserEmailException;
+import com.neulbomi.neulbom.exception.NotExistsExpertException;
 import com.neulbomi.neulbom.exception.NotExistsSettingException;
 import com.neulbomi.neulbom.exception.NotExistsUserException;
 import com.neulbomi.neulbom.repository.MemberRepository;
@@ -154,6 +155,9 @@ public class MemberServiceImpl implements MemberService {
 		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
 		Optional<List<Setting>> list = settingRepository.findByDelYnAndUserSeq("n", userSeq);
 		
+		User userMember = userRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsExpertException());
+		
+		result.put("userType", userMember.getUserType());
 		result.put("memberNickname", member.getMemberNickname());
 		result.put("memberImg", member.getMemberImg());
 		result.put("memberHeight", member.getMemberHeight());
