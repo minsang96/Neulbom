@@ -52,7 +52,7 @@ public class Career {
 
 	@Builder
 	public Career(int userSeq, String careerContent, String regEmail, String regDt, String modEmail,
-			String modDt) {
+			String modDt, String delYn) {
 		super();
 		this.userSeq = userSeq;
 		this.careerContent = careerContent;
@@ -60,6 +60,7 @@ public class Career {
 		this.regDt = regDt;
 		this.modEmail = modEmail;
 		this.modDt = modDt;
+		this.delYn = delYn;
 	}
 
 }
