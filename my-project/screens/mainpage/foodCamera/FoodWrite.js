@@ -260,13 +260,49 @@ const FoodWrite = () => {
           <Text>Checking redux</Text>
         </Pressable>
         <View>
-          {loading ? (
-            <Text>Loading...</Text>
-          ) : (
-            <>
-              {image ? (
-                <>
-                  <Text>이미지 있음</Text>
+          <>
+            {image ? (
+              <>
+                <Text>이미지 있음</Text>
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Image
+                    source={{ uri: image }}
+                    style={{ width: 200, height: 200 }}
+                  ></Image>
+                </View>
+                {loading ? (
+                  <Text>Loading...</Text>
+                ) : recognize ? (
+                  <>
+                    <Text>이미지 있고 인식 성공</Text>
+                    <Text>인식 성공!</Text>
+                    <Text>{analyze.foodName}</Text>
+                    <Text>{analyze.foodAmount}</Text>
+                    <Text>{analyze.foodKcal}</Text>
+                  </>
+                ) : (
+                  <>
+                    <Text>이미지 있고 인식 실패</Text>
+                    <Text>음식을 인식할 수 없습니다</Text>
+                  </>
+                )}
+              </>
+            ) : !data ? (
+              <>
+                <Text>이미지 없고 데이터 없음</Text>
+                <Text>아무것도 없음. 로딩 X</Text>
+              </>
+            ) : imagesLength > 0 ? (
+              <>
+                <Text>이미지 없고 데이터 있음</Text>
+
+                <View>
                   <View
                     style={{
                       flex: 1,
@@ -274,86 +310,48 @@ const FoodWrite = () => {
                       justifyContent: "center",
                     }}
                   >
+                    <Text>{current}</Text>
                     <Image
-                      source={{ uri: image }}
-                      style={{ width: 200, height: 200 }}
-                    ></Image>
-                  </View>
-                  {recognize ? (
-                    <>
-                      <Text>이미지 있고 인식 성공</Text>
-                      <Text>인식 성공!</Text>
-                      <Text>{analyze.foodName}</Text>
-                      <Text>{analyze.foodAmount}</Text>
-                      <Text>{analyze.foodKcal}</Text>
-                    </>
-                  ) : (
-                    <>
-                      <Text>이미지 있고 인식 실패</Text>
-                      <Text>음식을 인식할 수 없습니다</Text>
-                    </>
-                  )}
-                </>
-              ) : !data ? (
-                <>
-                  <Text>이미지 없고 데이터 없음</Text>
-                  <Text>아무것도 없음. 로딩 X</Text>
-                </>
-              ) : imagesLength > 0 ? (
-                <>
-                  <Text>이미지 없고 데이터 있음</Text>
-
-                  <View>
-                    <View
-                      style={{
-                        flex: 1,
-                        alignItems: "center",
-                        justifyContent: "center",
+                      source={{
+                        uri: images[current][imagesLength - 1].dietImg,
                       }}
-                    >
-                      <Text>{current}</Text>
-                      <Image
-                        source={{
-                          uri: images[current][imagesLength - 1].dietImg,
-                        }}
-                        style={{ width: 200, height: 200 }}
-                      />
-                      <Text>{images[current][imagesLength - 1].foodName}</Text>
-                      <Text>
-                        {images[current][imagesLength - 1].foodAmount}g (
-                        {Math.round(
-                          images[current][imagesLength - 1].dietAmount /
-                            images[current][imagesLength - 1].foodAmount
-                        )}
-                        인분)
-                      </Text>
-                      <Text>
-                        칼로리 {images[current][imagesLength - 1].foodKcal}
-                      </Text>
-                      <Text>
-                        나트륨 {images[current][imagesLength - 1].foodNatrium}
-                      </Text>
-                      <Text>
-                        당류 {images[current][imagesLength - 1].foodSugars}
-                      </Text>
-                      <Text>
-                        탄수화물
-                        {images[current][imagesLength - 1].foodCarbohydrate}
-                      </Text>
-                      <Text>
-                        단백질 {images[current][imagesLength - 1].foodProtein}
-                      </Text>
-                      <Text>
-                        지방 {images[current][imagesLength - 1].foodTransfat}
-                      </Text>
-                    </View>
+                      style={{ width: 200, height: 200 }}
+                    />
+                    <Text>{images[current][imagesLength - 1].foodName}</Text>
+                    <Text>
+                      {images[current][imagesLength - 1].foodAmount}g (
+                      {Math.round(
+                        images[current][imagesLength - 1].dietAmount /
+                          images[current][imagesLength - 1].foodAmount
+                      )}
+                      인분)
+                    </Text>
+                    <Text>
+                      칼로리 {images[current][imagesLength - 1].foodKcal}
+                    </Text>
+                    <Text>
+                      나트륨 {images[current][imagesLength - 1].foodNatrium}
+                    </Text>
+                    <Text>
+                      당류 {images[current][imagesLength - 1].foodSugars}
+                    </Text>
+                    <Text>
+                      탄수화물
+                      {images[current][imagesLength - 1].foodCarbohydrate}
+                    </Text>
+                    <Text>
+                      단백질 {images[current][imagesLength - 1].foodProtein}
+                    </Text>
+                    <Text>
+                      지방 {images[current][imagesLength - 1].foodTransfat}
+                    </Text>
                   </View>
-                </>
-              ) : (
-                <Text>아무것도 없어</Text>
-              )}
-            </>
-          )}
+                </View>
+              </>
+            ) : (
+              <Text>아무것도 없어</Text>
+            )}
+          </>
 
           {image && (
             <>
