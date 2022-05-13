@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { View, Text, Image } from "react-native";
-import { useSelector, shallowEqual } from "react-redux";
+import { useSelector } from "react-redux";
 
 const InfoMyself = (props) => {
   const userInfo = useSelector((state) => state.user.userInfo);
@@ -17,7 +17,11 @@ const InfoMyself = (props) => {
   return (
     <View style={props.styles.box}>
       <View style={props.styles.flexDirectionRow}>
-        <Image source={userInfo.memberImg} style={props.styles.image}></Image>
+        <Image
+          source={{ uri: userInfo.memberImg }}
+          style={props.styles.image}
+        ></Image>
+        <Image source={{ uri: userInfo.memberImg }}></Image>
         <View>
           <Text style={props.styles.userName}>
             {userInfo.memberNickname} {whatsUserGender()}

@@ -2,7 +2,7 @@
 --
 -- Host: k6a104.p.ssafy.io    Database: neulbom
 -- ------------------------------------------------------
--- Server version	8.0.28-0ubuntu0.20.04.3
+-- Server version	8.0.29-0ubuntu0.20.04.3
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -26,7 +26,7 @@ CREATE TABLE `member` (
   `member_seq` int NOT NULL AUTO_INCREMENT,
   `user_seq` int NOT NULL,
   `member_nickname` varchar(20) NOT NULL,
-  `member_img` varchar(100) NOT NULL,
+  `member_img` varchar(200) NOT NULL,
   `member_height` int NOT NULL,
   `member_weight` int NOT NULL,
   `member_year` int NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE `member` (
   UNIQUE KEY `member_seq_UNIQUE` (`member_seq`),
   KEY `member_user_fk_idx` (`user_seq`),
   CONSTRAINT `member_user_fk` FOREIGN KEY (`user_seq`) REFERENCES `user` (`user_seq`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -51,7 +51,7 @@ CREATE TABLE `member` (
 
 LOCK TABLES `member` WRITE;
 /*!40000 ALTER TABLE `member` DISABLE KEYS */;
-INSERT INTO `member` VALUES (1,1,'문서왕','image',161,48,1997,'f','질병 없음',10000,'n','blue8957@gmail.com','2022-04-26 01:43:28','blue8957@gmail.com','2022-04-26 01:43:28'),(2,2,'김싸피','image',171,68,1995,'m','질병 없음',20000,'n','ssafy@gmail.com','2022-04-26 01:43:28','ssafy@gmail.com','2022-04-26 01:43:28');
+INSERT INTO `member` VALUES (1,1,'문서왕','https://notion-emojis.s3-us-west-2.amazonaws.com/prod/svg-twitter/1f331.svg',170,55,1997,'f','고혈압,당뇨',1699,'n','blue8957@gmail.com','2022-04-26 01:43:28','blue8957@gmail.com','2022-04-28 15:25:20'),(2,2,'김싸피','image',171,68,1995,'m','질병 없음',1883,'n','ssafy@gmail.com','2022-04-26 01:43:28','ssafy@gmail.com','2022-04-26 01:43:28'),(7,14,'string','https://neulbom-s3-bucket.s3.ap-northeast-2.amazonaws.com/Profile/profile_1651121992083.jpg',172,58,1998,'m','고혈압과 당뇨가 있습니다..',1822,'n','string151','2022-04-27 14:33:17','string151','2022-05-12 14:13:24'),(8,16,'헝아','https://neulbom-s3-bucket.s3.ap-northeast-2.amazonaws.com/Profile/profile_1651121992083.jpg',200,100,1998,'f','고혈압,당뇨',2352,'n','sdi1358@naver.com','2022-04-29 12:19:48','sdi1358@naver.com','2022-04-29 12:19:48'),(13,23,'주변을 경계하는 관리자','https://neulbom-s3-bucket.s3.ap-northeast-2.amazonaws.com/Profile/profile_1651121992083.jpg',170,51,1995,'m','고혈압,당뇨adsd',1780,'n','ddd','2022-05-04 09:23:48','ddd','2022-05-12 15:32:27'),(14,25,'무서운 고수','https://notion-emojis.s3-us-west-2.amazonaws.com/prod/svg-twitter/1f331.svg',170,50,2000,'f','NO',1699,'n','neulbom104@gmail.com','2022-05-12 11:42:58','neulbom104@gmail.com','2022-05-12 11:42:58');
 /*!40000 ALTER TABLE `member` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -64,4 +64,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-26 17:58:56
+-- Dump completed on 2022-05-12 17:47:45

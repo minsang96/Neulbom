@@ -2,7 +2,7 @@
 --
 -- Host: k6a104.p.ssafy.io    Database: neulbom
 -- ------------------------------------------------------
--- Server version	8.0.28-0ubuntu0.20.04.3
+-- Server version	8.0.29-0ubuntu0.20.04.3
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -37,7 +37,7 @@ CREATE TABLE `setting` (
   KEY `setting_common_code_fk_idx` (`code`),
   CONSTRAINT `setting_common_code_fk` FOREIGN KEY (`code`) REFERENCES `common_code` (`code`),
   CONSTRAINT `setting_member_fk` FOREIGN KEY (`user_seq`) REFERENCES `member` (`user_seq`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,7 +46,7 @@ CREATE TABLE `setting` (
 
 LOCK TABLES `setting` WRITE;
 /*!40000 ALTER TABLE `setting` DISABLE KEYS */;
-INSERT INTO `setting` VALUES (1,1,'bloodPressure','n','blue8957@gmail.com','2022-04-26 01:43:28','blue8957@gmail.com','2022-04-26 01:43:28'),(2,2,'bloodSugar','n','ssafy@gmail.com','2022-04-26 01:43:28','ssafy@gmail.com','2022-04-26 01:43:28');
+INSERT INTO `setting` VALUES (1,1,'bloodPressure','y','blue8957@gmail.com','2022-04-26 01:43:28','blue8957@gmail.com','2022-04-28 15:25:20'),(2,2,'bloodSugar','n','ssafy@gmail.com','2022-04-26 01:43:28','ssafy@gmail.com','2022-04-26 01:43:28'),(5,14,'bloodPressure','y','string151','2022-04-27 14:33:17','string151','2022-04-27 16:48:10'),(6,14,'bloodSugar','y','string151','2022-04-27 14:33:17','string151','2022-04-28 15:25:14'),(7,14,'bloodPressure','y','string151','2022-04-27 16:48:25','string151','2022-04-27 17:53:48'),(8,14,'bloodPressure','y','string151','2022-05-04 16:34:31','string151','2022-05-04 16:34:57'),(9,14,'bloodSugar','y','string151','2022-05-04 16:34:43','string151','2022-05-04 16:35:10'),(10,14,'bloodPressure','n','string151','2022-05-04 16:35:10','string151','2022-05-04 16:35:10'),(12,23,'bloodPressure','n','ddd','2022-05-04 09:23:48','ddd','2022-05-04 09:23:48'),(13,25,'bloodPressure','n','neulbom104@gmail.com','2022-05-12 11:42:58','neulbom104@gmail.com','2022-05-12 11:42:58');
 /*!40000 ALTER TABLE `setting` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -59,4 +59,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-26 17:58:55
+-- Dump completed on 2022-05-12 17:47:48

@@ -8,6 +8,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { addBSRecodeFunction } from "../../api/recode";
+import { useSelector } from "react-redux";
 
 const BloodSugar = (props) => {
   const radioButtonsData = [
@@ -42,15 +43,22 @@ const BloodSugar = (props) => {
   ];
 
   // useState
+  const now = new Date();
+  const utcNow = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
+  const koreaTimeDiff = 9 * 60 * 60 * 1000;
+  const koreaNow = new Date(utcNow + koreaTimeDiff);
+
+  const userSeq = useSelector((state) => state.user.userSeq);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [radioButtons, setRadioButtons] = useState("");
   const [radioButtons2, setRadioButtons2] = useState("");
   const [radioButtonData, setRadioButtonData] = useState(radioButtonsData);
   const [radioButtonData2, setRadioButtonData2] = useState(radioButtonsData2);
-  const [isDate, setIsDate] = useState(new Date().toISOString().split("T")[0]);
+  const [bloodSugar, setBloodSugar] = useState(0);
+  const [isDate, setIsDate] = useState(koreaNow.toISOString().split("T")[0]);
   const [isTime, setIsTime] = useState(
-    new Date().toTimeString().split(" ")[0].slice(0, 5)
+    koreaNow.toTimeString().split(" ")[0].slice(0, 5)
   );
 
   // 라디오 버튼 관련 함수
@@ -76,11 +84,9 @@ const BloodSugar = (props) => {
   // 날짜 관련 함수
   const showDatePicker = () => {
     setDatePickerVisibility(!isDatePickerVisible);
-    // console.log(isDatePickerVisible);
   };
   const handleConfirm = (date) => {
     const selectDate = new Date(date).toISOString().split("T")[0];
-    console.log(selectDate);
     setIsDate(selectDate);
     showDatePicker();
   };
@@ -94,14 +100,13 @@ const BloodSugar = (props) => {
     showTimePicker();
   };
 
-  // 수정하기-api(현정)
   const addBloodSugarRecodeFunction = () => {
     const bloodSugarDto = {
       bsCode: radioButtons2 + radioButtons,
       bsDate: isDate,
-      bsLevel: 100,
+      bsLevel: bloodSugar,
       bsTime: isTime,
-      userSeq: 14,
+      userSeq: userSeq,
     };
     try {
       addBSRecodeFunction(bloodSugarDto);
@@ -182,6 +187,9 @@ const BloodSugar = (props) => {
           style={styles.input}
           placeholder="측정된 혈당을 입력하세요"
           keyboardType="numeric"
+          onChangeText={(text) => {
+            setBloodSugar(text);
+          }}
         ></TextInput>
         <ButtonCompo
           buttonName="혈당 등록하기"
