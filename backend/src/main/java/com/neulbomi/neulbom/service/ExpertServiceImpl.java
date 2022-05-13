@@ -191,6 +191,7 @@ public class ExpertServiceImpl implements ExpertService {
 					.regEmail(userExpert.getUserEmail())
 					.modDt(now)
 					.modEmail(userExpert.getUserEmail())
+					.delYn("n")
 					.build());
 		}
 	}
