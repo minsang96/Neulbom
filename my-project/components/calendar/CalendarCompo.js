@@ -4,12 +4,15 @@ import { Text, View, StyleSheet } from "react-native";
 import { format } from "date-fns";
 import { getCalendarList } from "../../api/reports";
 import { Dimensions } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ScrollView } from "react-native-gesture-handler";
+import calendarSlice from "../../slices/calendar";
 
 const screenSize = Dimensions.get("screen");
 
 const CalendarCompo = () => {
+  const dispatch = useDispatch();
+  const calendarList = useSelector((state) => state.calendar.calendarList);
   const now = new Date();
   const utcNow = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
   const koreaTimeDiff = 9 * 60 * 60 * 1000;
@@ -20,7 +23,6 @@ const CalendarCompo = () => {
   const bloodSugar = { key: "bloodSugar", color: "#F4525F" };
   const coffee = { key: "coffee", color: "#FF7F00" };
   const exercise = { key: "exercise", color: "#09BC8A" };
-  const [calendarList, setCalendarList] = useState([]);
   const [loading, isLoading] = useState(true);
   const [bloodPressureList, setBloodPressureList] = useState([]);
   const [bloodSugarList, setBloodSugarList] = useState([]);
@@ -40,7 +42,8 @@ const CalendarCompo = () => {
   const getCalendarListFunction = async (month) => {
     try {
       const response = await getCalendarList(month, userSeq);
-      setCalendarList(response);
+      dispatch(calendarSlice.actions.setCalendar(response));
+      // setCalendarList(response);
       isLoading(false);
     } catch (error) {
       console.log(error);
@@ -50,6 +53,7 @@ const CalendarCompo = () => {
   useEffect(() => {
     getCalendarListFunction(selectedDate.slice(0, 7), userSeq);
     picker(selectedDate);
+    setSelectedDate(format(koreaNow, "yyyy-MM-dd"));
   }, []);
 
   useEffect(() => {
@@ -57,8 +61,8 @@ const CalendarCompo = () => {
   }, [selectedDate]);
 
   useEffect(() => {
-    // getCalendarListFunction(selectedDate.slice(0, 7), userSeq);
-    // picker(selectedDate);
+    getCalendarListFunction(selectedDate.slice(0, 7), userSeq);
+    picker(selectedDate);
   }, [calendarList]);
 
   let markedDates = {};
@@ -143,8 +147,8 @@ const CalendarCompo = () => {
             markingType={"multi-dot"}
             markedDates={markedDates}
             selectedDate={selectedDate}
-            onDayPress={(data) => {
-              setSelectedDate(data.dateString);
+            onDayPress={(a) => {
+              setSelectedDate(a.dateString);
             }}
             theme={{
               selectedDayBackgroundColor: "#009688",
@@ -213,7 +217,7 @@ const CalendarCompo = () => {
                           <Text key={data.bsSeq}>{data.bsTime}</Text>
                         </View>
                         <View style={styles.row}>
-                          <Text>혈당 수치 </Text>
+                          <Text style={styles.numberText}>혈당 수치 </Text>
                           <Text style={styles.numberText} key={data.bsSeq}>
                             {data.bsLevel}
                           </Text>
@@ -234,13 +238,13 @@ const CalendarCompo = () => {
                           <Text key={data.bpSeq}>{data.bpTime}</Text>
                         </View>
                         <View style={{ flexDirection: "row" }}>
-                          <Text>최고 혈압 </Text>
+                          <Text style={styles.numberText}>최고 혈압 </Text>
                           <Text style={styles.numberText} key={data.bpSeq}>
                             {data.bpHigh}
                           </Text>
                         </View>
                         <View style={{ flexDirection: "row" }}>
-                          <Text>최저 혈압 </Text>
+                          <Text style={styles.numberText}>최저 혈압 </Text>
                           <Text style={styles.numberText} key={data.bpSeq}>
                             {data.bpLow}
                           </Text>
@@ -271,7 +275,7 @@ const CalendarCompo = () => {
                     <Text style={styles.title}>커피</Text>
                     {coffeeList[0].map((data) => (
                       <View style={styles.boxSec}>
-                        <View key={data.otherSeq}>
+                        <View>
                           <Text key={data.otherSeq}>{data.otherTime}</Text>
                         </View>
                         <View style={{ flexDirection: "row" }}>

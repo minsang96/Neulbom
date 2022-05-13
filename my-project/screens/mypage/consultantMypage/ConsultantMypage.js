@@ -37,7 +37,6 @@ const ConsultantMypage = (props) => {
       >
         <Text>수정하기</Text>
       </TouchableOpacity>
-      <Text>전문가</Text>
       <Text style={styles.title}>내 소개 😊</Text>
       <InfoConsultant
         styles={styles}
