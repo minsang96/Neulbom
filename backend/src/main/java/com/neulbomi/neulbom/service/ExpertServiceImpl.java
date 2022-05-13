@@ -147,6 +147,7 @@ public class ExpertServiceImpl implements ExpertService {
 		
 		Map<String, Object> info =new HashMap<>();
 		info.put("userSeq", expert.getUserSeq());
+		info.put("userType", userExpert.getUserType());
 		info.put("userEmail", userExpert.getUserEmail());
 		info.put("expertName", expert.getExpertName());
 		info.put("expertImg", expert.getExpertImg());
