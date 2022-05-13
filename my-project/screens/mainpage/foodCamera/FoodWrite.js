@@ -8,7 +8,12 @@ import * as ImagePicker from "expo-image-picker";
 import imagesSlice from "../../../slices/images";
 import UploadMode from "../../../components/modal/UploadMode";
 import ButtonCompo from "../../../components/button/ButtonCompo";
-import { getInfoAI, recordDiet, uploadS3 } from "../../../api/diets";
+import {
+  analyzeDiet,
+  recordDiet,
+  removeDiet,
+  uploadS3,
+} from "../../../api/diets";
 import moment from "moment";
 
 const Container = styled.ScrollView``;
@@ -50,9 +55,11 @@ const FoodWrite = () => {
   const [data, setData] = useState(true);
   const current = useNavigationState((state) => state.routes[0].params.current);
   const user = useSelector((state) => state.user);
+  const [analyze, setAnalyze] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setImagesLength(images.breakfast.length);
+    setImagesLength(images[current].length);
     setImageLength(images.add.length);
     console.log("current", current);
     console.log("here", images[current].length);
@@ -77,6 +84,7 @@ const FoodWrite = () => {
 
   // 카메라 켜기
   const onCamera = async () => {
+    setLoading(true);
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -91,20 +99,35 @@ const FoodWrite = () => {
       dispatch(imagesSlice.actions.addImageUrls(result.uri));
 
       // 음식 인식 api 호출
-      const response = await getInfoAI();
-      if (!response) {
-        setRecognize(false);
+      const frm = new FormData();
+
+      const addimage = {
+        uri: result.uri,
+        type: "multipart/form-data",
+        name: result.uri.split("/").slice(-1)[0],
+      };
+      frm.append("file", addimage);
+
+      try {
+        const response = await analyzeDiet(user.userSeq, frm);
+        console.log("인식결과!!", response);
+        if (!response) {
+          setRecognize(false);
+        }
+      } catch (error) {
+        console.log("인식 error", error);
       }
     }
   };
 
   // 갤러리에서 사진 고르기 ** 안드로이드 이뮬레이터는 갤러리에 사진이 없으므로 구글에서 다운받아서 쓰면 됨!
   const onGallery = async () => {
+    setLoading(true);
     try {
       let result_g = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
-        aspect: [4, 3],
+        // aspect: [4, 3],
         quality: 1,
       });
       console.log(result_g);
@@ -113,9 +136,30 @@ const FoodWrite = () => {
       if (!result_g.cancelled) {
         setImage(result_g.uri);
         dispatch(imagesSlice.actions.addImageUrls(result_g.uri));
-        const response = await getInfoAI();
-        if (!response) {
-          setRecognize(false);
+
+        const frm = new FormData();
+        const addimage = {
+          uri: result_g.uri,
+          type: "multipart/form-data",
+          name: result_g.uri.split("/").slice(-1)[0],
+        };
+        frm.append("file", addimage);
+
+        try {
+          const response = await analyzeDiet(user.userSeq, frm);
+          console.log("인식결과!!", response);
+          const tempFood = response.data;
+          if (response.message == "음식 분석 실패, 음식 검색을 이용하세요.") {
+            setRecognize(false);
+            setLoading(false);
+          } else {
+            setLoading(false);
+            dispatch(imagesSlice.actions.add({ tempFood, current }));
+            setRecognize(true);
+            setAnalyze(response.data);
+          }
+        } catch (error) {
+          console.log("인식 error", error);
         }
       }
     } catch (error) {
@@ -141,8 +185,10 @@ const FoodWrite = () => {
         };
         frm.append("file", addimage);
       });
+
       // 배열에 담아져 옴
       const response = await uploadS3(frm);
+      console.log("s3", response);
       dispatch(imagesSlice.actions.addS3url(response.data.data));
       const result = images.add.map((foodInfo, idx) => {
         return {
@@ -166,26 +212,47 @@ const FoodWrite = () => {
   // 이미지 업로드 axios 보내는 로직
   const saveDiet = async () => {
     try {
-      const response = await saveImage();
-      const response1 = await recordDiet(response);
-      console.log(response1);
+      if (images.remove.length !== 0) {
+        const response2 = await removeDiet(
+          user.userSeq,
+          user.accessToken,
+          images.remove
+        );
+        console.log(response2);
+      }
+      if (images.imageurls.length !== 0) {
+        console.log("saveImage");
+        const response = await saveImage();
+        console.log(response);
+        if (images.add.length !== 0) {
+          const response1 = await recordDiet(response);
+          console.log(response1);
+        }
+      }
     } catch (error) {
       console.log(error);
     } finally {
       console.log("saveImage");
     }
   };
+
   const onPress = () => {
-    console.log(images.total);
+    console.log(images);
   };
-  const onDelete = (dietSeq) => {
-    console.log(dietSeq);
+
+  const onDelete = (idx) => {
+    console.log("delete", idx);
+    console.log("delete real", imageLength - idx);
     console.log(user.accessToken);
     console.log(user.userSeq);
+    dispatch(imagesSlice.actions.remove(imageLength - idx));
   };
-  const onDeleteDB = (dietSeq) => {
-    console.log(dietSeq);
+
+  const onDeleteDB = (dietSeq, idx) => {
+    console.log("deleteDB", dietSeq);
+    dispatch(imagesSlice.actions.removeDB({ current, dietSeq }));
   };
+
   return (
     <>
       <Container style={{ backgroundColor: "white" }}>
@@ -193,90 +260,99 @@ const FoodWrite = () => {
           <Text>Checking redux</Text>
         </Pressable>
         <View>
-          {image ? (
+          {loading ? (
+            <Text>Loading...</Text>
+          ) : (
             <>
-              <Text>이미지 잇음</Text>
-              <View
-                style={{
-                  flex: 1,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Image
-                  source={{ uri: image }}
-                  style={{ width: 200, height: 200 }}
-                ></Image>
-              </View>
-              {recognize ? (
+              {image ? (
                 <>
-                  <Text>이미지 있고 인식 성공</Text>
-                  <Text>인식 성공!</Text>
+                  <Text>이미지 있음</Text>
+                  <View
+                    style={{
+                      flex: 1,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Image
+                      source={{ uri: image }}
+                      style={{ width: 200, height: 200 }}
+                    ></Image>
+                  </View>
+                  {recognize ? (
+                    <>
+                      <Text>이미지 있고 인식 성공</Text>
+                      <Text>인식 성공!</Text>
+                      <Text>{analyze.foodName}</Text>
+                      <Text>{analyze.foodAmount}</Text>
+                      <Text>{analyze.foodKcal}</Text>
+                    </>
+                  ) : (
+                    <>
+                      <Text>이미지 있고 인식 실패</Text>
+                      <Text>음식을 인식할 수 없습니다</Text>
+                    </>
+                  )}
+                </>
+              ) : !data ? (
+                <>
+                  <Text>이미지 없고 데이터 없음</Text>
+                  <Text>아무것도 없음. 로딩 X</Text>
+                </>
+              ) : imagesLength > 0 ? (
+                <>
+                  <Text>이미지 없고 데이터 있음</Text>
+
+                  <View>
+                    <View
+                      style={{
+                        flex: 1,
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Text>{current}</Text>
+                      <Image
+                        source={{
+                          uri: images[current][imagesLength - 1].dietImg,
+                        }}
+                        style={{ width: 200, height: 200 }}
+                      />
+                      <Text>{images[current][imagesLength - 1].foodName}</Text>
+                      <Text>
+                        {images[current][imagesLength - 1].foodAmount}g (
+                        {Math.round(
+                          images[current][imagesLength - 1].dietAmount /
+                            images[current][imagesLength - 1].foodAmount
+                        )}
+                        인분)
+                      </Text>
+                      <Text>
+                        칼로리 {images[current][imagesLength - 1].foodKcal}
+                      </Text>
+                      <Text>
+                        나트륨 {images[current][imagesLength - 1].foodNatrium}
+                      </Text>
+                      <Text>
+                        당류 {images[current][imagesLength - 1].foodSugars}
+                      </Text>
+                      <Text>
+                        탄수화물
+                        {images[current][imagesLength - 1].foodCarbohydrate}
+                      </Text>
+                      <Text>
+                        단백질 {images[current][imagesLength - 1].foodProtein}
+                      </Text>
+                      <Text>
+                        지방 {images[current][imagesLength - 1].foodTransfat}
+                      </Text>
+                    </View>
+                  </View>
                 </>
               ) : (
-                <>
-                  <Text>이미지 있고 인식 실패</Text>
-                  <Text>음식을 인식할 수 없습니다</Text>
-                </>
+                <Text>아무것도 없어</Text>
               )}
             </>
-          ) : !data ? (
-            <>
-              <Text>이미지 없고 데이터 없음</Text>
-              <Text>아무것도 없음. 로딩 X</Text>
-            </>
-          ) : imagesLength > 0 ? (
-            <>
-              <Text>이미지 없고 데이터 있음</Text>
-
-              <View>
-                <View
-                  style={{
-                    flex: 1,
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Text>{current}</Text>
-                  <Image
-                    source={{
-                      uri: images[current][imagesLength - 1].dietImg,
-                    }}
-                    style={{ width: 200, height: 200 }}
-                  />
-                  <Text>{images[current][imagesLength - 1].foodName}</Text>
-                  <Text>
-                    {images[current][imagesLength - 1].foodAmount}g (
-                    {Math.round(
-                      images[current][imagesLength - 1].dietAmount /
-                        images[current][imagesLength - 1].foodAmount
-                    )}
-                    인분)
-                  </Text>
-                  <Text>
-                    칼로리 {images[current][imagesLength - 1].foodKcal}
-                  </Text>
-                  <Text>
-                    나트륨 {images[current][imagesLength - 1].foodNatrium}
-                  </Text>
-                  <Text>
-                    당류 {images[current][imagesLength - 1].foodSugars}
-                  </Text>
-                  <Text>
-                    탄수화물
-                    {images[current][imagesLength - 1].foodCarbohydrate}
-                  </Text>
-                  <Text>
-                    단백질 {images[current][imagesLength - 1].foodProtein}
-                  </Text>
-                  <Text>
-                    지방 {images[current][imagesLength - 1].foodTransfat}
-                  </Text>
-                </View>
-              </View>
-            </>
-          ) : (
-            <Text>아무것도 없어</Text>
           )}
 
           {image && (
@@ -290,33 +366,26 @@ const FoodWrite = () => {
                   })
                 }
               ></ButtonCompo>
-              <ButtonCompo
+              {/* <ButtonCompo
                 buttonName="다시 찍기"
                 onPressButton={() => console.log("press 다시 찍기")}
-              ></ButtonCompo>
+              ></ButtonCompo> */}
             </>
           )}
           <View>
-            {/* {image && (
-              <Image
-                source={{ uri: image }}
-                style={{ width: 50, height: 50 }}
-              />
-            )} */}
             {images.imageurls
               .slice(0)
               .reverse()
               .map((food, idx) => (
-                <View>
+                <View key={food.id}>
                   <Image
-                    key={food.id}
                     source={{ uri: food.imageurl }}
                     style={{ width: 50, height: 50 }}
                   ></Image>
                   <Plus
                     style={{ marginRight: 5 }}
                     onPress={() => {
-                      onDelete(food.foodSeq);
+                      onDelete(idx);
                     }}
                   >
                     <Text
@@ -333,7 +402,7 @@ const FoodWrite = () => {
             {images[current]
               .slice(0)
               .reverse()
-              .map((food) => (
+              .map((food, idx) => (
                 <View key={food.dietSeq}>
                   <Image
                     source={{ uri: food.dietImg }}
@@ -342,7 +411,7 @@ const FoodWrite = () => {
                   <Plus
                     style={{ marginRight: 5 }}
                     onPress={() => {
-                      onDeleteDB(food.foodSeq);
+                      onDeleteDB(food.dietSeq, idx);
                     }}
                   >
                     <Text
