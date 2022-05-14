@@ -8,7 +8,7 @@ const Qualification = (props) => {
   return (
     <View style={props.styles.box}>
       <Text style={props.styles.subtitle}>🏅 자격</Text>
-      <Text style={props.styles.box}>{userInfo.expertCert}</Text>
+      {/* <Text style={props.styles.box}>{userInfo.expertCert}</Text>
       <Text style={props.styles.subtitle}>💼 이력</Text>
       <View style={props.styles.box}>
         {userInfo.expertCareer.map((data) => (
@@ -18,7 +18,7 @@ const Qualification = (props) => {
             </Text>
           </View>
         ))}
-      </View>
+      </View> */}
     </View>
   );
 };

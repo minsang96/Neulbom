@@ -19,8 +19,6 @@ const ConsultantMypageUpdate = (props) => {
   const userInfo = useSelector((state) => state.user.userInfo);
   const userSeq = useSelector((state) => state.user.userSeq);
   const accessToken = useSelector((state) => state.user.accessToken);
-  console.log(userSeq);
-  console.log(accessToken);
 
   // 수정하기-api 연결이 잘 안돼요(현정)
   const updateUserInfo = async () => {
@@ -58,7 +56,7 @@ const ConsultantMypageUpdate = (props) => {
         <Text>뒤로가기</Text>
       </TouchableOpacity>
       <View style={{ alignItems: "center", marginVertical: 10 }}>
-        <Image
+        {/* <Image
           source={{ uri: userInfo.expertImg }}
           style={styles.image}
         ></Image>
@@ -77,13 +75,14 @@ const ConsultantMypageUpdate = (props) => {
       </View>
       <View style={styles.box}>
         <Text style={styles.title}>이력 사항</Text>
-        {userInfo.expertCareer.map((data) => (
-          <View>
-            <TextInput key={data.careerSeq} style={styles.titleInputBox}>
-              {data.careerContent}
-            </TextInput>
+        {userInfo.expertCareer.map((data, index) => (
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <Text key={index}>{data.careerContent}</Text>
+            <Text>X</Text>
           </View>
-        ))}
+        ))} */}
         {/* 수정하기-textinput 추가하기(현정) */}
         <Text
           style={styles.changingText}
