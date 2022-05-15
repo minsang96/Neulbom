@@ -7,9 +7,7 @@ const InfoMyDisease = (props) => {
 
   return (
     <View style={props.styles.box}>
-      <Text style={props.styles.userInfoItemContent}>
-        {userInfo.memberDesc}
-      </Text>
+      <Text>{userInfo.memberDesc}</Text>
     </View>
   );
 };

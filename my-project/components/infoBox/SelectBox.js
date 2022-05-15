@@ -18,7 +18,7 @@ const SelectBox = (props) => {
       }
     }
     setLoading(false);
-  }, []);
+  }, [userInfo.setting]);
 
   return (
     <View>
