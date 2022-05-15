@@ -29,6 +29,7 @@ const UserMypageUpdate = (props) => {
   const [memberImg, setMemberImg] = useState(userInfo.memberImg);
   const [BPColor, setBPColor] = useState(false);
   const [BSColor, setBSColor] = useState(false);
+  const [settingList, setSettingList] = useState(userInfo.setting);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -49,8 +50,8 @@ const UserMypageUpdate = (props) => {
       height: memberHeight,
       img: "https://neulbom-s3-bucket.s3.ap-northeast-2.amazonaws.com/Profile/profile_1651121992083.jpg",
       setting: {
-        bloodPressure: true,
-        bloodSugar: false,
+        bloodPressure: BPColor,
+        bloodSugar: BSColor,
       },
       userSeq: userSeq,
       weight: memberWeight,
@@ -65,11 +66,13 @@ const UserMypageUpdate = (props) => {
 
       const response = await getMemeberInfo(accessToken, userSeq);
       dispatch(userSlice.actions.setUserInfo(response.data));
+      console.log(response.data);
     } catch (err) {
       console.log(err);
     }
   };
 
+  console.log(settingList);
   return (
     <ScrollView style={styles.background}>
       <TouchableOpacity
@@ -109,48 +112,44 @@ const UserMypageUpdate = (props) => {
       <View style={styles.box}>
         <Text style={styles.title}>건강 수치</Text>
         <View style={styles.boxRow}>
-          <View
+          <TouchableOpacity
             style={[
               styles.button,
               { backgroundColor: BPColor === true ? "#09BC8A" : "white" },
             ]}
+            onPress={() => {
+              // clickBP(settingList);
+              setBPColor(!BPColor);
+            }}
           >
-            <TouchableOpacity
-              onPress={() => {
-                setBPColor(!BPColor);
+            <Text
+              style={{
+                color: BPColor === true ? "white" : "black",
+                fontSize: 16,
               }}
             >
-              <Text
-                style={{
-                  color: BPColor === true ? "white" : "black",
-                  fontSize: 16,
-                }}
-              >
-                혈압
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View
+              혈압
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
             style={[
               styles.button,
               { backgroundColor: BSColor === true ? "#09BC8A" : "white" },
             ]}
+            onPress={() => {
+              // clickBS(settingList);
+              setBSColor(!BSColor);
+            }}
           >
-            <TouchableOpacity
-              onPress={() => {
-                setBSColor(!BSColor);
+            <Text
+              style={{
+                color: BSColor === true ? "white" : "black",
+                fontSize: 16,
               }}
             >
-              <Text
-                style={{
-                  color: BSColor === true ? "white" : "black",
-                  fontSize: 16,
-                }}
-              >
-                혈당
-              </Text>
-            </TouchableOpacity>
-          </View>
+              혈당
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.box}>

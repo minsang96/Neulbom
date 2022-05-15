@@ -1,6 +1,7 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Tabs from "./Tabs";
+import TabsConsultant from "./TabsConsultant";
 import Stack from "./Stack";
 import LoginStack from "./LoginStack";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,12 +15,12 @@ const Nav = createNativeStackNavigator();
 
 function Root() {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state) => state.user.accessToken);
+  const accessToken = useSelector((state) => state.user.accessToken);
   const userInfo = useSelector((state) => state.user.userInfo);
 
   useEffect(() => {
-    console.log("Root isLoggedIn: " + isLoggedIn);
-    if (!isLoggedIn) {
+    console.log("Root isLoggedIn: " + accessToken);
+    if (!accessToken) {
       const getUserSessionAndLogin = async () => {
         try {
           const session = await EncryptedStorage.getItem("user_session");
@@ -58,16 +59,17 @@ function Root() {
         }
       };
       getUserSessionAndLogin();
-      console.log(isLoggedIn);
     }
   }, []);
 
   return (
     <Nav.Navigator screenOptions={{ headerShown: false }}>
-      {isLoggedIn ? (
+      {userInfo === null ? (
+        <Nav.Screen name="LoginStack" component={LoginStack} />
+      ) : accessToken && userInfo.userType == 0 ? (
         <Nav.Screen name="Tabs" component={Tabs} />
       ) : (
-        <Nav.Screen name="LoginStack" component={LoginStack} />
+        <Nav.Screen name="TabsConsultant" component={TabsConsultant} />
       )}
       <Nav.Screen name="Stack" component={Stack} />
     </Nav.Navigator>
