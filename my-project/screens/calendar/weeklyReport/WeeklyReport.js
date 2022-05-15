@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, StyleSheet, Text } from "react-native";
+import { ScrollView, StyleSheet, Text, View, Pressable } from "react-native";
 import BloodPressureGraph from "../../../components/calendar/report/BloodPressureGraph";
 import BloodSugarGraph from "../../../components/calendar/report/BloodSugarGraph";
 import NutrientCompo from "../../../components/calendar/report/WeeklyNutrientCompo";
@@ -8,6 +8,7 @@ import { Dimensions } from "react-native";
 import WeeklyEat from "../../../components/calendar/report/WeeklyEat";
 import { useDispatch, useSelector } from "react-redux";
 import weeklyReportSlice from "../../../slices/weeklyReport";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {
   getWeeklyBloodPressure,
   getWeeklyBloodSugar,
@@ -16,11 +17,30 @@ import {
   getWeeklyNutirent,
 } from "../../../api/reports";
 import CalorieWeeklyCompo from "../../../components/calendar/report/CalorieWeeklyCompo";
+import { format } from "date-fns";
+import { ko } from "date-fns/locale";
 
 const screenSize = Dimensions.get("screen");
 
 const WeeklyReport = () => {
+  const now = new Date();
+  const utcNow = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
+  const koreaTimeDiff = 9 * 60 * 60 * 1000;
+  const koreaNow = new Date(utcNow + koreaTimeDiff);
   const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.user.userInfo);
+  const userSeq = useSelector((state) => state.user.userSeq);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isDate, setIsDate] = useState(koreaNow.toISOString().split("T")[0]);
+  const showDatePicker = () => {
+    setDatePickerVisibility(!isDatePickerVisible);
+  };
+  const handleConfirm = (date) => {
+    const selectDate = new Date(date).toISOString().split("T")[0];
+    setIsDate(selectDate);
+    showDatePicker();
+  };
+
   const weeklyBloodPressure = useSelector((state) =>
     state.weeklyReport.weeklyBloodPressure.sort()
   );
@@ -32,51 +52,50 @@ const WeeklyReport = () => {
   );
   const weeklyDiet = useSelector((state) => state.weeklyReport.weeklyDiet);
 
-  // 수정하기-api(현정)
+  const getWeeklyBloodPressureResult = async () => {
+    try {
+      const response = await getWeeklyBloodPressure(isDate, userSeq);
+      dispatch(
+        weeklyReportSlice.actions.setWeeklyBloodPressureReport(response)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getWeeklyBloodSugarResult = async () => {
+    try {
+      const response = await getWeeklyBloodSugar(isDate, userSeq);
+      dispatch(weeklyReportSlice.actions.setWeeklyBloodSugarReport(response));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getWeeklyCalorieResult = async () => {
+    try {
+      const response = await getWeeklyCalorie(isDate, userSeq);
+      dispatch(weeklyReportSlice.actions.setWeeklyCalorieReport(response));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getWeeklyNutirentResult = async () => {
+    try {
+      const response = await getWeeklyNutirent(isDate, userSeq);
+      dispatch(weeklyReportSlice.actions.setWeeklyNutrientReport(response));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getWeeklyDietResult = async () => {
+    try {
+      const response = await getWeeklyDiet(isDate, userSeq);
+      dispatch(weeklyReportSlice.actions.setWeeklyDietReport(response));
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    const getWeeklyBloodPressureResult = async () => {
-      try {
-        const response = await getWeeklyBloodPressure("2022-04-26", "2");
-        dispatch(
-          weeklyReportSlice.actions.setWeeklyBloodPressureReport(response)
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const getWeeklyBloodSugarResult = async () => {
-      try {
-        const response = await getWeeklyBloodSugar("2022-04-26", "2");
-        dispatch(weeklyReportSlice.actions.setWeeklyBloodSugarReport(response));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const getWeeklyCalorieResult = async () => {
-      try {
-        const response = await getWeeklyCalorie("2022-04-26", "2");
-        dispatch(weeklyReportSlice.actions.setWeeklyCalorieReport(response));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const getWeeklyNutirentResult = async () => {
-      try {
-        const response = await getWeeklyNutirent("2022-04-26", "2");
-        dispatch(weeklyReportSlice.actions.setWeeklyNutrientReport(response));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const getWeeklyDietResult = async () => {
-      try {
-        const response = await getWeeklyDiet("2022-04-26", "2");
-        dispatch(weeklyReportSlice.actions.setWeeklyDietReport(response));
-      } catch (error) {
-        console.log(error);
-      }
-    };
     getWeeklyBloodPressureResult();
     getWeeklyBloodSugarResult();
     getWeeklyCalorieResult();
@@ -95,9 +114,36 @@ const WeeklyReport = () => {
     }
   }, [weeklyBloodPressure, weeklyBloodSugar, weeklyNutrient, weeklyDiet]);
 
+  useEffect(() => {
+    getWeeklyBloodPressureResult();
+    getWeeklyBloodSugarResult();
+    getWeeklyCalorieResult();
+    getWeeklyNutirentResult();
+    getWeeklyDietResult();
+  }, [isDate]);
+
   return (
     <ScrollView style={styles.background}>
-      <Text style={styles.reportTitle}>정현정님의 주간 리포트</Text>
+      <View style={styles.center}>
+        <View style={styles.dateTime}>
+          <Pressable onPress={showDatePicker}>
+            <Text style={styles.dateTimeText}>
+              {format(new Date(isDate), "PPP", {
+                locale: ko,
+              })}
+            </Text>
+          </Pressable>
+        </View>
+      </View>
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirm}
+        onCancel={showDatePicker}
+      />
+      <Text style={styles.reportTitle}>
+        {userInfo.memberNickname}님의 주간 리포트
+      </Text>
       <UserInfo styles={styles}></UserInfo>
       {loading ? (
         <Text>Loading...</Text>
@@ -150,10 +196,22 @@ const styles = StyleSheet.create({
   background: {
     paddingHorizontal: 20,
   },
+  center: { alignItems: "center" },
+  dateTime: {
+    backgroundColor: "#09BC8A",
+    color: "white",
+    borderRadius: 10,
+    width: 150,
+    margin: 10,
+    padding: 5,
+    alignItems: "center",
+  },
+  dateTimeText: {
+    color: "white",
+  },
   reportTitle: {
     fontSize: 20,
-    marginVertical: 10,
-    // fontWeight: "bold",
+    marginBottom: 10,
   },
   box: {
     backgroundColor: "white",

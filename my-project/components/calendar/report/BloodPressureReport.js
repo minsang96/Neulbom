@@ -7,9 +7,6 @@ import {
   Cols,
   Col,
 } from "react-native-table-component";
-import { Dimensions } from "react-native";
-
-const screenSize = Dimensions.get("screen");
 
 const BloodPressureReport = (props) => {
   const element = (before, after) => {
@@ -203,7 +200,6 @@ const styles = StyleSheet.create({
   btnUpText: {
     textAlign: "center",
     color: "red",
-    textAlign: "center",
     backgroundColor: "rgba(255,0,0,0.2)",
     borderRadius: 30,
     width: 60,
@@ -211,7 +207,6 @@ const styles = StyleSheet.create({
   btnDownText: {
     textAlign: "center",
     color: "blue",
-    textAlign: "center",
     backgroundColor: "rgba(0,56,255,0.2)",
     borderRadius: 30,
     width: 60,
@@ -219,7 +214,6 @@ const styles = StyleSheet.create({
   btnText: {
     textAlign: "center",
     color: "black",
-    textAlign: "center",
     backgroundColor: "rgba(0,0,0,0.2)",
     borderRadius: 30,
     width: 60,

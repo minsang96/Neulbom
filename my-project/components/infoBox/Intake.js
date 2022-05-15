@@ -1,21 +1,30 @@
 import React from "react";
 import { View, Text } from "react-native";
+import { useSelector } from "react-redux";
 
 const Intake = (props) => {
+  const userInfo = useSelector((state) => state.user.userInfo);
+
   return (
     <View style={props.styles.box}>
       <View style={props.styles.userInfo}>
         <View style={props.styles.userInfoItem}>
           <Text>권장 칼로리</Text>
-          <Text style={props.styles.userInfoItemContent}>2100</Text>
+          <Text style={props.styles.userInfoItemContent}>
+            {parseInt(userInfo.memberKcal)}
+          </Text>
         </View>
         <View style={props.styles.userInfoItem}>
           <Text>권장 나트륨</Text>
-          <Text style={props.styles.userInfoItemContent}>350</Text>
+          <Text style={props.styles.userInfoItemContent}>
+            {parseInt(userInfo.memberNatrium)}
+          </Text>
         </View>
         <View style={props.styles.userInfoItem}>
           <Text>권장 당류</Text>
-          <Text style={props.styles.userInfoItemContent}>400</Text>
+          <Text style={props.styles.userInfoItemContent}>
+            {parseInt(userInfo.memberSugar)}
+          </Text>
         </View>
       </View>
     </View>

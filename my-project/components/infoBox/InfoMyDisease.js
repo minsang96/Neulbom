@@ -1,10 +1,13 @@
 import React from "react";
 import { View, Text } from "react-native";
+import { useSelector } from "react-redux";
 
 const InfoMyDisease = (props) => {
+  const userInfo = useSelector((state) => state.user.userInfo);
+
   return (
-    <View>
-      <Text style={props.styles.box}>고혈압, 당뇨</Text>
+    <View style={props.styles.box}>
+      <Text>{userInfo.memberDesc}</Text>
     </View>
   );
 };

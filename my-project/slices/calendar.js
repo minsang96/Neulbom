@@ -11,7 +11,7 @@ const calendarSlice = createSlice({
   // 리듀서
   reducers: {
     setCalendar: (state, action) => {
-      state.calendarList = [action.payload];
+      state.calendarList = action.payload;
     },
   },
 });

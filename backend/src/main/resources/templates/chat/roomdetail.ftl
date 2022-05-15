@@ -44,7 +44,11 @@
         //alert(document.title);
         // websocket & stomp initialize
         var sock = new SockJS("/api/ws-stomp");
+        // var sock = new SockJS("http://localhost:3030/api/ws-stomp");
+      
         var ws = Stomp.over(sock);
+        console.log("ws", ws);
+        
         var reconnect = 0;
         // vue.js
         var vm = new Vue({
@@ -57,8 +61,8 @@
                 messages: []
             },
             created() {
-                this.roomId = localStorage.getItem('wschat.roomId');
-                this.sender = localStorage.getItem('wschat.sender');
+                this.roomId = 23;
+                this.sender = 23;
                 this.findRoom();
             },
             methods: {

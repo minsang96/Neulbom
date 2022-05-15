@@ -48,7 +48,7 @@ public class Expert {
 	private String enabledYn;
 
 	@Column(name = "del_yn")
-	private String delYn = "n";
+	private String delYn;
 
 	@Column(name = "reg_email")
 	private String regEmail;
@@ -64,7 +64,7 @@ public class Expert {
 
 	@Builder
 	public Expert(int userSeq, String expertName, String expertImg, String expertDesc, String enabledYn,
-			String regEmail, String regDt, String modEmail, String modDt) {
+			String regEmail, String regDt, String modEmail, String modDt, String delYn) {
 		super();
 		this.userSeq = userSeq;
 		this.expertName = expertName;
@@ -75,6 +75,7 @@ public class Expert {
 		this.regDt = regDt;
 		this.modEmail = modEmail;
 		this.modDt = modDt;
+		this.delYn = delYn;
 	}
 
 }

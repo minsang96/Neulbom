@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components/native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useNavigationState } from "@react-navigation/native";
 import palette from "../../../components/palette";
 import { TextInput } from "react-native-gesture-handler";
 import { searchDiet } from "../../../api/diets";
@@ -41,10 +41,11 @@ const FoodSearch = () => {
   const [foods, setFoods] = useState([]);
   const [tempFood, setTempFood] = useState([]);
   const navigate = useNavigation();
-
+  const current = useNavigationState((state) => state.routes[0].params.current);
+  console.log("여기야!!!!!!", current);
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log("selected tempFood", tempFood);
+    console.log("selected tempFood");
   }, [tempFood]);
   const onSearch = async (text) => {
     try {
@@ -53,7 +54,6 @@ const FoodSearch = () => {
       setLoading(false);
     } catch (error) {
       console.log(error);
-      console.log("FoodSearch.js");
     } finally {
       console.log("diet/search");
     }
@@ -64,8 +64,10 @@ const FoodSearch = () => {
     onSearch(text);
   });
 
+  const kcal = 321;
   const onSelect = () => {
-    dispatch(imagesSlice.actions.add(tempFood));
+    console.log();
+    dispatch(imagesSlice.actions.add({ tempFood, current, kcal }));
     navigate.goBack();
   };
 
@@ -90,6 +92,7 @@ const FoodSearch = () => {
             android_ripple={{ color: `${palette.green}` }}
             onPress={() => {
               setTempFood(food);
+              console.log(food);
             }}
           >
             <Text>

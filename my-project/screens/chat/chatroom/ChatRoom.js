@@ -71,13 +71,12 @@ const ChatRoom = () => {
     // pub/sub event
     ws.connect({}, function(frame) {
         ws.subscribe("/api/sub/chat/room/"+roomId, function(message) {
-          console.log('받음')
-          var recv = JSON.parse(message.body);
-          console.log(recv)
+            var recv = JSON.parse(message.body);
             recvMessage(recv);
         });
-        ws.send("/pub/chat/message", {}, JSON.stringify({type:'ENTER', roomId: roomId, senderSeq: sender, message: message}));
+        ws.send("/pub/chat/message", {}, JSON.stringify({type:'ENTER', roomId: roomId, sender: sender}));
     }, function(error) {
+        console.log('error:')
         console.log(error)
         if(reconnect++ <= 5) {
             setTimeout(function() {
@@ -99,13 +98,13 @@ const ChatRoom = () => {
     <View style={{justifyContent: 'space-between', height: windowHeight}}>
       <ScrollView>
         <Text>ChatRoom</Text>
-        {/* {Object.keys(messages).length > 0 && messages.map(message => {
+        {Object.keys(messages).length > 0 && messages.map(message => {
           return (
             <>
               <Text>{message.sender}</Text>
               <Text>{message.message}</Text>
             </>
-        )})} */}
+        )})}
       </ScrollView>
       <View style={{backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-between'}}>
         <TextInput

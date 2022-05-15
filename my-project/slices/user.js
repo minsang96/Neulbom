@@ -6,15 +6,15 @@ const initialState = {
   userInfo: null,
   consultantProfileImageUri: null,
   consultantCertImageUri: null,
-}
+};
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     login: (state, action) => {
-      state.userSeq = action.payload.userSeq
-      state.accessToken = action.payload.accessToken
+      state.userSeq = action.payload.userSeq;
+      state.accessToken = action.payload.accessToken;
     },
     logout: (state, action) => {
       state.userSeq = null

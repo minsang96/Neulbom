@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 const WeeklyEat = (props) => {
   // 수정하기-한 주의 기록 꽉 찬 db 이용해서 수정 필요(현정)
   const weeklyDiet = useSelector((state) => state.weeklyReport.weeklyDiet[0]);
-  console.log(weeklyDiet["friday"]["breakfast"]);
+  // console.log(weeklyDiet["friday"]["breakfast"]);
   const tableTitle = ["아침", "점심", "저녁", "기록"];
   const tableData = [
     [
@@ -33,10 +33,7 @@ const WeeklyEat = (props) => {
     <View style={props.styles.box}>
       <Text style={props.styles.title}>한 주의 기록</Text>
       <ScrollView style={styles.container} horizontal={true}>
-        <Table
-          style={{ flexDirection: "row" }}
-          borderStyle={{ borderWidth: 0 }}
-        >
+        <Table borderStyle={{ borderWidth: 0 }}>
           {/* Left Wrapper */}
           <TableWrapper style={{ width: 80 }}>
             {/* <Cell data="" style={styles.singleHead} /> */}

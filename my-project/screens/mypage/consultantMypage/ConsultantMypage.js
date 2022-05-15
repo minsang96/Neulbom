@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import ButtonCompo from "../../../components/button/ButtonCompo";
 import Infomation from "../../../components/infoBox/Infomation";
@@ -6,32 +6,26 @@ import { useNavigation } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 import Qualification from "../../../components/infoBox/Qualification";
 import InfoConsultant from "../../../components/infoBox/InfoConsultant";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import userSlice from "../../../slices/user";
-import EncryptedStorage from 'react-native-encrypted-storage';
+import EncryptedStorage from "react-native-encrypted-storage";
 
 const screenSize = Dimensions.get("screen");
 
 const ConsultantMypage = (props) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const userInfo = useSelector(state => state.user.userInfo)
-  useEffect(() => {
-    console.log(userInfo)
-  }, [])
   const logout = () => {
     async function removeUserSession() {
       try {
         await EncryptedStorage.removeItem("user_session");
-        // Congrats! You've just removed your first value!
       } catch (error) {
-        // There was an error on the native side
         console.log(error.code);
       }
     }
-    dispatch(userSlice.actions.logout())
-    removeUserSession()
-  }
+    dispatch(userSlice.actions.logout());
+    removeUserSession();
+  };
   return (
     <ScrollView style={styles.background}>
       <TouchableOpacity
@@ -41,9 +35,12 @@ const ConsultantMypage = (props) => {
       >
         <Text>수정하기</Text>
       </TouchableOpacity>
-      <Text>전문가</Text>
       <Text style={styles.title}>내 소개 😊</Text>
-      <InfoConsultant styles={styles} update={props.update}></InfoConsultant>
+      <InfoConsultant
+        styles={styles}
+        update={props.update}
+        type={"infopage"}
+      ></InfoConsultant>
       <Text style={styles.title}>이력 사항✨</Text>
       <Qualification styles={styles} update={props.update}></Qualification>
       <ButtonCompo buttonName="소개페이지 보기"></ButtonCompo>
@@ -51,7 +48,8 @@ const ConsultantMypage = (props) => {
       <Infomation styles={styles}></Infomation>
       <ButtonCompo
         onPressButton={() => logout()}
-        buttonName="로그아웃"></ButtonCompo>
+        buttonName="로그아웃"
+      ></ButtonCompo>
     </ScrollView>
   );
 };
@@ -60,7 +58,6 @@ export default ConsultantMypage;
 
 const styles = StyleSheet.create({
   background: {
-    // backgroundColor: "white",
     paddingHorizontal: 20,
   },
   box: {
@@ -89,12 +86,12 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginRight: screenSize.width * 0.05,
   },
-  userName: { fontSize: 20, marginBottom: 5 },
+  userName: { fontSize: 18, marginBottom: 5 },
   flexDirectionRow: {
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: screenSize.height * 0.01,
-    justifyContent: "center",
+    paddingLeft: screenSize.width * 0.04,
   },
   userInfo: {
     flexDirection: "row",

@@ -2355,15 +2355,6 @@
     "strip-ansi" "^6.0.0"
     "wrap-ansi" "^6.2.0"
 
-"cliui@^7.0.2":
-  "integrity" "sha512-OcRE68cOsVMXp1Yvonl/fzkQOyjLSu/8bhPDfQt0e0/Eb283TKP20Fs2MqoPsr9SwA595rRCA+QMzYc9nBP+JQ=="
-  "resolved" "https://registry.npmjs.org/cliui/-/cliui-7.0.4.tgz"
-  "version" "7.0.4"
-  dependencies:
-    "string-width" "^4.2.0"
-    "strip-ansi" "^6.0.0"
-    "wrap-ansi" "^7.0.0"
-
 "clone-deep@^4.0.1":
   "integrity" "sha512-neHB9xuzh/wk0dIHweyAXv2aPGZIVk3pLMe+/RNzINf17fe0OG96QroktYAUm7SM1PBnzTabaLboqqxDyMU+SQ=="
   "resolved" "https://registry.npmjs.org/clone-deep/-/clone-deep-4.0.1.tgz"
@@ -3451,7 +3442,7 @@
   "resolved" "https://registry.npmjs.org/gensync/-/gensync-1.0.0-beta.2.tgz"
   "version" "1.0.0-beta.2"
 
-"get-caller-file@^2.0.1", "get-caller-file@^2.0.5":
+"get-caller-file@^2.0.1":
   "integrity" "sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg=="
   "resolved" "https://registry.npmjs.org/get-caller-file/-/get-caller-file-2.0.5.tgz"
   "version" "2.0.5"
@@ -5597,11 +5588,6 @@
   "resolved" "https://registry.npmjs.org/react-native-encrypted-storage/-/react-native-encrypted-storage-4.0.2.tgz"
   "version" "4.0.2"
 
-"react-native-flipper@>=0.100.0":
-  "integrity" "sha512-FZJsQsMfvn6y6+xouvfFOtcNiZ8nkXT2/p1D7rBLIb1kTUw5357+sveg4qwp77UhmcBYiE9IRGHlgLp+tLWbnw=="
-  "resolved" "https://registry.npmjs.org/react-native-flipper/-/react-native-flipper-0.145.0.tgz"
-  "version" "0.145.0"
-
 "react-native-gesture-handler@^2.4.1", "react-native-gesture-handler@> 1.0.0", "react-native-gesture-handler@>= 1.0.0":
   "integrity" "sha512-qJHkZAWyuvZvEm8jV6TsYKeTgkYmoNsKrO/CEx0YaisAcHSiaiMx2Dy/0/QQ7oZr3t5aL4rJqWtOEZCADNbfeQ=="
   "resolved" "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.4.1.tgz"
@@ -5726,14 +5712,6 @@
   "resolved" "https://registry.npmjs.org/react-native-table-component/-/react-native-table-component-1.2.2.tgz"
   "version" "1.2.2"
 
-"react-native-vector-icons@*":
-  "integrity" "sha512-2AHZ/h9d/+rC0odz+OwbGNlc1Lik/pHhSixn4HfC8RtQ8CxfSBZ6gg7bTLcZhdSvZN+ZEGi30Fj+ZnOSQy+smg=="
-  "resolved" "https://registry.npmjs.org/react-native-vector-icons/-/react-native-vector-icons-9.1.0.tgz"
-  "version" "9.1.0"
-  dependencies:
-    "prop-types" "^15.7.2"
-    "yargs" "^16.1.1"
-
 "react-native-web-swiper@^2.2.3":
   "integrity" "sha512-wNdTsu96dTbtNSaMly7YtDYj2PDxgSk9pjE84HDRwXyAaqvr/W8bcUvpmxrxxvyQfNZ7Qo19Z0P4aRgSqAoBGQ=="
   "resolved" "https://registry.npmjs.org/react-native-web-swiper/-/react-native-web-swiper-2.2.3.tgz"
@@ -5754,7 +5732,7 @@
     "normalize-css-color" "^1.0.2"
     "prop-types" "^15.6.0"
 
-"react-native@*", "react-native@> 0.50.0", "react-native@>= 0.30.0", "react-native@>=0.42.0", "react-native@>=0.46.0", "react-native@>=0.50.0", "react-native@>=0.59", "react-native@>=0.61.5", "react-native@>=0.63.0", "react-native@>=0.64.0-rc.0 || 0.0.0-*", "react-native@>=0.65.0", "react-native@>0.62.0", "react-native@0.64.3":
+"react-native@*", "react-native@> 0.50.0", "react-native@>= 0.30.0", "react-native@>=0.42.0", "react-native@>=0.46.0", "react-native@>=0.50.0", "react-native@>=0.59", "react-native@>=0.61.5", "react-native@>=0.63.0", "react-native@>=0.64.0-rc.0 || 0.0.0-*", "react-native@>=0.65.0", "react-native@0.64.3":
   "integrity" "sha512-2OEU74U0Ek1/WeBzPbg6XDsCfjF/9fhrNX/5TFgEiBKd5mNc9LOZ/OlMmkb7iues/ZZ/oc51SbEfLRQdcW0fVw=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.64.3.tgz"
   "version" "0.64.3"
@@ -5818,7 +5796,7 @@
   "resolved" "https://registry.npmjs.org/react-refresh/-/react-refresh-0.4.3.tgz"
   "version" "0.4.3"
 
-"react@*", "react@^16.8 || ^17.0 || ^18.0", "react@^16.8.0 || ^17.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.9.0 || ^17.0.0 || ^18", "react@^17.0.0", "react@^18.0.0", "react@> 15.0.0", "react@>= 15.2.1", "react@>= 16.8.0", "react@>=16.0.0-alpha.12", "react@>=16.3.0", "react@>=17.0.1", "react@17.0.1":
+"react@*", "react@^16.8 || ^17.0 || ^18.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.9.0 || ^17.0.0 || ^18", "react@^17.0.0", "react@^18.0.0", "react@> 15.0.0", "react@>= 15.2.1", "react@>= 16.8.0", "react@>=16.0.0-alpha.12", "react@>=16.3.0", "react@>=17.0.1", "react@17.0.1":
   "integrity" "sha512-lG9c9UuMHdcAexXtigOZLX8exLWkW0Ku29qPRU8uhF2R9BN96dLCt0psvzPLlHc5OWkgymP3qwTRgbnw5BKx3w=="
   "resolved" "https://registry.npmjs.org/react/-/react-17.0.1.tgz"
   "version" "17.0.1"
@@ -6948,15 +6926,6 @@
     "string-width" "^4.1.0"
     "strip-ansi" "^6.0.0"
 
-"wrap-ansi@^7.0.0":
-  "integrity" "sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q=="
-  "resolved" "https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-7.0.0.tgz"
-  "version" "7.0.0"
-  dependencies:
-    "ansi-styles" "^4.0.0"
-    "string-width" "^4.1.0"
-    "strip-ansi" "^6.0.0"
-
 "wrappy@1":
   "integrity" "sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8="
   "resolved" "https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz"
@@ -7067,10 +7036,10 @@
   "resolved" "https://registry.npmjs.org/y18n/-/y18n-4.0.3.tgz"
   "version" "4.0.3"
 
-"y18n@^5.0.5":
-  "integrity" "sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA=="
-  "resolved" "https://registry.npmjs.org/y18n/-/y18n-5.0.8.tgz"
-  "version" "5.0.8"
+"yaeti@^0.0.6":
+  "integrity" "sha1-8m9ITXJoTPQr7ft2lwqhYI+/lXc="
+  "resolved" "https://registry.npmjs.org/yaeti/-/yaeti-0.0.6.tgz"
+  "version" "0.0.6"
 
 "yaeti@^0.0.6":
   "integrity" "sha1-8m9ITXJoTPQr7ft2lwqhYI+/lXc="
@@ -7090,11 +7059,6 @@
     "camelcase" "^5.0.0"
     "decamelize" "^1.2.0"
 
-"yargs-parser@^20.2.2":
-  "integrity" "sha512-y11nGElTIV+CT3Zv9t7VKl+Q3hTQoT9a1Qzezhhl6Rp21gJ/IVTW7Z3y9EWXhuUBC2Shnf+DX0antecpAwSP8w=="
-  "resolved" "https://registry.npmjs.org/yargs-parser/-/yargs-parser-20.2.9.tgz"
-  "version" "20.2.9"
-
 "yargs@^15.1.0", "yargs@^15.3.1":
   "integrity" "sha512-aePbxDmcYW++PaqBsJ+HYUFwCdv4LVvdnhBy78E57PIor8/OVvhMrADFFEDh8DHDFRv/O9i3lPhsENjO7QX0+A=="
   "resolved" "https://registry.npmjs.org/yargs/-/yargs-15.4.1.tgz"
@@ -7111,19 +7075,6 @@
     "which-module" "^2.0.0"
     "y18n" "^4.0.0"
     "yargs-parser" "^18.1.2"
-
-"yargs@^16.1.1":
-  "integrity" "sha512-D1mvvtDG0L5ft/jGWkLpG1+m0eQxOfaBvTNELraWj22wSVUMWxZUvYgJYcKh6jGGIkJFhH4IZPQhR4TKpc8mBw=="
-  "resolved" "https://registry.npmjs.org/yargs/-/yargs-16.2.0.tgz"
-  "version" "16.2.0"
-  dependencies:
-    "cliui" "^7.0.2"
-    "escalade" "^3.1.1"
-    "get-caller-file" "^2.0.5"
-    "require-directory" "^2.1.1"
-    "string-width" "^4.2.0"
-    "y18n" "^5.0.5"
-    "yargs-parser" "^20.2.2"
 
 "yocto-queue@^0.1.0":
   "integrity" "sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q=="
