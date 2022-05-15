@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width;
 
-function ConsultantCard() {
+function ConsultantCard(props) {
 // const ConsultantCard = ({ navigation: { navigate } }) => {
   const navigation = useNavigation();
   const cardWidth = windowWidth/2
@@ -11,15 +11,15 @@ function ConsultantCard() {
   return (
     <TouchableOpacity
       style={{...styles.container, width: cardWidth}}
-      onPress={() => navigation.navigate("ConsultantInfo")}
+      onPress={(props) => navigation.navigate("ConsultantInfo")}
     >
       <Image
         source={require('./me_160x200.jpg')}
         style={{...styles.img ,width: imgWidth, height: imgWidth}}
       >
       </Image>
-      <Text>손형선</Text>
-      <Text>#</Text>
+      <Text>{props.consultantInfo.expertName}</Text>
+      <Text>#{props.consultantInfo.expertDesc}</Text>
     </TouchableOpacity>
 )}
 

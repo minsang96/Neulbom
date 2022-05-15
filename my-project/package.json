@@ -28,6 +28,7 @@
     "expo-splash-screen": "~0.14.1",
     "expo-status-bar": "~1.2.0",
     "metro": "^0.70.2",
+    "net": "^1.0.2",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
@@ -56,7 +57,12 @@
     "react-redux": "^8.0.1",
     "redux": "^4.2.0",
     "redux-flipper": "^2.0.1",
-    "styled-components": "^5.3.5"
+    "sockjs": "^0.3.24",
+    "sockjs-client": "^1.6.0",
+    "stompjs": "^2.3.3",
+    "styled-components": "^5.3.5",
+    "text-encoding": "^0.7.0",
+    "websocket": "^1.0.34"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

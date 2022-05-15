@@ -4,6 +4,8 @@ const initialState = {
   userSeq: null,
   accessToken: null,
   userInfo: null,
+  consultantProfileImageUri: null,
+  consultantCertImageUri: null,
 }
 
 const userSlice = createSlice({
@@ -17,9 +19,17 @@ const userSlice = createSlice({
     logout: (state, action) => {
       state.userSeq = null
       state.accessToken = null
+      state.userInfo = null
     },
     setUserInfo: (state, action) => {
       state.userInfo = action.payload
+    },
+    setConsultantProfileImageUri: (state, action) => {
+      state.consultantProfileImageUri = action.payload
+    },
+    setConsultantCertImageUri: (state, action) => {
+      state.consultantCertImageUri = action.payload
+      console.log(state.consultantCertImageUri)
     }
   }
 });
@@ -27,6 +37,8 @@ const userSlice = createSlice({
 export const {
   login,
   logout,
+  // 등록 안해도 됨..
+  setConsultantProfileImageUri,
 } = userSlice.actions;
 
 export default userSlice;

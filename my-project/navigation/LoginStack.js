@@ -6,6 +6,7 @@ import ConsultantSignUp from '../screens/user/consultantSignup/ConsultantSignUp'
 import SuccessSignUpUser from '../screens/user/userSignup/SuccessSignUpUser';
 import SuccessSignUpConsultant from '../screens/user/consultantSignup/SuccessSignUpConsultant'
 import Chat from '../screens/chat/Chat'
+import CheckImage from '../screens/user/consultantSignup/CheckImage';
 
 const NativeStack = createNativeStackNavigator();
 
@@ -41,6 +42,12 @@ function LoginStack() {
         options={{ title: '전문가 회원가입' }}
         name="ConsultantSignUp"
         component={ConsultantSignUp}
+      />
+      <NativeStack.Screen
+        options={{ title: '전문가 회원가입' }}
+        name="CheckImage"
+        component={CheckImage}
+        getId={({params}) => params.imgType}
       />
       <NativeStack.Screen
         options={{ title: '일반회원 회원가입' }}

@@ -17,7 +17,6 @@ function Root () {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(state => state.user.accessToken)
   useEffect(() => {
-    console.log('Root isLoggedIn: '+isLoggedIn)
     if (!isLoggedIn) {
       const getUserSessionAndLogin = async () => {
         try {
@@ -58,6 +57,7 @@ function Root () {
 
   return (
     <Nav.Navigator screenOptions={{ headerShown: false }}>
+    {/* <Nav.Screen name="Tabs" component={Tabs} /> */}
     {isLoggedIn ? <Nav.Screen name="Tabs" component={Tabs} /> :
     <Nav.Screen name="LoginStack" component={LoginStack} />}
     <Nav.Screen name="Stack" component={Stack} />

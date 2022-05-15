@@ -1,17 +1,45 @@
 import { View, Text, Image, ScrollView, StyleSheet, Dimensions } from 'react-native'
-import { borderColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes'
+import ButtonGreen2 from '../../../components/button/ButtonGreen2'
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import { useDispatch, useSelector } from "react-redux";
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-export default function ConsultantInfo() {
+export default function ConsultantInfo(props) {
+  const navigation = useNavigation();
   const imgHeight = windowHeight*24/100
   const containerWidth = windowWidth*94/100
   const containerHiehgt = windowHeight*71.5/100
+
+  const userSeq = useSelector(state => state.user.userSeq)
+  const toChatRoom = async () => {
+    const room_name = 'halo'
+    let params = new URLSearchParams();
+    params.append("name", room_name);
+    const findAllRoom = async () => {
+      try {
+        await axios.get('https://k6a104.p.ssafy.io/api/chat/rooms').then(response => { this.chatrooms = response.data; });
+      } catch(err) {
+        console.log(err)
+      }
+    }
+    await axios.get(`https://k6a104.p.ssafy.io/api/chat/room/enter/${String(userSeq)}`)
+    .then(
+      response => {
+        alert(response.data.name+"방 개설에 성공하였습니다.")
+        // findAllRoom();
+        navigation.navigate("ChatRoom")
+      }
+      )
+      .catch( response => { alert("채팅방 개설에 실패하였습니다."); console.log(response)} );
+  }
+
   return (
     <ScrollView style={styles.scrollviewContainer}>
-      <View style={{...styles.container, borderRadius: containerWidth*4/100, height: containerHiehgt}}>
-        <Text style={styles.name}>손형선</Text>
+      <View style={{...styles.container, borderRadius: containerWidth*4/100}}>
+        <Text style={styles.name}>{}손형선</Text>
         <View style={{...styles.imgContainer}}>
           <Image
             source={require('../../../components/chat/me_160x200.jpg')}
@@ -36,7 +64,11 @@ export default function ConsultantInfo() {
             <Text>세브란스 병원 구강교정 레지던트 4년ddddddddddddddddddddddddddddddddddddddd</Text>
           </View >
         </View>
-
+        <ButtonGreen2 
+          buttonName='상담하기'
+          width='100%'
+          padding={10}
+          onPressButton={() => toChatRoom()}></ButtonGreen2>
       </View>
     </ScrollView>
 )}
