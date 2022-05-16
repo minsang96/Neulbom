@@ -30,13 +30,11 @@ public class ConsultingServiceImpl implements ConsultingService {
 			obj.put("expertName", cur.getExpertName());
 			obj.put("expertDesc", cur.getExpertDesc());
 			obj.put("expertImg", cur.getExpertImg());
+			obj.put("userSeq", cur.getUserSeq());
 			
 			result.add(obj);
 		}
-		
-//		result.put("exper")
-		System.out.println(experts);
-		
+				
 		return result;
 	}
 
