@@ -24,7 +24,7 @@ const Infomation = (props) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={props.styles.infoItem}
-          onPress={() => navigation.navigate("Nuelbom")}
+          onPress={() => navigation.navigate("Neulbom")}
         >
           <Ionicons name="information-circle" size={24} color="black" />
           <Text style={{ marginTop: 5 }}>늘봄소개</Text>

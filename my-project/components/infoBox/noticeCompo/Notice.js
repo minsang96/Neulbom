@@ -16,10 +16,9 @@ const Notice = () => {
   return (
     <ScrollView style={styles.background}>
       <View>
-        <Text style={{ fontSize: 24, margin: 10 }}>늘봄의 공지사항</Text>
         <TouchableOpacity style={styles.box}>
           <Text
-            onPress={() => navigation.navigate("Notice1")}
+            onPress={() => navigation.navigate("Notice2")}
             style={styles.title}
           >
             두번째 공지사항(수정중)

@@ -79,6 +79,8 @@ const Tabs = () => (
               ></Ionicons>
             );
           },
+          headerBackTitleVisible: false,
+          headerShown: false,
         }}
       ></Tab.Screen>
     </Tab.Navigator>

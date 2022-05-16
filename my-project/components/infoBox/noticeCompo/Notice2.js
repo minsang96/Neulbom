@@ -4,17 +4,25 @@ import { Dimensions } from "react-native";
 
 const screenSize = Dimensions.get("screen");
 
-const Nuelbom = () => {
+const Notice2 = () => {
   return (
     <ScrollView style={styles.background}>
       <View style={styles.box}>
-        <Text>이것은 늘봄 소개</Text>
+        <View style={styles.titleBox}>
+          <Text style={styles.title}>ver 1.0 출시</Text>
+          <Text style={{ textAlign: "right" }}>2022-05-14</Text>
+        </View>
+        <View style={styles.line} />
+        <Text>
+          안녕하세요! 그리고 어서오세요! {"\n"}여러분의 건강을 유지하기 위해
+          노력하는 늘봄입니다.
+        </Text>
       </View>
     </ScrollView>
   );
 };
 
-export default Nuelbom;
+export default Notice2;
 
 const styles = StyleSheet.create({
   background: {

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Text,
-  TouchableOpacity,
   StyleSheet,
   ScrollView,
   TextInput,
@@ -11,7 +10,13 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 import ButtonCompo from "../../../components/button/ButtonCompo";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import UploadMode from "../../../components/modal/UploadMode";
+import * as ImagePicker from "expo-image-picker";
+import userImageSlice from "../../../slices/updateUser";
+import axios from "axios";
+import { getExpertInfo } from "../../../api/getUserInfo";
+import userSlice from "../../../slices/user";
 
 const screenSize = Dimensions.get("screen");
 
@@ -19,28 +24,97 @@ const ConsultantMypageUpdate = (props) => {
   const userInfo = useSelector((state) => state.user.userInfo);
   const userSeq = useSelector((state) => state.user.userSeq);
   const accessToken = useSelector((state) => state.user.accessToken);
+  const [memberImg, setMemberImg] = useState(userInfo.expertImg);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // 수정하기-api 연결이 잘 안돼요(현정)
+  // 수정하기-data, 삭제, input 기능(현정)
+  const dispatch = useDispatch();
   const updateUserInfo = async () => {
     const data = {
       career: ["싸피 병원 근무무", "싸피 보건소 근무"],
       desc: "건강한 식습관 만들어요.",
-      expertImg:
-        "https://neulbom-s3-bucket.s3.ap-northeast-2.amazonaws.com/Profile/profile_1651121992083.jpg",
+      expertImg: memberImg,
       userSeq: userSeq,
     };
 
     try {
-      await axios.post("https://k6a104.p.ssafy.io/api/member/modify", data, {
+      await axios.post("https://k6a104.p.ssafy.io/api/expert/modify", data, {
         headers: {
           Authorization: accessToken,
         },
       });
-
-      const response = await getMemeberInfo(accessToken, userSeq);
+      const response = await getExpertInfo(accessToken, userSeq);
       dispatch(userSlice.actions.setUserInfo(response.data));
     } catch (err) {
       console.log(err);
+    }
+  };
+  const onCamera = async () => {
+    setLoading(true);
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+      saveToPhotos: true,
+    });
+
+    if (!result.cancelled) {
+      setMemberImg(result.uri);
+      dispatch(userImageSlice.actions.addImageUrls(result.uri));
+    }
+  };
+
+  const onGallery = async () => {
+    setLoading(true);
+    try {
+      let result_g = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        // aspect: [4, 3],
+        quality: 1,
+      });
+      console.log(result_g.uri);
+
+      if (!result_g.cancelled) {
+        setMemberImg(result_g.uri);
+
+        const frm = new FormData();
+        const addimage = {
+          uri: result_g.uri,
+          type: "multipart/form-data",
+          name: result_g.uri.split("/").slice(-1)[0],
+        };
+        frm.append("file", addimage);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const saveImage = async () => {
+    try {
+      const frm = new FormData();
+      const addimage = {
+        uri: memberImg,
+        type: "multipart/form-data",
+        name: memberImg,
+      };
+      frm.append("file", addimage);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 이미지 업로드 axios 보내는 로직
+  const saveImageAxios = async () => {
+    try {
+      if (memberImg !== null) {
+        await saveImage();
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -48,19 +122,16 @@ const ConsultantMypageUpdate = (props) => {
   const navigation = useNavigation();
   return (
     <ScrollView style={styles.background}>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("ConsultantMypage"), props.onClick();
-        }}
-      >
-        <Text>뒤로가기</Text>
-      </TouchableOpacity>
       <View style={{ alignItems: "center", marginVertical: 10 }}>
-        {/* <Image
-          source={{ uri: userInfo.expertImg }}
-          style={styles.image}
-        ></Image>
-        <Text style={styles.changingText}>사진 변경</Text>
+        <Image source={{ uri: memberImg }} style={styles.image}></Image>
+        <Text
+          style={styles.changingText}
+          onPress={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          사진 변경
+        </Text>
       </View>
       <View style={styles.box}>
         <Text style={styles.title}>한 줄 소개</Text>
@@ -82,7 +153,7 @@ const ConsultantMypageUpdate = (props) => {
             <Text key={index}>{data.careerContent}</Text>
             <Text>X</Text>
           </View>
-        ))} */}
+        ))}
         {/* 수정하기-textinput 추가하기(현정) */}
         <Text
           style={styles.changingText}
@@ -96,11 +167,18 @@ const ConsultantMypageUpdate = (props) => {
       <ButtonCompo
         buttonName="수정 완료"
         onPressButton={() => {
-          updateUserInfo(),
-            navigation.navigate("ConsultantMypage"),
-            props.onClick();
+          updateUserInfo();
+          navigation.navigate("ConsultantMypage");
+          props.onClick();
+          saveImageAxios;
         }}
       ></ButtonCompo>
+      <UploadMode
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onCamera={onCamera}
+        onGallery={onGallery}
+      ></UploadMode>
     </ScrollView>
   );
 };

@@ -40,14 +40,6 @@ const UserMypage = (props) => {
 
   return (
     <ScrollView style={styles.background}>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("MypageUpdate"), props.onClick();
-        }}
-      >
-        <Text>수정하기</Text>
-      </TouchableOpacity>
-
       <Text style={styles.title}>내 소개 😊</Text>
       <InfoMyself styles={styles} update={props.update}></InfoMyself>
       <Text style={styles.title}>권장 섭취량 ✨</Text>

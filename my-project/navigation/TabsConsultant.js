@@ -46,6 +46,8 @@ const TabsConsultant = () => (
               ></Ionicons>
             );
           },
+          headerBackTitleVisible: false,
+          headerShown: false,
         }}
       ></Tab.Screen>
     </Tab.Navigator>
