@@ -45,7 +45,6 @@ const FoodWrite = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const images = useSelector((state) => state.images);
-  // const total_meal = useSelector((state) => state.images[`total_${current}`]);
   const [imagesLength, setImagesLength] = useState(0);
   const [image, setImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -61,9 +60,7 @@ const FoodWrite = () => {
   useEffect(() => {
     setImagesLength(images[current].length);
     setImageLength(images.add.length);
-    console.log("current", current);
-    console.log("here", images[current].length);
-    console.log("여기", images[`total_${current}`]);
+
     if (images[current].length == 0) {
       setData(false);
       setModalVisible(true);
@@ -229,6 +226,7 @@ const FoodWrite = () => {
           console.log(response1);
         }
       }
+      navigation.navigate("식단관리");
     } catch (error) {
       console.log(error);
     } finally {
@@ -241,15 +239,11 @@ const FoodWrite = () => {
   };
 
   const onDelete = (idx) => {
-    console.log("delete", idx);
-    console.log("delete real", imageLength - idx);
-    console.log(user.accessToken);
-    console.log(user.userSeq);
     dispatch(imagesSlice.actions.remove(imageLength - idx));
+    setImage(null);
   };
 
   const onDeleteDB = (dietSeq, idx) => {
-    console.log("deleteDB", dietSeq);
     dispatch(imagesSlice.actions.removeDB({ current, dietSeq }));
   };
 
@@ -280,16 +274,35 @@ const FoodWrite = () => {
                   <Text>Loading...</Text>
                 ) : recognize ? (
                   <>
-                    <Text>이미지 있고 인식 성공</Text>
-                    <Text>인식 성공!</Text>
                     <Text>{analyze.foodName}</Text>
-                    <Text>{analyze.foodAmount}</Text>
-                    <Text>{analyze.foodKcal}</Text>
+                    <Text>{analyze.foodAmount}g(1인분)</Text>
+                    <View>
+                      <ButtonCompo buttonName="섭취량 변경"></ButtonCompo>
+                    </View>
+                    <Text>칼로리 {analyze.foodKcal} kcal</Text>
+                    <Text>나트륨 {analyze.foodNatrium} mg</Text>
+                    <Text>당류 {analyze.foodSugars} mg</Text>
+                    <Text>탄수화물 {analyze.foodCarbohydrate} g</Text>
+                    <Text>단백질 {analyze.foodProtein} g</Text>
+                    <Text>지방 {analyze.foodFat} g</Text>
                   </>
                 ) : (
                   <>
                     <Text>이미지 있고 인식 실패</Text>
-                    <Text>음식을 인식할 수 없습니다</Text>
+                    {images.add.length > 0 ? (
+                      <>
+                        <View>
+                          {/* <Text>{images.add.slice(-1)[0].food.foodName}</Text>
+                          <Text>{images.add.slice(-1)[0].food.foodAmount}</Text> */}
+                          <Text>(1인분)</Text>
+                        </View>
+                        <View>
+                          <ButtonCompo buttonName="섭취량 변경"></ButtonCompo>
+                        </View>
+                      </>
+                    ) : (
+                      <Text>음식을 인식할 수 없습니다</Text>
+                    )}
                   </>
                 )}
               </>
@@ -349,7 +362,7 @@ const FoodWrite = () => {
                 </View>
               </>
             ) : (
-              <Text>아무것도 없어</Text>
+              <Text>아무 사진도 없습니다.</Text>
             )}
           </>
 
@@ -364,10 +377,6 @@ const FoodWrite = () => {
                   })
                 }
               ></ButtonCompo>
-              {/* <ButtonCompo
-                buttonName="다시 찍기"
-                onPressButton={() => console.log("press 다시 찍기")}
-              ></ButtonCompo> */}
             </>
           )}
           <View>
@@ -433,7 +442,7 @@ const FoodWrite = () => {
           </View>
         </View>
         <View>
-          <Text>{current} 섭취 량</Text>
+          <Text>{current} 섭취량</Text>
           <Text>칼로리: {images[`total_${current}`].kcal} kcal</Text>
           <Text>나트륨: {images[`total_${current}`].natrium} mg</Text>
           <Text>당류: {images[`total_${current}`].sugars} g</Text>
