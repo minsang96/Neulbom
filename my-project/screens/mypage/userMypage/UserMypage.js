@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import ButtonCompo from "../../../components/button/ButtonCompo";
-import AlarmSetting from "../../../components/infoBox/AlarmSetting";
+import BpAlarmSetting from "../../../components/infoBox/BpAlarmSetting";
+import BsAlarmSetting from "../../../components/infoBox/BsAlarmSetting";
 import InfoMyDisease from "../../../components/infoBox/InfoMyDisease";
 import InfoMyself from "../../../components/infoBox/InfoMyself";
 import Intake from "../../../components/infoBox/Intake";
@@ -47,7 +48,8 @@ const UserMypage = (props) => {
       <Text style={styles.title}>건강 수치 ✨</Text>
       <SelectBox styles={styles}></SelectBox>
       <Text style={styles.title}>알림 설정 ✨</Text>
-      <AlarmSetting styles={styles}></AlarmSetting>
+      <BpAlarmSetting styles={styles}></BpAlarmSetting>
+      <BsAlarmSetting styles={styles}></BsAlarmSetting>
       <Text style={styles.title}>질병 소개 ✨</Text>
       <InfoMyDisease styles={styles}></InfoMyDisease>
       <Text style={styles.title}>이용 안내 ✨</Text>
