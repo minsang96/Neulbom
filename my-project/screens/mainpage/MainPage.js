@@ -10,6 +10,7 @@ import imagesSlice from "../../slices/images";
 import { getDiet } from "../../api/diets";
 import dietdailySlice from "../../slices/dietdaily";
 import moment from "moment";
+import userSlice from "../../slices/user";
 
 const Box = styled.View`
   flex: 1;
@@ -27,6 +28,7 @@ const MainPage = ({ navigation: { navigate } }) => {
   const user = useSelector((state) => state.user);
   const yourDate = moment(d, "yyyy-mm-dd").format();
   const formatted = yourDate.split("T")[0];
+
   // 첫 화면을 그릴 때 일일 영양 섭취량 정보를 리덕스에 저장
   const getMyDiet = async () => {
     try {
@@ -61,6 +63,18 @@ const MainPage = ({ navigation: { navigate } }) => {
     console.log("ip");
   });
 
+  const logout = () => {
+    async function removeUserSession() {
+      try {
+        await EncryptedStorage.removeItem("user_session");
+      } catch (error) {
+        console.log(error.code);
+      }
+    }
+    dispatch(userSlice.actions.logout());
+    removeUserSession();
+  };
+
   return (
     <Container style={{ backgroundColor: "white" }}>
       <Box>
@@ -81,6 +95,10 @@ const MainPage = ({ navigation: { navigate } }) => {
         ></ButtonCompo> */}
         <DietList></DietList>
       </Box>
+      <ButtonCompo
+        onPressButton={() => logout()}
+        buttonName="로그아웃"
+      ></ButtonCompo>
     </Container>
   );
 };

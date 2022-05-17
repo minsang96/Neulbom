@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text, View } from "react-native";
 import { useSelector } from "react-redux";
 
 const Qualification = (props) => {
   const userInfo = useSelector((state) => state.user.userInfo);
-
+  const [loading, setLoading] = useState(true);
   return (
     <View style={props.styles.box}>
       <Text style={props.styles.subtitle}>🏅 자격</Text>
