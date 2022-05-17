@@ -11,6 +11,7 @@ import { getDiet } from "../../api/diets";
 import dietdailySlice from "../../slices/dietdaily";
 import moment from "moment";
 import AddTodayRecord from "../calendar/calendarTab/component/AddTodayRecord";
+import userSlice from "../../slices/user";
 
 const Box = styled.View`
   flex: 1;
@@ -66,6 +67,18 @@ const MainPage = ({ navigation: { navigate } }) => {
     console.log("ip");
   });
 
+  const logout = () => {
+    async function removeUserSession() {
+      try {
+        await EncryptedStorage.removeItem("user_session");
+      } catch (error) {
+        console.log(error.code);
+      }
+    }
+    dispatch(userSlice.actions.logout());
+    removeUserSession();
+  };
+
   return (
     <Container style={{ backgroundColor: "white" }}>
       <Box>
@@ -91,6 +104,10 @@ const MainPage = ({ navigation: { navigate } }) => {
         ></ButtonCompo> */}
         <DietList></DietList>
       </Box>
+      <ButtonCompo
+        onPressButton={() => logout()}
+        buttonName="로그아웃"
+      ></ButtonCompo>
     </Container>
   );
 };
