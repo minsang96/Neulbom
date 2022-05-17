@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 
 const InfoConsultant = (props) => {
   const userInfo = useSelector((state) => state.user.userInfo);
-  console.log(userInfo);
 
   return (
     <View style={props.styles.box}>

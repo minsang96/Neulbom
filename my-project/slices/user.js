@@ -4,6 +4,7 @@ const initialState = {
   userSeq: null,
   accessToken: null,
   userInfo: null,
+  isLoggin: false,
 };
 
 const userSlice = createSlice({
@@ -17,9 +18,13 @@ const userSlice = createSlice({
     logout: (state, action) => {
       state.userSeq = null;
       state.accessToken = null;
+      state.userInfo = null;
     },
     setUserInfo: (state, action) => {
       state.userInfo = action.payload;
+    },
+    setIsLoggin: (state, action) => {
+      state.isLoggin = true;
     },
   },
 });

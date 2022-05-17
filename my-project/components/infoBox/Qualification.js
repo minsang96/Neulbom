@@ -8,23 +8,17 @@ const Qualification = (props) => {
   return (
     <View style={props.styles.box}>
       <Text style={props.styles.subtitle}>🏅 자격</Text>
-      <Text style={props.styles.box}>{userInfo.expertCert}</Text>
+      {/* <Text style={props.styles.box}>{userInfo.expertCert}</Text>
       <Text style={props.styles.subtitle}>💼 이력</Text>
       <View style={props.styles.box}>
-        {/* {userInfo.expertCareer ? (
-          <Text>NOTHING IN EXPERT CAREER</Text>
-        ) : (
-          <>
-            {userInfo.expertCareer.map((data) => (
-              <View>
-                <Text key={data.careerSeq} style={{ color: "black" }}>
-                  {data.careerContent}
-                </Text>
-              </View>
-            ))}
-          </>
-        )} */}
-      </View>
+        {userInfo.expertCareer.map((data) => (
+          <View>
+            <Text key={data.careerSeq} style={{ color: "black" }}>
+              {data.careerContent}
+            </Text>
+          </View>
+        ))}
+      </View> */}
     </View>
   );
 };

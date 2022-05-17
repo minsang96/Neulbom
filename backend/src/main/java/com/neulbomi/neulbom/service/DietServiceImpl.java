@@ -338,6 +338,7 @@ public class DietServiceImpl implements DietService {
 		
 		// 분석한 음식 코드
 		String code = response.get("code").asText();
+		double quantity = response.get("quantity").asDouble();
 		
 		// 분석한 음식
 		Food food = foodRepository.findFood(code);
@@ -362,6 +363,7 @@ public class DietServiceImpl implements DietService {
 		obj.put("foodZinc", food.getFoodZinc());
 		obj.put("foodCholesterol", food.getFoodCholesterol());
 		obj.put("foodTransfat", food.getFoodTransfat());
+		obj.put("quantity", quantity);
 	 
 		return obj;
 	 

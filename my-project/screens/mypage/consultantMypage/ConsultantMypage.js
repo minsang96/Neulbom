@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import ButtonCompo from "../../../components/button/ButtonCompo";
 import Infomation from "../../../components/infoBox/Infomation";
@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 import Qualification from "../../../components/infoBox/Qualification";
 import InfoConsultant from "../../../components/infoBox/InfoConsultant";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import userSlice from "../../../slices/user";
 import EncryptedStorage from "react-native-encrypted-storage";
 
@@ -19,9 +19,7 @@ const ConsultantMypage = (props) => {
     async function removeUserSession() {
       try {
         await EncryptedStorage.removeItem("user_session");
-        // Congrats! You've just removed your first value!
       } catch (error) {
-        // There was an error on the native side
         console.log(error.code);
       }
     }
@@ -30,13 +28,6 @@ const ConsultantMypage = (props) => {
   };
   return (
     <ScrollView style={styles.background}>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("ConsultantMypageUpdate"), props.onClick();
-        }}
-      >
-        <Text>수정하기</Text>
-      </TouchableOpacity>
       <Text style={styles.title}>내 소개 😊</Text>
       <InfoConsultant
         styles={styles}

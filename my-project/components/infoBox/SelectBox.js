@@ -6,19 +6,10 @@ import { Dimensions } from "react-native";
 const SelectBox = (props) => {
   const userInfo = useSelector((state) => state.user.userInfo);
   const [loading, setLoading] = useState(true);
-  const [BPColor, setBPColor] = useState(false);
-  const [BSColor, setBSColor] = useState(false);
 
   useEffect(() => {
-    for (let i in userInfo.setting) {
-      if (userInfo.setting[i] === "bloodPressure") {
-        setBPColor(true);
-      } else if (userInfo.setting[i] === "bloodSugar") {
-        setBSColor(true);
-      }
-    }
     setLoading(false);
-  }, []);
+  }, [userInfo]);
 
   return (
     <View>
@@ -29,12 +20,16 @@ const SelectBox = (props) => {
           <View
             style={[
               styles.button,
-              { backgroundColor: BPColor === true ? "#09BC8A" : "white" },
+              {
+                backgroundColor:
+                  userInfo.setting.bloodPressure === true ? "#09BC8A" : "white",
+              },
             ]}
           >
             <Text
               style={{
-                color: BPColor === true ? "white" : "black",
+                color:
+                  userInfo.setting.bloodPressure === true ? "white" : "black",
                 fontSize: 16,
               }}
             >
@@ -44,12 +39,15 @@ const SelectBox = (props) => {
           <View
             style={[
               styles.button,
-              { backgroundColor: BSColor === true ? "#09BC8A" : "white" },
+              {
+                backgroundColor:
+                  userInfo.setting.bloodSugar === true ? "#09BC8A" : "white",
+              },
             ]}
           >
             <Text
               style={{
-                color: BSColor === true ? "white" : "black",
+                color: userInfo.setting.bloodSugar === true ? "white" : "black",
                 fontSize: 16,
               }}
             >

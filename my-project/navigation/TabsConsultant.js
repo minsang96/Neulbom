@@ -1,6 +1,4 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import MainPage from "../screens/mainpage/MainPage";
-import Calendar from "../screens/calendar/Calendar";
 import Chat from "../screens/chat/Chat";
 import Mypage from "../screens/mypage/Mypage";
 import { Ionicons } from "@expo/vector-icons";
@@ -9,7 +7,7 @@ import store from "../store";
 
 const Tab = createBottomTabNavigator();
 
-const Tabs = () => (
+const TabsConsultant = () => (
   <Provider store={store}>
     <Tab.Navigator
       initialRouteName="식단관리"
@@ -20,37 +18,6 @@ const Tabs = () => (
         },
       }}
     >
-      <Tab.Screen
-        name="식단관리"
-        component={MainPage}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ focused, color, size }) => {
-            return (
-              <Ionicons
-                name={focused ? "restaurant" : "restaurant-outline"}
-                color={color}
-                size={size}
-              ></Ionicons>
-            );
-          },
-        }}
-      ></Tab.Screen>
-      <Tab.Screen
-        name="건강달력"
-        component={Calendar}
-        options={{
-          tabBarIcon: ({ focused, color, size }) => {
-            return (
-              <Ionicons
-                name={focused ? "calendar" : "calendar-sharp"}
-                color={color}
-                size={size}
-              ></Ionicons>
-            );
-          },
-        }}
-      ></Tab.Screen>
       <Tab.Screen
         name="전문가상담"
         component={Chat}
@@ -87,4 +54,4 @@ const Tabs = () => (
   </Provider>
 );
 
-export default Tabs;
+export default TabsConsultant;

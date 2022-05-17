@@ -39,6 +39,7 @@ const DailyReport = () => {
     setIsDate(selectDate);
     showDatePicker();
   };
+  const other = useSelector((state) => state.dailyReport.other);
 
   const todayBloodPressure = useSelector(
     (state) => state.dailyReport.todayBloodPressure
@@ -108,6 +109,14 @@ const DailyReport = () => {
     getDailyNutirentResult();
     getDailyOtherResult();
   }, []);
+
+  // useEffect(() => {
+  //   getDailyBloodpressureResult();
+  //   getDailyBloodSugarResult();
+  //   getCalorieResult();
+  //   getDailyNutirentResult();
+  //   getDailyOtherResult();
+  // }, [todayBloodPressure, todayBloodSugar, intakeNutrient, other]);
 
   useEffect(() => {
     if (
