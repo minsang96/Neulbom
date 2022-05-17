@@ -21,7 +21,8 @@ const Notice = () => {
             onPress={() => navigation.navigate("Notice2")}
             style={styles.title}
           >
-            두번째 공지사항(수정중)
+            방금 업데이트 한 것 같은데 또 찾아온{" "}
+            <Text style={{ fontWeight: "bold" }}>1.1</Text> 업데이트 안내
           </Text>
           <Text style={styles.date}>2022-05-16</Text>
         </TouchableOpacity>
@@ -30,7 +31,7 @@ const Notice = () => {
             style={styles.title}
             onPress={() => navigation.navigate("Notice1")}
           >
-            ver 1.0 출시
+            안녕하세요! 늘봄 1.0 출시 안내
           </Text>
           <Text style={styles.date}>2022-05-14</Text>
         </TouchableOpacity>

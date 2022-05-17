@@ -24,16 +24,21 @@ const ConsultantMypageUpdate = (props) => {
   const userInfo = useSelector((state) => state.user.userInfo);
   const userSeq = useSelector((state) => state.user.userSeq);
   const accessToken = useSelector((state) => state.user.accessToken);
+  const careerList = useSelector((state) => state.user.userInfo.expertCareer);
   const [memberImg, setMemberImg] = useState(userInfo.expertImg);
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [expertDesc, setExpertDesc] = useState(userInfo.expertDesc);
+  const [career, setCareer] = useState("");
+  const [careerUpdateList, setCareerUpdateList] = useState([]);
+  const navigation = useNavigation();
 
   // 수정하기-data, 삭제, input 기능(현정)
   const dispatch = useDispatch();
   const updateUserInfo = async () => {
     const data = {
-      career: ["싸피 병원 근무무", "싸피 보건소 근무"],
-      desc: "건강한 식습관 만들어요.",
+      career: careerUpdateList[0],
+      desc: expertDesc,
       expertImg: memberImg,
       userSeq: userSeq,
     };
@@ -44,8 +49,10 @@ const ConsultantMypageUpdate = (props) => {
           Authorization: accessToken,
         },
       });
+
       const response = await getExpertInfo(accessToken, userSeq);
       dispatch(userSlice.actions.setUserInfo(response.data));
+      // dispatch(userSlice.actions.setUserInfo(response.data.career));
     } catch (err) {
       console.log(err);
     }
@@ -118,8 +125,6 @@ const ConsultantMypageUpdate = (props) => {
     }
   };
 
-  const [expertDesc, setExpertDesc] = useState(userInfo.expertDesc);
-  const navigation = useNavigation();
   return (
     <ScrollView style={styles.background}>
       <View style={{ alignItems: "center", marginVertical: 10 }}>
@@ -146,23 +151,34 @@ const ConsultantMypageUpdate = (props) => {
       </View>
       <View style={styles.box}>
         <Text style={styles.title}>이력 사항</Text>
-        {userInfo.expertCareer.map((data, index) => (
+        {careerList.map((data, index) => (
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
             <Text key={index}>{data.careerContent}</Text>
-            <Text>X</Text>
+            {/* <Text>X</Text> */}
+            {/* 삭제하기(현정) */}
           </View>
         ))}
-        {/* 수정하기-textinput 추가하기(현정) */}
-        <Text
-          style={styles.changingText}
-          onPress={() => {
-            // userInfo.expertCareer.push();
-          }}
-        >
-          + 추가하기
-        </Text>
+        <View style={{ flexDirection: "row" }}>
+          <TextInput
+            style={styles.InputBox}
+            onChangeText={(text) => {
+              setCareer(text);
+            }}
+          ></TextInput>
+          <Text
+            style={styles.uploadText}
+            onPress={() => {
+              setCareerUpdateList((oldList) => [...oldList, [career]]);
+              dispatch(
+                userSlice.actions.setUpdateCareer({ careerContent: career })
+              );
+            }}
+          >
+            추가
+          </Text>
+        </View>
       </View>
       <ButtonCompo
         buttonName="수정 완료"
@@ -222,11 +238,25 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingBottom: 2,
   },
+  InputBox: {
+    borderColor: "black",
+    borderBottomWidth: 1,
+    width: screenSize.width * 0.68,
+    marginLeft: screenSize.width * 0.01,
+    fontSize: 16,
+    paddingBottom: 2,
+  },
   changingText: {
     fontSize: 16,
     color: "#09BC8A",
     marginVertical: 5,
     textAlign: "center",
+  },
+  uploadText: {
+    fontSize: 16,
+    color: "#09BC8A",
+    marginVertical: 5,
+    marginLeft: 10,
   },
   button: {
     backgroundColor: "#09BC8A",
