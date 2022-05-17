@@ -26,6 +26,9 @@ const userSlice = createSlice({
     setIsLoggin: (state, action) => {
       state.isLoggin = true;
     },
+    setUpdateCareer: (state, action) => {
+      state.userInfo.expertCareer.push(action.payload);
+    },
   },
 });
 
