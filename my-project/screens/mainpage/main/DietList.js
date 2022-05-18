@@ -23,12 +23,6 @@ const DietList = () => {
         <Lunch></Lunch>
         <Dinner></Dinner>
       </Box>
-      <ButtonCompo
-        buttonName="+ 간식 추가"
-        onPressButton={() =>
-          navigation.navigate("Stack", { screen: "SnackWrite" })
-        }
-      ></ButtonCompo>
     </>
   );
 };

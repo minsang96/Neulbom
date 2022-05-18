@@ -49,6 +49,7 @@ const MainPage = ({ navigation: { navigate } }) => {
       console.log("diet/daily");
     }
   };
+
   useEffect(() => {
     getMyDiet();
   }, []);
