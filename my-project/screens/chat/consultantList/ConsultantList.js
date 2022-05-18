@@ -1,13 +1,16 @@
-import { View, StyleSheet, FlatList } from "react-native";
+import { View, StyleSheet, FlatList, ScrollView, Text } from "react-native";
 import ConsultantCard from '../../../components/chat/ConsultantCard'
 import axios from 'axios';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import chatSlice from '../../../slices/chat'
 
 const ConsultantList = () => {
   const dispatch = useDispatch();
   const consultants = useSelector(state => state.chat.consultants)
+  const chatList = useSelector((state) => state.chat.chatList);
+
+  console.log('Redux ChatList:', chatList)
   const getConsultantList = async() => {
     try {
       const res = await axios.get('https://k6a104.p.ssafy.io/api/consulting/expert')
@@ -20,12 +23,17 @@ const ConsultantList = () => {
 
     }
   }
+
   console.log(consultants)
   useEffect(() => {
+    console.log('Page: ConsultantList')
     getConsultantList()
   }, [])
+  useEffect(() => {
+
+  }, [])
   return (
-  <FlatList
+    <FlatList
     style={styles.container}
     horizontal={false}
     numColumns={2}
@@ -33,19 +41,24 @@ const ConsultantList = () => {
       Platform.OS !== 'android' &&
       (({ highlighted }) => (
         <View
-          style={[
-            style.separator,
-            highlighted && { marginLeft: 0 }
-          ]}
+        style={[
+          style.separator,
+          highlighted && { marginLeft: 0 }
+        ]}
         />
-      ))
-    }
-    data={consultants}
-    renderItem={({ item, index, separators }) => (
-      // data={[{item}, {item2}, {item3}]}
-      <ConsultantCard consultantInfo={item} key={index}/>
-    )}
-  />
+        ))
+      }
+      data={consultants}
+      keyExtractor={(item, index) => {
+        return index.toString();
+      }}
+      renderItem={({ item, index, separators }) => (
+        // data={[{item}, {item2}, {item3}]}
+        <ConsultantCard consultantInfo={item}
+          // key={item.userSeq}
+        />
+        )}
+    />
   )
 }
 

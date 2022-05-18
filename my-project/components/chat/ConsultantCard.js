@@ -8,18 +8,19 @@ function ConsultantCard(props) {
   const navigation = useNavigation();
   const cardWidth = windowWidth/2
   const imgWidth = cardWidth*55/100
+  const consultantInfo = props.consultantInfo
   return (
     <TouchableOpacity
       style={{...styles.container, width: cardWidth}}
-      onPress={(props) => navigation.navigate("ConsultantInfo")}
+      onPress={() => navigation.navigate("ConsultantInfo", consultantInfo)}
     >
       <Image
         source={require('./me_160x200.jpg')}
         style={{...styles.img ,width: imgWidth, height: imgWidth}}
       >
       </Image>
-      <Text>{props.consultantInfo.expertName}</Text>
-      <Text>#{props.consultantInfo.expertDesc}</Text>
+      <Text>{consultantInfo.expertName}</Text>
+      <Text>#{consultantInfo.expertDesc}</Text>
     </TouchableOpacity>
 )}
 
