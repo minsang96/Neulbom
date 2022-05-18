@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "449635761883",
+    "project_id": "neulbom-a104",
+    "storage_bucket": "neulbom-a104.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449635761883:android:061ce8e18490344c99d6fe",
+        "android_client_info": {
+          "package_name": "com.neulbompjt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "449635761883-48003lejsajq6eg9vucnku89l3l4fmk5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIY1v3-brd1Cw68A0043G41DVtOr4xE1Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "449635761883-48003lejsajq6eg9vucnku89l3l4fmk5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
