@@ -74,6 +74,7 @@ export default function ConsultantInfo(props) {
               }
           });
         }
+        connect()
       }
     }
     navigation.navigate("ChatRoom", {consultantName: consultantInfo.expertName, consultantSeq: consultantSeq})
