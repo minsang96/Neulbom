@@ -53,28 +53,27 @@ export async function searchDiet(keyword) {
 
 // 음식 인식 temp 함수
 export async function analyzeDiet(userSeq, file) {
-  // console.log("analyzeDiet", userSeq, file);
-  // const response = await client({
-  //   method: "post",
-  //   url: "/diet/analyze",
-  //   data: file,
-  //   params: { userSeq: userSeq },
-  //   headers: {
-  //     "content-type": "multipart/form-data",
-  //   },
-  // });
-  // return response.data;
-  return { message: "음식 분석 실패, 음식 검색을 이용하세요." };
+  console.log("analyzeDiet", userSeq, file);
+  const response = await client({
+    method: "post",
+    url: "/diet/analyze",
+    data: file,
+    params: { userSeq: userSeq },
+    headers: {
+      "content-type": "multipart/form-data",
+    },
+  });
+  return response.data;
+  // return { message: "음식 분석 실패, 음식 검색을 이용하세요." };
 }
 
 // 식단 저장
 export async function recordDiet(diets) {
-  console.log("input", diets);
   const response = await client({
     method: "post",
     url: "/diet/record",
     data: diets,
-  }).then(console.log(diets));
+  });
   return response.data;
 }
 

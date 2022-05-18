@@ -100,31 +100,32 @@ const imagesSlice = createSlice({
 
     removeDB: (state, action) => {
       console.log(action.payload);
-      state.remove.push(action.payload.dietSeq);
-      // if (action.payload.current == "breakfast") {
-      // return {
-      //   ...state,
-      //   breakfast: state.breakfast.filter(
-      //     (food) => food.dietSeq !== action.payload.dietSeq
-      //   ),
-
-      // };
-      // };
-      //   } else if (action.payload.current == "lunch") {
-      //     return {
-      //       ...state,
-      //       lunch: state.lunch.filter(
-      //         (food) => food.dietSeq !== action.payload.dietSeq
-      //       ),
-      //     };
-      //   } else if (action.payload.current == "dinner") {
-      //     return {
-      //       ...state,
-      //       dinner: state.dinner.filter(
-      //         (food) => food.dietSeq !== action.payload.dietSeq
-      //       ),
-      //     };
-      //   }
+      state.remove.push(action.payload);
+    },
+    remove_breakfast: (state, action) => {
+      // state.remove.push(action.payload.dietSeq);
+      return {
+        ...state,
+        breakfast: state.breakfast.filter(
+          (food) => food.dietSeq !== action.payload
+        ),
+      };
+    },
+    remove_lunch: (state, action) => {
+      return {
+        ...state,
+        lunch: state.breakfast.filter(
+          (food) => food.dietSeq !== action.payload
+        ),
+      };
+    },
+    remove_dinner: (state, action) => {
+      return {
+        ...state,
+        dinner: state.breakfast.filter(
+          (food) => food.dietSeq !== action.payload
+        ),
+      };
     },
   },
 });
@@ -139,6 +140,7 @@ export const {
   removeDB,
   addNum,
   addFood,
+  remove_breakfast,
 } = imagesSlice.actions;
 
 export default imagesSlice;

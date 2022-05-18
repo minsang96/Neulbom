@@ -14,6 +14,11 @@
 		96905EF65AED1B983A6B3ABC /* libPods-myproject.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-myproject.a */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		FBF0727286F64636973CD488 /* SeoulNamsanB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7EB919377614F9EA70A1BD8 /* SeoulNamsanB.ttf */; };
+		E20B8650EB2F4673AF61555F /* SeoulNamsanEB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A0562D32C9F94C6F9DB38DDA /* SeoulNamsanEB.ttf */; };
+		EDE6F2DF74164552BF150926 /* SeoulNamsanL.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8990D88200C344E991704788 /* SeoulNamsanL.ttf */; };
+		1BA67E56248446F581C2B874 /* SeoulNamsanM.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BBC93C8C3205433BADEDF0E4 /* SeoulNamsanM.ttf */; };
+		8C10989985874D15948AB1F6 /* SeoulNamsanvert.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9682CB1A338B4AB3A8C5A293 /* SeoulNamsanvert.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +36,11 @@
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-myproject/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		A7EB919377614F9EA70A1BD8 /* SeoulNamsanB.ttf */ = {isa = PBXFileReference; name = "SeoulNamsanB.ttf"; path = "../assets/fonts/SeoulNamsanB.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A0562D32C9F94C6F9DB38DDA /* SeoulNamsanEB.ttf */ = {isa = PBXFileReference; name = "SeoulNamsanEB.ttf"; path = "../assets/fonts/SeoulNamsanEB.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8990D88200C344E991704788 /* SeoulNamsanL.ttf */ = {isa = PBXFileReference; name = "SeoulNamsanL.ttf"; path = "../assets/fonts/SeoulNamsanL.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		BBC93C8C3205433BADEDF0E4 /* SeoulNamsanM.ttf */ = {isa = PBXFileReference; name = "SeoulNamsanM.ttf"; path = "../assets/fonts/SeoulNamsanM.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9682CB1A338B4AB3A8C5A293 /* SeoulNamsanvert.ttf */ = {isa = PBXFileReference; name = "SeoulNamsanvert.ttf"; path = "../assets/fonts/SeoulNamsanvert.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +95,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				D65327D7A22EEC0BE12398D9 /* Pods */,
 				D7E4C46ADA2E9064B798F356 /* ExpoModulesProviders */,
+				73AA9BD9C10C41F59D6F0B06 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -132,6 +143,19 @@
 			);
 			name = ExpoModulesProviders;
 			sourceTree = "<group>";
+		};
+		73AA9BD9C10C41F59D6F0B06 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				A7EB919377614F9EA70A1BD8 /* SeoulNamsanB.ttf */,
+				A0562D32C9F94C6F9DB38DDA /* SeoulNamsanEB.ttf */,
+				8990D88200C344E991704788 /* SeoulNamsanL.ttf */,
+				BBC93C8C3205433BADEDF0E4 /* SeoulNamsanM.ttf */,
+				9682CB1A338B4AB3A8C5A293 /* SeoulNamsanvert.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -196,6 +220,11 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
+				FBF0727286F64636973CD488 /* SeoulNamsanB.ttf in Resources */,
+				E20B8650EB2F4673AF61555F /* SeoulNamsanEB.ttf in Resources */,
+				EDE6F2DF74164552BF150926 /* SeoulNamsanL.ttf in Resources */,
+				1BA67E56248446F581C2B874 /* SeoulNamsanM.ttf in Resources */,
+				8C10989985874D15948AB1F6 /* SeoulNamsanvert.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
