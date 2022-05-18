@@ -36,6 +36,7 @@
     "react-native-drop-shadow": "^0.0.4",
     "react-native-encrypted-storage": "^4.0.2",
     "react-native-gesture-handler": "^2.4.1",
+    "react-native-gifted-chat": "^0.16.3",
     "react-native-image-picker": "^4.8.2",
     "react-native-modal": "^13.0.1",
     "react-native-modal-datetime-picker": "^13.1.2",

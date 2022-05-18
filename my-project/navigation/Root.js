@@ -11,6 +11,8 @@ import axios from "axios";
 import userSlice from "../slices/user";
 import { LogBox } from 'react-native'
 import { retrieveChatList } from "../api/retrieveChatList";
+import SockJS from "sockjs-client";
+import Stomp from 'stompjs'
 // import SplashScreen from 'react-native-splash-screen';
 
 const Nav = createNativeStackNavigator();
@@ -19,6 +21,34 @@ function Root() {
   const dispatch = useDispatch();
   const accessToken = useSelector((state) => state.user.accessToken);
   const userInfo = useSelector((state) => state.user.userInfo);
+  var sock = new SockJS('https://k6a104.p.ssafy.io/api/ws-stomp');
+  var ws = Stomp.over(sock);
+  function connect() {
+    // pub/sub event
+    ws.connect({}, function(frame) {
+        ws.subscribe(`/api/sub/user/${userInfo.userSeq}`, function(message) {
+            var recv = JSON.parse(message.body);
+            console.log('Root received msg: ', recv)
+            // ws.subscribe(`/api/sub/chat/room/${recv.senderSeq}with${userInfo.userSeq}`, function(message) {
+
+            // })
+        });
+        ws.send("/pub/chat/message", {}, JSON.stringify({type:'ENTER', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq}));
+        dispatch(chatSlice.actions.setSocketConnected(recv.senderSeq))
+    }, function(error) {
+        console.log('error:')
+        console.log(error)
+        if(reconnect++ <= 5) {
+            setTimeout(function() {
+                console.log("connection reconnect");
+                sock = new SockJS("https://k6a104.p.ssafy.io/api/ws-stomp");
+                ws = Stomp.over(sock);
+                connect();
+            },10*1000);
+        }
+    });
+  }
+
   useEffect(() => {
     LogBox.ignoreLogs(['SerializableStateInvariantMiddleware took'])
     if (!accessToken) {
@@ -61,6 +91,9 @@ function Root() {
       getUserSessionAndLogin();
       console.log('root')
       retrieveChatList(dispatch)
+      if (userInfo.userType === 1) {
+        connect()
+      }
     }
   }, []);
 
