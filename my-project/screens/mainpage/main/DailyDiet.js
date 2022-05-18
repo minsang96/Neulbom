@@ -144,7 +144,7 @@ const DailyDiet = () => {
                     // progress={diet.total.carbohydrate / recommend.carbohydrate}
                     progress={carbohydrateProgress}
                     animated={false}
-                    color="#FB8F67"
+                    color="#F8E16C"
                     borderColor="rgba(0, 122, 255, 0)"
                     unfilledColor="#E2E2E2"
                     height={10}
@@ -160,7 +160,7 @@ const DailyDiet = () => {
                     // progress={diet.total.protein / parseInt(recommend.protein)}
                     progress={proteinProgress}
                     animated={false}
-                    color="#FB8F67"
+                    color="#F8E16C"
                     borderColor="rgba(0, 122, 255, 0)"
                     unfilledColor="#E2E2E2"
                     height={10}
@@ -177,7 +177,7 @@ const DailyDiet = () => {
                     // progress={diet.total.fat / recommend.fat}
                     progress={fatProgress}
                     animated={false}
-                    color="#FB8F67"
+                    color="#F8E16C"
                     borderColor="rgba(0, 122, 255, 0)"
                     unfilledColor="#E2E2E2"
                     height={10}
