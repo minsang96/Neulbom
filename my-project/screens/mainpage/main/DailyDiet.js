@@ -62,7 +62,7 @@ const DailyDiet = () => {
           <Text>Loading...</Text>
         ) : (
           dietdaily.map((diet) => (
-            <View>
+            <View key={diet.id}>
               <View style={styles.flexDirection}>
                 <Text style={styles.title}>총 칼로리</Text>
                 <Text style={styles.content}>

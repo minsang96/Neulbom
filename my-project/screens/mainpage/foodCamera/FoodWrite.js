@@ -78,12 +78,12 @@ const FoodWrite = () => {
       setModalVisible(true);
     }
 
-    return () => dispatch(imagesSlice.actions.clear());
+    return () => {
+      dispatch(imagesSlice.actions.clear());
+    };
   }, []);
 
   useEffect(() => {
-    console.log(imageLength);
-    console.log(imagesLength);
     setImagesLength(images[current].length);
     setImageLength(images.add.length);
     if (images.add > 0 || images[current] > 0) {
@@ -124,9 +124,11 @@ const FoodWrite = () => {
         if (response.message == "음식 분석 실패, 음식 검색을 이용하세요.") {
           setRecognize(false);
           setLoading(false);
+          setImageError(true);
         } else {
           setLoading(false);
-          dispatch(imagesSlice.actions.add({ tempFood, current }));
+          const food = response.data;
+          dispatch(imagesSlice.actions.add({ food, current }));
           setRecognize(true);
           setAnalyze(response.data);
         }
@@ -168,17 +170,17 @@ const FoodWrite = () => {
           if (response.message == "음식 분석 실패, 음식 검색을 이용하세요.") {
             setRecognize(false);
             setLoading(false);
+            // setImageError(true);
           } else {
             setLoading(false);
-            dispatch(imagesSlice.actions.add({ tempFood, current }));
+            const food = response.data;
+            dispatch(imagesSlice.actions.add({ food, current }));
             setRecognize(true);
             setAnalyze(response.data);
           }
         } catch (error) {
           console.log("인식 error", error);
         }
-      } else {
-        setImage(null);
       }
     } catch (error) {
       console.log(error);
@@ -205,7 +207,7 @@ const FoodWrite = () => {
       });
 
       // 배열에 담아져 옴
-      const response = await uploadS3(frm);
+      const response = await uploadS3(frm, user.userSeq);
       console.log("s3", response);
       dispatch(imagesSlice.actions.addS3url(response.data.data));
       const result = images.add.map((foodInfo, idx) => {
@@ -231,6 +233,7 @@ const FoodWrite = () => {
   // 이미지 업로드 axios 보내는 로직
   const saveDiet = async () => {
     try {
+      console.log("왜안돼,,", images.add);
       if (images.remove.length !== 0) {
         const response2 = await removeDiet(
           user.userSeq,
@@ -242,7 +245,7 @@ const FoodWrite = () => {
       if (images.imageurls.length !== 0) {
         console.log("saveImage");
         const response = await saveImage();
-        console.log(response);
+        // console.log(response.data);
         if (images.add.length !== 0) {
           const response1 = await recordDiet(response);
           console.log(response1);
@@ -251,6 +254,7 @@ const FoodWrite = () => {
       navigation.navigate("식단관리");
     } catch (error) {
       console.log(error);
+      console.log(images);
     } finally {
       console.log("saveImage");
     }
@@ -311,11 +315,11 @@ const FoodWrite = () => {
                 ) : (
                   <>
                     <Text>이미지 있고 인식 실패</Text>
-                    {images.add.length > 0 ? (
+                    {images.tempFood.length > 0 ? (
                       <View style={styles.foodInfo}>
                         <View>
-                          {/* <Text>{images.add.slice(-1)[0].food.foodName}</Text>
-                          <Text>{images.add.slice(-1)[0].food.foodAmount}</Text> */}
+                          <Text>{images.tempFood.slice(-1)[0].foodName}</Text>
+                          {/* <Text>{images.add.slice(-1)[0].food.foodAmount}</Text> */}
                           <Text>(1인분)</Text>
                         </View>
                         <View

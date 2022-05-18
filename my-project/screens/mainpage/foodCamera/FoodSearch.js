@@ -42,7 +42,7 @@ const FoodSearch = () => {
   const [tempFood, setTempFood] = useState([]);
   const navigate = useNavigation();
   const current = useNavigationState((state) => state.routes[0].params.current);
-  console.log("여기야!!!!!!", current);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -67,9 +67,13 @@ const FoodSearch = () => {
   });
 
   const kcal = 321;
-  const onSelect = () => {
-    console.log();
-    dispatch(imagesSlice.actions.add({ tempFood, current, kcal }));
+  const onSelect = async (food) => {
+    setTempFood(food);
+    if (tempFood.length > 0 || food !== tempFood) {
+      console.log(food);
+      dispatch(imagesSlice.actions.addFood(food));
+      dispatch(imagesSlice.actions.add({ food, current, kcal }));
+    }
     navigate.goBack();
   };
 
@@ -93,8 +97,9 @@ const FoodSearch = () => {
             key={food.foodSeq}
             android_ripple={{ color: `${palette.green}` }}
             onPress={() => {
-              setTempFood(food);
-              // onSelect();
+              // setTempFood(food);
+              onSelect(food);
+              // console.log(food);
             }}
           >
             <Text>
@@ -103,11 +108,11 @@ const FoodSearch = () => {
           </ActionButtons>
         ))
       )}
-      <ButtonCompo
+      {/* <ButtonCompo
         style={{ backgroundColor: `${palette.green}` }}
         buttonName="선택한 음식 추가"
         onPressButton={onSelect}
-      ></ButtonCompo>
+      ></ButtonCompo> */}
     </View>
   );
 };
