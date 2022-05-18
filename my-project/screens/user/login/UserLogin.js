@@ -41,7 +41,6 @@ export default function UserLogin({ navigation: { navigate } }) {
           password: user.password,
         })
       );
-      dispatch(userSlice.actions.setIsLoggin());
       console.log(res.data.data.accessToken);
       console.log(res.data.data.userSeq);
       // getUserInfo()

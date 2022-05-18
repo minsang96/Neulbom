@@ -1,18 +1,22 @@
-import { View, Text, TextInput, ScrollView, Dimensions } from "react-native";
+import { View, Text, TextInput, ScrollView, Dimensions, TouchableOpacity, KeyboardAvoidingView, StyleSheet } from "react-native";
 import React, { useEffect, useState } from 'react'
 import SockJS from "sockjs-client";
 import Stomp from 'stompjs'
 import ButtonGreen2 from "../../../components/button/ButtonGreen2";
-import axios from 'axios';
+import EncryptedStorage from "react-native-encrypted-storage";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import chatSlice from "../../../slices/chat";
 
-const windowHeight = Dimensions.get('window').height*40/100;
+const windowHeight = Dimensions.get('window').height*80/100
 
-const ChatRoom = () => {
+const ChatRoom = (props) => {
+  console.log('Page: ChatRoom')
+  const dispatch = useDispatch();
   var sock = new SockJS('https://k6a104.p.ssafy.io/api/ws-stomp');
   var ws = Stomp.over(sock);
   // var client = Stomp.Client('http://10.0.2.2:8081/api/ws-stomp')
   var reconnect = 0;
-
   // 웹소켓이 연결될 때 까지 실행하는 함수
   function waitForConnection(ws, callback) {
     setTimeout(
@@ -28,16 +32,30 @@ const ChatRoom = () => {
       1 // 밀리초 간격으로 실행
     );
   }
+  const EnterRoom = async () => {
+    const room_name = 'halo'
+    let params = new URLSearchParams();
+    params.append("name", room_name);
+    await axios.get(`https://k6a104.p.ssafy.io/api/chat/room/enter/${userSeq}with${consultantSeq}`)
+    .then(
+      response => {
+        alert(response.data.name+"방 개설에 성공하였습니다.")
+      }
+    ).catch( response => { alert("채팅방 개설에 실패하였습니다."); console.log(response)} );
+  }
 
-  const sender = 23
-  const roomId = 23
+  // const consultantSeq = 3
+  const consultantSeq = props.route.params.consultantSeq
+  const userSeq = useSelector((state) => state.user.userSeq);
+  // const userSeq = 23;
+  const socketConnected = useSelector((state) => state.chat.socketConnected);
   const [ message, setMessage ] = useState('');
-  const [ messages, setMessages ] = useState({});
+  const chat = useSelector(state => state.chat.chat)
 
   function sendMessage() {
     try {
       // send할 데이터
-      const data = {type:'TALK', roomId: roomId, sender: sender, message: message}
+      const data = {type:'TALK', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq, message: message}
       // 빈문자열이면 리턴
       if (message === '') {
         return;
@@ -50,31 +68,47 @@ const ChatRoom = () => {
           {},
           JSON.stringify(data)
         );
-        console.log(ws.ws.readyState);
-        // dispatch(chatActions.writeMessage(''));
+        // console.log(ws.ws.readyState);
+        setMessage('');
       });
     } catch (error) {
       console.log(error);
       console.log(ws.ws.readyState);
     }
   }
-
-  // const sendMessage = () => {
-  //   ws.send("/pub/chat/message", {}, JSON.stringify({type:'TALK', roomId: roomId, sender: sender, message: message}));
-  //   setMessage('');
-  // }
-  const recvMessage = (recv) => {
-    console.log('메세지받음')
-    setMessages({"type":recv.type,"sender":recv.type=='ENTER'?'[알림]':recv.sender,"message":recv.message}, ...messages)
-  }
+  
   function connect() {
     // pub/sub event
     ws.connect({}, function(frame) {
-        ws.subscribe("/api/sub/chat/room/"+roomId, function(message) {
+        ws.subscribe(`/api/sub/chat/room/${userSeq}with${consultantSeq}`, function(message) {
             var recv = JSON.parse(message.body);
-            recvMessage(recv);
+            console.log('received msg: ', recv)
+            const storeChat = async () => {
+              try {
+                if (chat[consultantSeq].length > 0) {
+                  await EncryptedStorage.setItem(
+                    `chatWith${consultantSeq}`,
+                    JSON.stringify({chat: [...chat[consultantSeq], recv]})
+                    );
+                  } else {
+                    await EncryptedStorage.setItem(
+                      `chatWith${consultantSeq}`,
+                      JSON.stringify({chat: [recv]})
+                  );
+                }
+              } catch {
+                
+              } finally {
+                console.log('chat stored')
+              }
+            }
+            if (recv.message) {
+              dispatch(chatSlice.actions.setChat([consultantSeq, recv]))
+              storeChat()
+            }
         });
-        ws.send("/pub/chat/message", {}, JSON.stringify({type:'ENTER', roomId: roomId, sender: sender}));
+        ws.send("/pub/chat/message", {}, JSON.stringify({type:'ENTER', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq}));
+        dispatch(chatSlice.actions.setSocketConnected(consultantSeq))
     }, function(error) {
         console.log('error:')
         console.log(error)
@@ -88,23 +122,68 @@ const ChatRoom = () => {
         }
     });
   }
-  console.log('-------------------------------')
-  // console.log(messages)
+  // const storeChat = async () => {
+  //   dispatch(chatSlice.actions.setChat([consultantSeq, {type:'TALK', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq, message: message}]))
+  //   try {
+  //     if (chat[consultantSeq].length > 0) {
+  //       await EncryptedStorage.setItem(
+  //         `chatWith${consultantSeq}`,
+  //         JSON.stringify({chat: [...chat[consultantSeq], {type:'TALK', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq, message: message}]})
+  //         );
+  //       } else {
+  //         await EncryptedStorage.setItem(
+  //         `chatWith${consultantSeq}`,
+  //         JSON.stringify({chat: [{type:'TALK', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq, message: message}]})
+  //       );
+  //     }
+  //   } catch {
+      
+  //   } finally {
+  //     setMessage('')
+  //   }
+  // }
   useEffect(() => {
-    connect()
+    loadChat()
+    // EnterRoom()
+    if (!socketConnected.includes(consultantSeq)) {
+      connect()
+    }
   }, [])
+  console.log('state chat: ', chat)
+  const loadChat = async () => {
+    try {
+      const chatFromStorage = await EncryptedStorage.getItem(`chatWith${consultantSeq}`)
+      let JsonChat;
+      if (chatFromStorage !== undefined && chatFromStorage !== null) {
+        JsonChat = JSON.parse(chatFromStorage);
+        console.log('JsonChat: ')
+        console.log(JsonChat)
+        dispatch(chatSlice.actions.setInitialChat([consultantSeq, JsonChat['chat']]))
+      }
+    } catch {
+      
+    }
+  }
 
+  // async function deleteChat() {
+  //   try {
+  //     await EncryptedStorage.removeItem(`chatWith${consultantSeq}`);
+  //     console.log('deleted successfully')
+
+  //   } catch (error) {
+      
+  //   }
+  // }
   return (
-    <View style={{justifyContent: 'space-between', height: windowHeight}}>
+    <KeyboardAvoidingView style={{justifyContent: 'space-between', height: windowHeight, flex: 1}}>
+      {/* <TouchableOpacity onPress={() => {deleteChat()}}><Text>대화 기록encrypted storage삭제</Text></TouchableOpacity> */}
       <ScrollView>
-        <Text>ChatRoom</Text>
-        {Object.keys(messages).length > 0 && messages.map(message => {
+        {Object.keys(chat).includes(String(consultantSeq)) && chat[String(consultantSeq)].map(message => {
           return (
-            <>
-              <Text>{message.sender}</Text>
-              <Text>{message.message}</Text>
-            </>
-        )})}
+            <View style={{borderWidth: 1}}>
+              <Text style={message && message.senderSeq === userSeq ? {alignSelf: 'flex-end'} : {}}>{message && message.message}</Text>
+            </View>)
+        })}
       </ScrollView>
       <View style={{backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-between'}}>
         <TextInput
@@ -112,9 +191,17 @@ const ChatRoom = () => {
           style={{width: '90%'}}
           onChangeText={event => setMessage(event)}></TextInput>
         <ButtonGreen2 buttonName='전송' onPressButton={() => sendMessage()}></ButtonGreen2>
+        {/* <ButtonGreen2 buttonName='전송' onPressButton={() => storeChat()}></ButtonGreen2> */}
       </View>
-    </View>
+    </KeyboardAvoidingView>
   )
 }
-  
+
 export default ChatRoom;
+
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: '3%',
+    paddingTop: '1.5%'
+  }
+})

@@ -9,6 +9,8 @@ import { useEffect } from "react";
 import EncryptedStorage from "react-native-encrypted-storage";
 import axios from "axios";
 import userSlice from "../slices/user";
+import { LogBox } from 'react-native'
+import { retrieveChatList } from "../api/retrieveChatList";
 // import SplashScreen from 'react-native-splash-screen';
 
 const Nav = createNativeStackNavigator();
@@ -17,9 +19,8 @@ function Root() {
   const dispatch = useDispatch();
   const accessToken = useSelector((state) => state.user.accessToken);
   const userInfo = useSelector((state) => state.user.userInfo);
-
   useEffect(() => {
-    console.log("Root isLoggedIn: " + accessToken);
+    LogBox.ignoreLogs(['SerializableStateInvariantMiddleware took'])
     if (!accessToken) {
       const getUserSessionAndLogin = async () => {
         try {
@@ -58,6 +59,8 @@ function Root() {
         }
       };
       getUserSessionAndLogin();
+      console.log('root')
+      retrieveChatList(dispatch)
     }
   }, []);
 
@@ -70,6 +73,7 @@ function Root() {
       ) : (
         <Nav.Screen name="TabsConsultant" component={TabsConsultant} />
       )}
+      {/* <Nav.Screen name="Tabs" component={Tabs} /> */}
       <Nav.Screen name="Stack" component={Stack} />
     </Nav.Navigator>
   );
