@@ -108,8 +108,15 @@ const FoodWrite = () => {
       try {
         const response = await analyzeDiet(user.userSeq, frm);
         console.log("인식결과!!", response);
-        if (!response) {
+        const tempFood = response.data;
+        if (response.message == "음식 분석 실패, 음식 검색을 이용하세요.") {
           setRecognize(false);
+          setLoading(false);
+        } else {
+          setLoading(false);
+          dispatch(imagesSlice.actions.add({ tempFood, current }));
+          setRecognize(true);
+          setAnalyze(response.data);
         }
       } catch (error) {
         console.log("인식 error", error);
@@ -158,6 +165,8 @@ const FoodWrite = () => {
         } catch (error) {
           console.log("인식 error", error);
         }
+      } else {
+        setImage(null);
       }
     } catch (error) {
       console.log(error);
@@ -301,7 +310,12 @@ const FoodWrite = () => {
                         </View>
                       </>
                     ) : (
-                      <Text>음식을 인식할 수 없습니다</Text>
+                      <>
+                        <Text>음식을 인식할 수 없습니다</Text>
+                        <Text>
+                          아래 검색하기 버튼을 눌러 음식 정보를 저장하세요!
+                        </Text>
+                      </>
                     )}
                   </>
                 )}
