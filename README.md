@@ -1,7 +1,7 @@
 # 늘봄
 
 <br/>
-
+<div align="center"> <img src ="/uploads/9a18dafc22aac15d65e61d85fba76514/늘봄.png" alt="늘봄" width="10%"></div>
 <div align="center">늘 봄처럼 활기차고 새롭게 살자, <b>늘봄</b></div>
 <br/>
 
@@ -31,9 +31,11 @@
 
 ### - 팀 이름
 
-늘 봄처럼 활기차고 새롭게 살자
+<b>NEULBOM, 늘 봄처럼 활기차고 새롭게 살자</b>
 
 ### - 팀원 소개
+<div align="center"> <img src ="/uploads/a3217b8d63300dab5f47df0170658035/늘보미.png" alt="늘보미" width="50%"></div>
+
 
 | 이름   | 직책 | 역할     | 담당                           |
 | ------ | ---- | -------- | ------------------------------ |
