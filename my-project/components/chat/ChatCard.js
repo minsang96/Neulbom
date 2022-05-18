@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import EncryptedStorage from "react-native-encrypted-storage";
 import { useEffect } from 'react';
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 export default function ChatCard(props) {
   console.log('-----------------------------------------------------')
@@ -42,17 +42,17 @@ export default function ChatCard(props) {
       </View>
     </TouchableOpacity>
     </>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   card: {
-    marginVertical: '1.5%',
-    paddingHorizontal: '4%',
+    marginVertical: "1.5%",
+    paddingHorizontal: "4%",
     borderWidth: 1,
-    borderColor: '#000',
-    alignItems: 'center',
-    flexDirection: 'row'
+    borderColor: "#000",
+    alignItems: "center",
+    flexDirection: "row",
   },
   img: {
     borderRadius: 5000,
@@ -65,14 +65,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   texts: {
-    marginLeft: '6%',
-    paddingRight: '27%'
+    marginLeft: "6%",
+    paddingRight: "27%",
   },
   date: {
     fontSize: 13,
-    marginTop: '1%'
+    marginTop: "1%",
   },
   chatContent: {
-    marginTop: '1%'
-  }
-})
+    marginTop: "1%",
+  },
+});

@@ -44,9 +44,11 @@ const FoodSearch = () => {
   const current = useNavigationState((state) => state.routes[0].params.current);
   console.log("여기야!!!!!!", current);
   const dispatch = useDispatch();
+
   useEffect(() => {
     console.log("selected tempFood");
   }, [tempFood]);
+
   const onSearch = async (text) => {
     try {
       const response = await searchDiet(text);
@@ -92,7 +94,7 @@ const FoodSearch = () => {
             android_ripple={{ color: `${palette.green}` }}
             onPress={() => {
               setTempFood(food);
-              console.log(food);
+              // onSelect();
             }}
           >
             <Text>
@@ -101,12 +103,11 @@ const FoodSearch = () => {
           </ActionButtons>
         ))
       )}
-      <Pressable
+      <ButtonCompo
         style={{ backgroundColor: `${palette.green}` }}
-        onPress={onSelect}
-      >
-        <Text>선택한 음식 추가</Text>
-      </Pressable>
+        buttonName="선택한 음식 추가"
+        onPressButton={onSelect}
+      ></ButtonCompo>
     </View>
   );
 };

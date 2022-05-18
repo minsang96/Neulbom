@@ -30,8 +30,11 @@ const userSlice = createSlice({
     setConsultantCertImageUri: (state, action) => {
       state.consultantCertImageUri = action.payload
       console.log(state.consultantCertImageUri)
-    }
-  }
+    },
+    setUpdateCareer: (state, action) => {
+      state.userInfo.expertCareer.push(action.payload);
+    },
+  },
 });
 
 export const {

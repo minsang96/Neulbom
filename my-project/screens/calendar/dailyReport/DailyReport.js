@@ -39,25 +39,27 @@ const DailyReport = () => {
     setIsDate(selectDate);
     showDatePicker();
   };
+  // const other = useSelector((state) => state.dailyReport.other);
 
-  const todayBloodPressure = useSelector(
-    (state) => state.dailyReport.todayBloodPressure
-  );
-  const yesterdayBloodPressure = useSelector(
-    (state) => state.dailyReport.yesterdayBloodPressure
-  );
-  const todayBloodSugar = useSelector(
-    (state) => state.dailyReport.todayBloodSugar
-  );
-  const yesterdayBloodSugar = useSelector(
-    (state) => state.dailyReport.yesterdayBloodSugar
-  );
-  const recommendNutrient = useSelector(
-    (state) => state.dailyReport.recommendNutrient
-  );
-  const intakeNutrient = useSelector(
-    (state) => state.dailyReport.intakeNutrient
-  );
+  // const todayBloodPressure = useSelector(
+  //   (state) => state.dailyReport.todayBloodPressure
+  // );
+  const dailyReport = useSelector((state) => state.dailyReport);
+  // const yesterdayBloodPressure = useSelector(
+  //   (state) => state.dailyReport.yesterdayBloodPressure
+  // );
+  // const todayBloodSugar = useSelector(
+  //   (state) => state.dailyReport.todayBloodSugar
+  // );
+  // const yesterdayBloodSugar = useSelector(
+  //   (state) => state.dailyReport.yesterdayBloodSugar
+  // );
+  // const recommendNutrient = useSelector(
+  //   (state) => state.dailyReport.recommendNutrient
+  // );
+  // const intakeNutrient = useSelector(
+  //   (state) => state.dailyReport.intakeNutrient
+  // );
 
   const getDailyBloodpressureResult = async () => {
     try {
@@ -109,15 +111,44 @@ const DailyReport = () => {
     getDailyOtherResult();
   }, []);
 
+  // useEffect(() => {
+  //   getDailyBloodpressureResult();
+  //   getDailyBloodSugarResult();
+  //   getCalorieResult();
+  //   getDailyNutirentResult();
+  //   getDailyOtherResult();
+  // }, [dailyReport]);
+
+  // useEffect(() => {
+  //   getDailyBloodSugarResult();
+  // }, [dailyReport.todayBloodSugar]);
+
+  // useEffect(() => {
+  //   getDailyBloodpressureResult();
+  //   getDailyBloodSugarResult();
+  //   getCalorieResult();
+  //   getDailyNutirentResult();
+  //   getDailyOtherResult();
+  // }, [
+  //   dailyReport.todayBloodPressure,
+  //   dailyReport.todayBloodSugar,
+  //   dailyReport.intakeNutrient,
+  //   dailyReport.other,
+  // ]);
+
   useEffect(() => {
     if (
-      yesterdayBloodSugar.length > 0 &&
-      todayBloodPressure.length > 0 &&
-      intakeNutrient.length > 0
+      dailyReport.yesterdayBloodSugar.length > 0 &&
+      dailyReport.todayBloodPressure.length > 0 &&
+      dailyReport.intakeNutrient.length > 0
     ) {
       setLoading(false);
     }
-  }, [yesterdayBloodSugar, todayBloodPressure, intakeNutrient]);
+  }, [
+    dailyReport.yesterdayBloodSugar,
+    dailyReport.todayBloodPressure,
+    dailyReport.intakeNutrient,
+  ]);
 
   useEffect(() => {
     getDailyBloodpressureResult();
@@ -154,8 +185,8 @@ const DailyReport = () => {
       ) : (
         <BloodPressureReport
           styles={styles}
-          todayBloodPressure={todayBloodPressure[0]}
-          yesterdayBloodPressure={yesterdayBloodPressure[0]}
+          todayBloodPressure={dailyReport.todayBloodPressure[0]}
+          yesterdayBloodPressure={dailyReport.yesterdayBloodPressure[0]}
         ></BloodPressureReport>
       )}
       {loading ? (
@@ -163,8 +194,8 @@ const DailyReport = () => {
       ) : (
         <BloodSugarReport
           styles={styles}
-          todayBloodSugar={todayBloodSugar[0]}
-          yesterdayBloodSugar={yesterdayBloodSugar[0]}
+          todayBloodSugar={dailyReport.todayBloodSugar[0]}
+          yesterdayBloodSugar={dailyReport.yesterdayBloodSugar[0]}
         ></BloodSugarReport>
       )}
       <CalorieCompo
@@ -180,8 +211,8 @@ const DailyReport = () => {
         <NutrientCompo
           now="오늘"
           styles={styles}
-          recommendNutrient={recommendNutrient[0]}
-          intakeNutrient={intakeNutrient[0]}
+          recommendNutrient={dailyReport.recommendNutrient[0]}
+          intakeNutrient={dailyReport.intakeNutrient[0]}
         ></NutrientCompo>
       )}
       <TodayReport styles={styles}></TodayReport>

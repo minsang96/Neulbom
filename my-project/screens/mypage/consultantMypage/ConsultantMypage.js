@@ -28,13 +28,6 @@ const ConsultantMypage = (props) => {
   };
   return (
     <ScrollView style={styles.background}>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("ConsultantMypageUpdate"), props.onClick();
-        }}
-      >
-        <Text>수정하기</Text>
-      </TouchableOpacity>
       <Text style={styles.title}>내 소개 😊</Text>
       <InfoConsultant
         styles={styles}

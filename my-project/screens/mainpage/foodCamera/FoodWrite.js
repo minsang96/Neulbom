@@ -3,7 +3,15 @@ import styled from "styled-components/native";
 import { useNavigation, useNavigationState } from "@react-navigation/native";
 import palette from "../../../components/palette";
 import { useDispatch, useSelector } from "react-redux";
-import { Image, FlatList, Pressable } from "react-native";
+import {
+  Image,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  ScrollViewComponent,
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import imagesSlice from "../../../slices/images";
 import UploadMode from "../../../components/modal/UploadMode";
@@ -15,6 +23,10 @@ import {
   uploadS3,
 } from "../../../api/diets";
 import moment from "moment";
+import { Dimensions } from "react-native";
+import ButtonHalfCompo from "../../../components/button/ButtonHalfCompo";
+
+const screenSize = Dimensions.get("screen");
 
 const Container = styled.ScrollView``;
 const View = styled.View``;
@@ -45,7 +57,6 @@ const FoodWrite = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const images = useSelector((state) => state.images);
-  // const total_meal = useSelector((state) => state.images[`total_${current}`]);
   const [imagesLength, setImagesLength] = useState(0);
   const [image, setImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -61,9 +72,7 @@ const FoodWrite = () => {
   useEffect(() => {
     setImagesLength(images[current].length);
     setImageLength(images.add.length);
-    console.log("current", current);
-    console.log("here", images[current].length);
-    console.log("여기", images[`total_${current}`]);
+
     if (images[current].length == 0) {
       setData(false);
       setModalVisible(true);
@@ -111,8 +120,15 @@ const FoodWrite = () => {
       try {
         const response = await analyzeDiet(user.userSeq, frm);
         console.log("인식결과!!", response);
-        if (!response) {
+        const tempFood = response.data;
+        if (response.message == "음식 분석 실패, 음식 검색을 이용하세요.") {
           setRecognize(false);
+          setLoading(false);
+        } else {
+          setLoading(false);
+          dispatch(imagesSlice.actions.add({ tempFood, current }));
+          setRecognize(true);
+          setAnalyze(response.data);
         }
       } catch (error) {
         console.log("인식 error", error);
@@ -161,6 +177,8 @@ const FoodWrite = () => {
         } catch (error) {
           console.log("인식 error", error);
         }
+      } else {
+        setImage(null);
       }
     } catch (error) {
       console.log(error);
@@ -191,6 +209,7 @@ const FoodWrite = () => {
       console.log("s3", response);
       dispatch(imagesSlice.actions.addS3url(response.data.data));
       const result = images.add.map((foodInfo, idx) => {
+        console.log(foodInfo);
         return {
           dietDate: formatted,
           dietImg: response.data.data[idx],
@@ -229,6 +248,7 @@ const FoodWrite = () => {
           console.log(response1);
         }
       }
+      navigation.navigate("식단관리");
     } catch (error) {
       console.log(error);
     } finally {
@@ -241,21 +261,17 @@ const FoodWrite = () => {
   };
 
   const onDelete = (idx) => {
-    console.log("delete", idx);
-    console.log("delete real", imageLength - idx);
-    console.log(user.accessToken);
-    console.log(user.userSeq);
     dispatch(imagesSlice.actions.remove(imageLength - idx));
+    setImage(null);
   };
 
   const onDeleteDB = (dietSeq, idx) => {
-    console.log("deleteDB", dietSeq);
     dispatch(imagesSlice.actions.removeDB({ current, dietSeq }));
   };
 
   return (
     <>
-      <Container style={{ backgroundColor: "white" }}>
+      <ScrollView style={styles.background}>
         <Pressable onPress={onPress}>
           <Text>Checking redux</Text>
         </Pressable>
@@ -280,16 +296,54 @@ const FoodWrite = () => {
                   <Text>Loading...</Text>
                 ) : recognize ? (
                   <>
-                    <Text>이미지 있고 인식 성공</Text>
-                    <Text>인식 성공!</Text>
                     <Text>{analyze.foodName}</Text>
-                    <Text>{analyze.foodAmount}</Text>
-                    <Text>{analyze.foodKcal}</Text>
+                    <Text>{analyze.foodAmount}g(1인분)</Text>
+                    <View>
+                      <ButtonCompo buttonName="섭취량 변경"></ButtonCompo>
+                    </View>
+                    <Text>칼로리 {analyze.foodKcal} kcal</Text>
+                    <Text>나트륨 {analyze.foodNatrium} mg</Text>
+                    <Text>당류 {analyze.foodSugars} mg</Text>
+                    <Text>탄수화물 {analyze.foodCarbohydrate} g</Text>
+                    <Text>단백질 {analyze.foodProtein} g</Text>
+                    <Text>지방 {analyze.foodFat} g</Text>
                   </>
                 ) : (
                   <>
                     <Text>이미지 있고 인식 실패</Text>
-                    <Text>음식을 인식할 수 없습니다</Text>
+                    {images.add.length > 0 ? (
+                      <View style={styles.foodInfo}>
+                        <View>
+                          {/* <Text>{images.add.slice(-1)[0].food.foodName}</Text>
+                          <Text>{images.add.slice(-1)[0].food.foodAmount}</Text> */}
+                          <Text>(1인분)</Text>
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-around",
+                          }}
+                        >
+                          <ButtonHalfCompo buttonName="섭취량 변경"></ButtonHalfCompo>
+                          <ButtonHalfCompo
+                            buttonName="검색하기"
+                            onPressButton={() =>
+                              navigation.navigate("Stack", {
+                                screen: "FoodSearch",
+                                params: { current: current },
+                              })
+                            }
+                          ></ButtonHalfCompo>
+                        </View>
+                      </View>
+                    ) : (
+                      <View style={styles.foodInfo}>
+                        <Text>음식을 인식할 수 없습니다 😥</Text>
+                        <Text>
+                          아래 검색하기 버튼을 눌러 음식 정보를 저장하세요!
+                        </Text>
+                      </View>
+                    )}
                   </>
                 )}
               </>
@@ -302,7 +356,7 @@ const FoodWrite = () => {
               <>
                 <Text>이미지 없고 데이터 있음</Text>
 
-                <View>
+                <View style={styles.foodInfo}>
                   <View
                     style={{
                       flex: 1,
@@ -310,14 +364,15 @@ const FoodWrite = () => {
                       justifyContent: "center",
                     }}
                   >
-                    <Text>{current}</Text>
                     <Image
                       source={{
                         uri: images[current][imagesLength - 1].dietImg,
                       }}
                       style={{ width: 200, height: 200 }}
                     />
-                    <Text>{images[current][imagesLength - 1].foodName}</Text>
+                    <Text style={styles.foodTitle}>
+                      {images[current][imagesLength - 1].foodName}
+                    </Text>
                     <Text>
                       {images[current][imagesLength - 1].foodAmount}g (
                       {Math.round(
@@ -326,30 +381,81 @@ const FoodWrite = () => {
                       )}
                       인분)
                     </Text>
-                    <Text>
-                      칼로리 {images[current][imagesLength - 1].foodKcal}
-                    </Text>
-                    <Text>
-                      나트륨 {images[current][imagesLength - 1].foodNatrium}
-                    </Text>
-                    <Text>
-                      당류 {images[current][imagesLength - 1].foodSugars}
-                    </Text>
-                    <Text>
-                      탄수화물
-                      {images[current][imagesLength - 1].foodCarbohydrate}
-                    </Text>
-                    <Text>
-                      단백질 {images[current][imagesLength - 1].foodProtein}
-                    </Text>
-                    <Text>
-                      지방 {images[current][imagesLength - 1].foodTransfat}
-                    </Text>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        marginTop: 10,
+                      }}
+                    >
+                      <View style={{ alignItems: "center", marginRight: 20 }}>
+                        <Text>칼로리</Text>
+                        <View style={styles.circle}>
+                          <Text style={{ fontWeight: "bold" }}>
+                            {images[current][imagesLength - 1].foodKcal}
+                          </Text>
+                          <Text>kcal</Text>
+                        </View>
+                      </View>
+                      <View style={{ alignItems: "center" }}>
+                        <Text>나트륨</Text>
+                        <View style={styles.circle}>
+                          <Text style={{ fontWeight: "bold" }}>
+                            {images[current][imagesLength - 1].foodNatrium}
+                          </Text>
+                          <Text>mg</Text>
+                        </View>
+                      </View>
+                      <View style={{ alignItems: "center", marginLeft: 20 }}>
+                        <Text>당류</Text>
+                        <View style={styles.circle}>
+                          <Text style={{ fontWeight: "bold" }}>
+                            {images[current][imagesLength - 1].foodSugars}
+                          </Text>
+                          <Text>mg</Text>
+                        </View>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        marginTop: 10,
+                      }}
+                    >
+                      <View style={{ alignItems: "center", marginRight: 20 }}>
+                        <Text>탄수화물</Text>
+                        <View style={styles.circle}>
+                          <Text style={{ fontWeight: "bold" }}>
+                            {images[current][imagesLength - 1].foodCarbohydrate}
+                          </Text>
+                          <Text>mg</Text>
+                        </View>
+                      </View>
+                      <View style={{ alignItems: "center" }}>
+                        <Text>단백질</Text>
+                        <View style={styles.circle}>
+                          <Text style={{ fontWeight: "bold" }}>
+                            {images[current][imagesLength - 1].foodProtein}
+                          </Text>
+                          <Text>mg</Text>
+                        </View>
+                      </View>
+                      <View style={{ alignItems: "center", marginLeft: 20 }}>
+                        <Text>지방</Text>
+                        <View style={styles.circle}>
+                          <Text style={{ fontWeight: "bold" }}>
+                            {images[current][imagesLength - 1].foodTransfat}
+                          </Text>
+                          <Text>mg</Text>
+                        </View>
+                      </View>
+                    </View>
                   </View>
                 </View>
               </>
             ) : (
-              <Text>아무것도 없어</Text>
+              <Text>아무 사진도 없습니다.</Text>
             )}
           </>
 
@@ -364,13 +470,13 @@ const FoodWrite = () => {
                   })
                 }
               ></ButtonCompo>
-              {/* <ButtonCompo
-                buttonName="다시 찍기"
-                onPressButton={() => console.log("press 다시 찍기")}
-              ></ButtonCompo> */}
             </>
           )}
-          <View>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={[styles.foodInfo, { flexDirection: "row" }]}
+          >
             {images.imageurls
               .slice(0)
               .reverse()
@@ -378,9 +484,23 @@ const FoodWrite = () => {
                 <View key={food.id}>
                   <Image
                     source={{ uri: food.imageurl }}
-                    style={{ width: 50, height: 50 }}
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: 10,
+                      margin: 3,
+                    }}
                   ></Image>
-                  <Plus
+
+                  <TouchableOpacity
+                    onPress={() => {
+                      onDelete(idx);
+                    }}
+                  >
+                    <Text style={{ textAlign: "center", fontSize: 12 }}>
+                      삭제
+                    </Text>
+                    {/* <Plus
                     style={{ marginRight: 5 }}
                     onPress={() => {
                       onDelete(idx);
@@ -394,7 +514,8 @@ const FoodWrite = () => {
                     >
                       -
                     </Text>
-                  </Plus>
+                  </Plus> */}
+                  </TouchableOpacity>
                 </View>
               ))}
             {images[current]
@@ -404,9 +525,24 @@ const FoodWrite = () => {
                 <View key={food.dietSeq}>
                   <Image
                     source={{ uri: food.dietImg }}
-                    style={{ width: 50, height: 50 }}
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: 10,
+                      margin: 3,
+                    }}
                   ></Image>
-                  <Plus
+
+                  <TouchableOpacity
+                    onPress={() => {
+                      onDeleteDB(food.dietSeq, idx);
+                    }}
+                  >
+                    <Text style={{ textAlign: "center", fontSize: 12 }}>
+                      삭제
+                    </Text>
+                  </TouchableOpacity>
+                  {/* <Plus
                     style={{ marginRight: 5 }}
                     onPress={() => {
                       onDeleteDB(food.dietSeq, idx);
@@ -420,7 +556,7 @@ const FoodWrite = () => {
                     >
                       -
                     </Text>
-                  </Plus>
+                  </Plus> */}
                 </View>
               ))}
             <PlusDiet
@@ -430,19 +566,54 @@ const FoodWrite = () => {
             >
               <Text>+</Text>
             </PlusDiet>
-          </View>
+          </ScrollView>
         </View>
-        <View>
-          <Text>{current} 섭취 량</Text>
-          <Text>칼로리: {images[`total_${current}`].kcal} kcal</Text>
-          <Text>나트륨: {images[`total_${current}`].natrium} mg</Text>
-          <Text>당류: {images[`total_${current}`].sugars} g</Text>
+        <View style={styles.foodInfo}>
+          <Text style={{ textAlign: "center", fontSize: 18, padding: 5 }}>
+            {current === "breakfast"
+              ? "아침"
+              : current === "lunch"
+              ? "점심"
+              : "저녁"}{" "}
+            식단 총 영양 정보
+          </Text>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-evenly" }}
+          >
+            <View style={{ alignItems: "center" }}>
+              <Text>칼로리</Text>
+              <View style={styles.circle}>
+                <Text style={{ fontWeight: "bold" }}>
+                  {images[`total_${current}`].kcal}
+                </Text>
+                <Text>kcal</Text>
+              </View>
+            </View>
+            <View style={{ alignItems: "center" }}>
+              <Text>나트륨</Text>
+              <View style={styles.circle}>
+                <Text style={{ fontWeight: "bold" }}>
+                  {images[`total_${current}`].natrium}
+                </Text>
+                <Text>mg</Text>
+              </View>
+            </View>
+            <View style={{ alignItems: "center" }}>
+              <Text>당류</Text>
+              <View style={styles.circle}>
+                <Text style={{ fontWeight: "bold" }}>
+                  {images[`total_${current}`].sugars}
+                </Text>
+                <Text>g</Text>
+              </View>
+            </View>
+          </View>
         </View>
         <ButtonCompo
           buttonName="식단 저장"
           onPressButton={saveDiet}
         ></ButtonCompo>
-      </Container>
+      </ScrollView>
       <UploadMode
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
@@ -454,3 +625,32 @@ const FoodWrite = () => {
 };
 
 export default FoodWrite;
+
+const styles = StyleSheet.create({
+  background: {
+    paddingHorizontal: 20,
+  },
+  foodInfo: {
+    backgroundColor: "white",
+    paddingVertical: screenSize.height * 0.01,
+    paddingHorizontal: screenSize.width * 0.04,
+    margin: screenSize.width * 0.01,
+    marginBottom: screenSize.height * 0.01,
+    borderRadius: 10,
+    elevation: 3,
+  },
+  circle: {
+    backgroundColor: "white",
+    padding: 15,
+    borderRadius: 50,
+    width: 70,
+    height: 70,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 3,
+  },
+  foodTitle: {
+    fontSize: 18,
+    margin: 8,
+  },
+});

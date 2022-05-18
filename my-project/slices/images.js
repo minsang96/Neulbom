@@ -27,6 +27,7 @@ const imagesSlice = createSlice({
       state.dinner = action.payload.dinner.dietList;
       state.total_dinner = action.payload.dinner.total;
     },
+
     add: (state, action) => {
       state.add.push({ food: action.payload.tempFood, id: nextId });
       state[`total_${action.payload.current}`] = {
@@ -53,6 +54,7 @@ const imagesSlice = createSlice({
       //   ],
       // };
     },
+
     addS3url: (state, action) => {
       return {
         ...state,
@@ -63,6 +65,7 @@ const imagesSlice = createSlice({
         ],
       };
     },
+
     addImageUrls: (state, action) => {
       state.imageurls.push({ imageurl: action.payload, id: nextId_image });
       nextId_image += 1;
@@ -88,29 +91,32 @@ const imagesSlice = createSlice({
     },
 
     removeDB: (state, action) => {
+      console.log(action.payload);
       state.remove.push(action.payload.dietSeq);
       // if (action.payload.current == "breakfast") {
-      //   return {
-      //     ...state,
-      //     breakfast: state.breakfast.filter(
-      //       (food) => food.dietSeq !== action.payload.dietSeq
-      //     ),
-      //   };
-      // } else if (action.payload.current == "lunch") {
-      //   return {
-      //     ...state,
-      //     lunch: state.lunch.filter(
-      //       (food) => food.dietSeq !== action.payload.dietSeq
-      //     ),
-      //   };
-      // } else if (action.payload.current == "dinner") {
-      //   return {
-      //     ...state,
-      //     dinner: state.dinner.filter(
-      //       (food) => food.dietSeq !== action.payload.dietSeq
-      //     ),
-      //   };
-      // }
+      return {
+        ...state,
+        breakfast: state.breakfast.filter(
+          (food) => food.dietSeq !== action.payload.dietSeq
+        ),
+
+        // };
+      };
+      //   } else if (action.payload.current == "lunch") {
+      //     return {
+      //       ...state,
+      //       lunch: state.lunch.filter(
+      //         (food) => food.dietSeq !== action.payload.dietSeq
+      //       ),
+      //     };
+      //   } else if (action.payload.current == "dinner") {
+      //     return {
+      //       ...state,
+      //       dinner: state.dinner.filter(
+      //         (food) => food.dietSeq !== action.payload.dietSeq
+      //       ),
+      //     };
+      //   }
     },
   },
 });

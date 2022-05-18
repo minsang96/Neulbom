@@ -8,7 +8,7 @@ const Developers = () => {
   return (
     <ScrollView style={styles.background}>
       <View style={styles.box}>
-        <Text>늘보미들</Text>
+        <Text># 늘보미들 소개{"\n"}</Text>
         <Image
           source={require("../../assets/images/nuelbomTeam.png")}
           style={{
@@ -18,6 +18,15 @@ const Developers = () => {
             alignItems: "center",
           }}
         ></Image>
+        <Text>
+          {"\n"}
+          늘봄을 만들 늘보미들{"\n"}
+          문의하기 freessafy104@gmail.com{"\n"}
+          노션 -
+          https://wry-nebula-845.notion.site/Neulbom-b1c97f798625453f9c44bceee7359375
+          {"\n"}
+          깃헙 - https://lab.ssafy.com/s06-final/S06P31A104/-/tree/master
+        </Text>
       </View>
     </ScrollView>
   );
