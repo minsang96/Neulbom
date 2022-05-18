@@ -6,6 +6,8 @@ import EncryptedStorage from "react-native-encrypted-storage";
 import { useEffect, useState } from 'react';
 import { retrieveChatList } from '../../../api/retrieveChatList';
 import axios from 'axios';
+import SockJS from "sockjs-client";
+import Stomp from 'stompjs'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -29,7 +31,7 @@ export default function ConsultantInfo(props) {
   }
 
   const toChatRoom = async () => {
-    if (!chatList.includes(consultantSeq)) {
+    if (chatList.length > 0 && !chatList.includes(consultantSeq)) {
       console.log('new consultant')
       try {
         if (chatList) {
@@ -53,6 +55,25 @@ export default function ConsultantInfo(props) {
       } finally {
         console.log('chatList stored')
         retrieveChatList(dispatch)
+        var sock = new SockJS('https://k6a104.p.ssafy.io/api/ws-stomp');
+        var ws = Stomp.over(sock);
+        function connect() {
+          // pub/sub event
+          ws.connect({}, function(frame) {
+            ws.send("/pub/chat/message", {}, JSON.stringify({type:'CREATE', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq, recvSeq: consultantSeq}));
+          }, function(error) {
+              console.log('error:')
+              console.log(error)
+              if(reconnect++ <= 5) {
+                  setTimeout(function() {
+                      console.log("connection reconnect");
+                      sock = new SockJS("https://k6a104.p.ssafy.io/api/ws-stomp");
+                      ws = Stomp.over(sock);
+                      connect();
+                  },10*1000);
+              }
+          });
+        }
       }
     }
     navigation.navigate("ChatRoom", {consultantName: consultantInfo.expertName, consultantSeq: consultantSeq})

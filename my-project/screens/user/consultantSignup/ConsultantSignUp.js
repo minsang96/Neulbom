@@ -285,6 +285,6 @@ const styles = StyleSheet.create({
   modalContainer: {
     justifyContent: "center",
     alignItems: "center",
-    height: windowHeight
+    // height: windowHeight
   },
 })

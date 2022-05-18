@@ -33,6 +33,7 @@ export default function UserLogin({ navigation: { navigate } }) {
         userEmail: user.email,
         userPwd: user.password,
       });
+      console.log(res)
       dispatch(userSlice.actions.login(res.data.data));
       await EncryptedStorage.setItem(
         "user_session",
