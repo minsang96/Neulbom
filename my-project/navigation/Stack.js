@@ -1,11 +1,11 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import FoodWrite from "../screens/mainpage/foodCamera/FoodWrite";
 import Diet from "../components/diets/Diet";
 import SnackWrite from "../screens/mainpage/foodCamera/SnackWrite";
 import FoodSearch from "../screens/mainpage/foodCamera/FoodSearch";
-import { useNavigation, useNavigationState } from "@react-navigation/native";
+import { useNavigationState } from "@react-navigation/native";
 
 const ScreenOne = ({ navigation: { navigate } }) => {
   const routesLength = useNavigationState((state) => state.routes);
@@ -39,6 +39,7 @@ const Stack = () => (
     <NativeStack.Screen name="Two" component={ScreenTwo} />
     <NativeStack.Screen name="Three" component={ScreenThree} />
     <NativeStack.Screen
+      options={{ title: "식단 입력" }}
       name="FoodWrite"
       component={FoodWrite}
       // initialParams={{ current: "dinner" }}
@@ -48,16 +49,5 @@ const Stack = () => (
     <NativeStack.Screen name="FoodSearch" component={FoodSearch} />
   </NativeStack.Navigator>
 );
-
-// const Stack = () => (
-//   <NativeStack.Navigator>
-//     <NativeStack.Screen name="one" component={ScreenOne}></NativeStack.Screen>
-//     <NativeStack.Screen name="Two" component={ScreenTwo}></NativeStack.Screen>
-//     <NativeStack.Screen
-//       name="Three"
-//       component={ScreenThree}
-//     ></NativeStack.Screen>
-//   </NativeStack.Navigator>
-// );
 
 export default Stack;

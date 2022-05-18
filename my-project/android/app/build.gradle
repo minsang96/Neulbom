@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: 'com.google.gms.google-services' // <- 추가
 
 import com.android.build.OutputFile
 
@@ -196,6 +197,9 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    // 아래 두 줄 추가
+    // Add the SDK for Firebase Cloud Messaging
+    implementation 'com.google.firebase:firebase-messaging:20.2.3'
 
     def isGifEnabled = (findProperty('expo.gif.enabled') ?: "") == "true";
     def isWebpEnabled = (findProperty('expo.webp.enabled') ?: "") == "true";

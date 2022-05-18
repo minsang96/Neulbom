@@ -68,18 +68,6 @@ const MainPage = ({ navigation: { navigate } }) => {
     console.log("ip");
   });
 
-  const logout = () => {
-    async function removeUserSession() {
-      try {
-        await EncryptedStorage.removeItem("user_session");
-      } catch (error) {
-        console.log(error.code);
-      }
-    }
-    dispatch(userSlice.actions.logout());
-    removeUserSession();
-  };
-
   return (
     <Container style={{ backgroundColor: "white" }}>
       <Box>
@@ -87,28 +75,15 @@ const MainPage = ({ navigation: { navigate } }) => {
         <DailyDiet></DailyDiet>
         <ButtonCompo
           onPressButton={() => onPressButton()}
-          buttonName="+ 혈당 추가"
+          buttonName="오늘의 기록 등록하기"
         ></ButtonCompo>
         <AddTodayRecord
           onPressButton={onPressButton}
           todayList={todayList}
           isModalVisible={isModalVisible}
         ></AddTodayRecord>
-
-        {/* <ButtonCompo
-          onPressButton={reduxTest}
-          buttonName="redux test"
-        ></ButtonCompo>
-        <ButtonCompo
-          onPressButton={reduxIn}
-          buttonName="redux에 뭐가 들어 있을까?"
-        ></ButtonCompo> */}
         <DietList></DietList>
       </Box>
-      <ButtonCompo
-        onPressButton={() => logout()}
-        buttonName="로그아웃"
-      ></ButtonCompo>
     </Container>
   );
 };
