@@ -94,7 +94,7 @@ const FoodSearch = () => {
             android_ripple={{ color: `${palette.green}` }}
             onPress={() => {
               setTempFood(food);
-              console.log(food);
+              // onSelect();
             }}
           >
             <Text>
