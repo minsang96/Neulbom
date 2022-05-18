@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   consultants: null,
-  chatList: null,
+  chatList: [],
   chat: {},
   socketConnected: [],
   isChatting: false,
