@@ -181,11 +181,6 @@ const WeeklyReport = () => {
           weeklyNutrient={weeklyNutrient[0]}
         ></NutrientCompo>
       )}
-      {loading ? (
-        <Text>Loading...</Text>
-      ) : (
-        <WeeklyEat styles={styles}></WeeklyEat>
-      )}
     </ScrollView>
   );
 };

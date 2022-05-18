@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Image, Text, StyleSheet } from "react-native";
+import { View, Image, Text, StyleSheet, ScrollView } from "react-native";
 import styled from "styled-components/native";
 import palette from "../palette";
 import { Ionicons } from "@expo/vector-icons";
@@ -14,13 +14,11 @@ const screenSize = Dimensions.get("screen");
 
 const Column = styled.View`
   flex-direction: row;
-  width: 80%;
+  width: 90%;
 `;
 
 const Box = styled.View`
-  flex: 1;
-  align-items: center;
-  margin: 0px 20px;
+  margin: 10px 20px;
   background-color: ${palette.gray};
   padding: 10px 15px;
   border-radius: 10px;
@@ -35,7 +33,7 @@ const Plus = styled.TouchableOpacity`
   position: absolute;
   justify-content: center;
   align-items: center;
-  left: 270px;
+  left: ${screenSize.width * 0.75};
   height: 30px;
   width: 30px;
   background-color: ${palette.green};
@@ -74,15 +72,34 @@ const Diet = ({ kind, current, kcal, meal, total_meal }) => {
             <Image source={{ uri: image }} style={{ width: 20, height: 20 }} />
           )}
         </View>
-        {meal.map((food) => (
-          <Box key={food.dietSeq}>
-            <Text>{food.foodName}</Text>
-            <Image
-              source={{ uri: food.dietImg }}
-              style={{ width: 55, height: 55 }}
-            ></Image>
-          </Box>
-        ))}
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={{
+            flexDirection: "row",
+          }}
+        >
+          {meal.length !== 0 ? (
+            meal.map((food) => (
+              //<Box key={food.dietSeq}>
+              <Image
+                source={{ uri: food.dietImg }}
+                style={{ width: 55, height: 55, borderRadius: 10, margin: 3 }}
+              ></Image>
+              //</Box>
+            ))
+          ) : (
+            <View
+              style={{
+                width: screenSize.width * 0.82,
+              }}
+            >
+              <Text style={{ textAlign: "center", fontSize: 16 }}>
+                아직 등록된 식단이 없습니다.
+              </Text>
+            </View>
+          )}
+        </ScrollView>
         <View style={styles.line} />
         <View style={styles.box}>
           <View style={styles.whiteCircle}>
