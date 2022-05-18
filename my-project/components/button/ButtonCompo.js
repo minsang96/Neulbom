@@ -18,7 +18,11 @@ const ButtonCompo = (props) => {
       }}
       onPress={props.onPressButton}
     >
-      <Text style={{ color: "white", fontSize: 20 }}>{props.buttonName}</Text>
+      <Text
+        style={{ color: "white", fontSize: 20, fontFamily: "SeoulNamsanEB" }}
+      >
+        {props.buttonName}
+      </Text>
     </TouchableOpacity>
   );
 };

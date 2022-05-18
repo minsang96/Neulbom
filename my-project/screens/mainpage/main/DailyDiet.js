@@ -56,10 +56,12 @@ const DailyDiet = () => {
 
   return (
     <>
-      <Text style={{ fontSize: 18, marginTop: 10 }}>일일 영양 섭취량 🥗</Text>
+      <Text style={{ fontSize: 18, marginTop: 10, fontFamily: "SeoulNamsanB" }}>
+        일일 영양 섭취량 🥗
+      </Text>
       <View style={styles.Box2}>
         {loading ? (
-          <Text>Loading...</Text>
+          <Text style={{ fontFamily: "SeoulNamsanEB" }}>Loading...</Text>
         ) : (
           dietdaily.map((diet) => (
             <View key={diet.id}>
@@ -208,18 +210,21 @@ const styles = StyleSheet.create({
   title: {
     marginLeft: screenSize.width * 0.01,
     marginBottom: screenSize.height * 0.01,
+    fontFamily: "SeoulNamsanB",
   },
   subTitle: {
     marginTop: screenSize.height * 0.01,
     marginLeft: screenSize.width * 0.01,
     marginBottom: screenSize.height * 0.01,
     fontSize: 12,
+    fontFamily: "SeoulNamsanB",
   },
   content: {
     marginLeft: screenSize.width * 0.01,
     marginBottom: screenSize.height * 0.01,
     color: "#7A7A7A",
     fontSize: 10,
+    fontFamily: "SeoulNamsanB",
   },
   Box2: {
     width: screenSize.width * 0.9,

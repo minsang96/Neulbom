@@ -22,7 +22,7 @@ const Ad = () => (
   <Box>
     <View style={{ flexDirection: "row" }}>
       <View>
-        <Content>
+        <Content style={{ fontFamily: "SeoulNamsanEB" }}>
           수기 작성 식단관리,
           {"\n"}이제는 그만!
         </Content>
@@ -38,5 +38,5 @@ const Ad = () => (
 export default Ad;
 
 const styles = StyleSheet.create({
-  contentMore: { marginLeft: 15, marginRight: 15 },
+  contentMore: { marginLeft: 15, marginRight: 15, fontFamily: "SeoulNamsanL" },
 });
