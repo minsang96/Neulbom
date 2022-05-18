@@ -1,8 +1,10 @@
-import { View, Text, StyleSheet, TextInput, Dimensions, TouchableOpacity, FlatList, ScrollView, LogBox } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Dimensions, TouchableOpacity, FlatList, ScrollView, LogBox, Alert } from 'react-native'
 import ButtonGreen2 from '../../../components/button/ButtonGreen2'
 import React, { useState, useEffect } from 'react';
 import ButtonWhite from '../../../components/button/ButtonWhite';
 import axios from 'axios';
+import { passwordVerify, stylePasswordVerify } from '../../../api/passwordVerify'
+import { emailVerify } from '../../../api/emailVerify'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -29,9 +31,6 @@ export default function UserSignUp({ navigation: {navigate} } ) {
   const radioWidth = windowWidth * 5.5 /100
   const infoCardWidth = infoBoxWidth *47 /100
   const infoInputBoxWidth = infoCardWidth * 65/100
-  const passwordVerify = () => {
-
-  }
   const setInfoFromInfoBox = (event, param) => {
     if (param === 'height') {
       setInfo({...info, height: Number(event)})
@@ -42,6 +41,33 @@ export default function UserSignUp({ navigation: {navigate} } ) {
     }
   }
   const signUp = () => {
+    if (!info.email || !info.email.trim()) {
+      return Alert.alert('알림', '이메일을 입력해주세요.');
+    }
+    else if (!info.email.includes('@') || !info.email.includes('.') || info.email.length < 6) {
+      return Alert.alert('알림', '이메일을 확인해주세요.');
+    }
+    if (!info.password || !info.password.trim()) {
+      return Alert.alert('알림', '비밀번호를 입력해주세요.');
+    }
+    if (!info.passwordVerification || !info.passwordVerification.trim()) {
+      return Alert.alert('알림', '비밀번호 확인을 입력해주세요.');
+    }
+    if (info.password !== info.passwordVerification) {
+      return Alert.alert('알림', '비밀번호 확인을 확인해주세요.');
+    }
+    if (!info.gender) {
+      return Alert.alert('알림', '성별을 선택해주세요.');
+    }
+    if (info.height < 1 || info.height > 250) {
+      return Alert.alert('알림', '키를 확인해주세요.');
+    }
+    if (info.weight < 1 || info.weight > 250) {
+      return Alert.alert('알림', '몸무게를 확인해주세요.');
+    }
+    if (info.birthYear < 1922 || info.birthYear > new Date().getFullYear()) {
+      return Alert.alert('알림', '출생연도를 확인해주세요.');
+    }
     axios.post('https://k6a104.p.ssafy.io/api/member/join', {
       type: 0,
       email: info.email,
@@ -59,13 +85,17 @@ export default function UserSignUp({ navigation: {navigate} } ) {
         console.log(res)
         navigate('SuccessSignUpUser')
       })
+      .catch(err => {
+        if (err.response.data.message === "이미 해당 이메일로 가입된 계정이 있습니다.") {
+          return Alert.alert('알림', '이미 가입된 이메일입니다.');
+        }
+      })
+    
   }
   const getNickname = () => {
-    const nickname = ''
     axios.get('https://nickname.hwanmoo.kr/?format=json&count=1')
       .then(res => {
         setInfo({...info, nickname: res.data.words[0]})
-        console.log(res.data.words[0])
       })
   }
   return (
@@ -86,7 +116,7 @@ export default function UserSignUp({ navigation: {navigate} } ) {
           <View style={styles.certification}>
             <View style={styles.certificationtextInput}>
               <TextInput
-                style={styles.textInput}
+                style={{...styles.textInput, width: '180%'}}
                 placeholder='인증번호'
                 keyboardType='number-pad'
                 onChangeText={(event) => setInfo({...info, certification: event})}
@@ -100,6 +130,7 @@ export default function UserSignUp({ navigation: {navigate} } ) {
                 width={windowWidth*30/100}
                 buttonName='이메일 인증'
                 padding={8}
+                onPressButton={() => {emailVerify(info.email)}}
               ></ButtonGreen2>
             </View>
           </View>
@@ -115,10 +146,11 @@ export default function UserSignUp({ navigation: {navigate} } ) {
             style={styles.textInput}
             placeholder='비밀번호 확인'
             secureTextEntry={true}
-            onChangeText={(event) => [passwordVerify(), setInfo({...info, passwordVerification: event})]}
+            onChangeText={(event) => setInfo({...info, passwordVerification: event})}
             autoCapitalize='none'
           ></TextInput>
           <View style={styles.inputline}></View>
+          <Text style={stylePasswordVerify(info)}>{info.passwordVerification && passwordVerify(info)}</Text>
         </View>
         <View style={{...styles.radiosBox}}>
           <View style={styles.radio}>
@@ -298,6 +330,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(226,226,226,0.2)',
     elevation: 1,
     flexDirection: 'row',
-    justifyContent: 'space-evenly'
+    justifyContent: 'space-evenly',
+    paddingVertical: '0.5%'
   }
 })

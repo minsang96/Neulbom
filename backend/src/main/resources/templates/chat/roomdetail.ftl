@@ -61,8 +61,8 @@
                 messages: []
             },
             created() {
-                this.roomId = 23;
-                this.sender = 23;
+                this.roomId = localStorage.getItem("roomId");
+                this.sender = localStorage.getItem("sender");
                 this.findRoom();
             },
             methods: {

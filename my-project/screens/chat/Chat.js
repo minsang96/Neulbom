@@ -15,7 +15,7 @@ const Chat = () => {
         tabBarActiveTintColor: '#09BC8A',
         tabBarInactiveTintColor: '#a7a7a7',
         tabBarIndicatorStyle: { backgroundColor: '#09BC8A' },
-        swipeEnabled: false
+        swipeEnabled: false,
       }}
     >
       <Tab.Screen name="전문가 목록" component={ConsultantStack} />
@@ -35,7 +35,7 @@ function ConsultantStack() {
       }}
     >
       <NativeStack.Screen name="ConsultantList" component={ConsultantList} />
-      <NativeStack.Screen name="ConsultantInfo" component={ConsultantInfo}  />
+      <NativeStack.Screen name="ConsultantInfo" component={ConsultantInfo} />
     </NativeStack.Navigator>
   );
 }
@@ -49,7 +49,7 @@ function ChatStack() {
       }}
     >
       <NativeStack.Screen name="ChatList" component={ChatList} />
-      <NativeStack.Screen name="ChatRoom" component={ChatRoom}  />
+      <NativeStack.Screen name="ChatRoom" component={ChatRoom} />
     </NativeStack.Navigator>
   );
 }
