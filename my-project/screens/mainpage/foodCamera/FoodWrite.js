@@ -26,6 +26,7 @@ import moment from "moment";
 import { Dimensions } from "react-native";
 import ButtonHalfCompo from "../../../components/button/ButtonHalfCompo";
 import ButtonCompoSearch from "../../../components/button/ButtonCompoSearch";
+import AmountMode from "../../../components/modal/AmountMode";
 
 const screenSize = Dimensions.get("screen");
 
@@ -33,6 +34,7 @@ const Container = styled.ScrollView``;
 const View = styled.View``;
 const Text = styled.Text`
   font-family: SeoulNamsanB;
+  color: ${palette.navy};
 `;
 const Plus = styled.TouchableOpacity`
   position: absolute;
@@ -61,9 +63,11 @@ const FoodWrite = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const images = useSelector((state) => state.images);
+  const [amount, setAmount] = useState(1);
   const [imagesLength, setImagesLength] = useState(0);
   const [image, setImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
   const [imageLength, setImageLength] = useState(0);
   const [recognize, setRecognize] = useState(true);
   const [diets, setDiets] = useState([]);
@@ -81,7 +85,7 @@ const FoodWrite = () => {
       setData(false);
       setModalVisible(true);
     }
-
+    setAmount(1);
     return () => {
       dispatch(imagesSlice.actions.clear());
     };
@@ -97,6 +101,7 @@ const FoodWrite = () => {
 
   // 카메라 켜기
   const onCamera = async () => {
+    setAmount(1);
     setLoading(true);
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchCameraAsync({
@@ -144,6 +149,7 @@ const FoodWrite = () => {
 
   // 갤러리에서 사진 고르기 ** 안드로이드 이뮬레이터는 갤러리에 사진이 없으므로 구글에서 다운받아서 쓰면 됨!
   const onGallery = async () => {
+    setAmount(1);
     setLoading(true);
     try {
       let result_g = await ImagePicker.launchImageLibraryAsync({
@@ -220,7 +226,7 @@ const FoodWrite = () => {
           dietDate: formatted,
           dietImg: response.data.data[idx],
           dietTime: current,
-          foodAmount: foodInfo.food.foodAmount,
+          foodAmount: amount * foodInfo.food.foodAmount,
           foodCode: foodInfo.food.foodCode,
           userSeq: user.userSeq,
         };
@@ -264,6 +270,7 @@ const FoodWrite = () => {
 
   const onPress = () => {
     console.log(images);
+    console.log("amoutn", amount);
   };
 
   const onDelete = (idx) => {
@@ -273,6 +280,7 @@ const FoodWrite = () => {
 
   const onDeleteDB = (dietSeq, idx) => {
     console.log(`remove_${current}`);
+    setImagesLength(imagesLength - 1);
     dispatch(imagesSlice.actions.removeDB(dietSeq));
     if (current == "breakfast") {
       dispatch(imagesSlice.actions.remove_breakfast(dietSeq));
@@ -286,9 +294,9 @@ const FoodWrite = () => {
   return (
     <>
       <ScrollView style={styles.background}>
-        <Pressable onPress={onPress}>
-          {/* <Text>Checking redux</Text> */}
-        </Pressable>
+        {/* <Pressable onPress={onPress}>
+          <Text>Checking redux</Text>
+        </Pressable> */}
         <View>
           <>
             {image ? (
@@ -328,7 +336,7 @@ const FoodWrite = () => {
                           justifyContent: "space-around",
                         }}
                       >
-                        <ButtonHalfCompo buttonName="섭취량 변경"></ButtonHalfCompo>
+                        <ButtonHalfCompo buttonName="섭취량변경"></ButtonHalfCompo>
                         <ButtonHalfCompo
                           buttonName="검색하기"
                           onPressButton={() =>
@@ -424,8 +432,7 @@ const FoodWrite = () => {
                           }}
                         >
                           <Text>{images.tempFood.slice(-1)[0].foodName}</Text>
-                          {/* <Text>{images.add.slice(-1)[0].food.foodAmount}</Text> */}
-                          <Text>(1인분)</Text>
+                          <Text>({amount}인분)</Text>
                         </View>
                         <View
                           style={{
@@ -440,7 +447,9 @@ const FoodWrite = () => {
                             <Text>칼로리</Text>
                             <View style={styles.circle}>
                               <Text style={{ fontWeight: "bold" }}>
-                                {parseInt(analyze.foodKcal)}
+                                {parseInt(
+                                  images.tempFood.slice(-1)[0].foodKcal
+                                )}
                               </Text>
                               <Text style={{ fontSize: 10 }}>kcal</Text>
                             </View>
@@ -449,7 +458,9 @@ const FoodWrite = () => {
                             <Text>나트륨</Text>
                             <View style={styles.circle}>
                               <Text style={{ fontWeight: "bold" }}>
-                                {parseInt(analyze.foodNatrium)}
+                                {parseInt(
+                                  images.tempFood.slice(-1)[0].foodNatrium
+                                )}
                               </Text>
                               <Text style={{ fontSize: 10 }}>mg</Text>
                             </View>
@@ -460,7 +471,9 @@ const FoodWrite = () => {
                             <Text>당류</Text>
                             <View style={styles.circle}>
                               <Text style={{ fontWeight: "bold" }}>
-                                {parseInt(analyze.foodSugars)}
+                                {parseInt(
+                                  images.tempFood.slice(-1)[0].foodSugars
+                                )}
                               </Text>
                               <Text style={{ fontSize: 10 }}>mg</Text>
                             </View>
@@ -479,7 +492,9 @@ const FoodWrite = () => {
                             <Text>탄수화물</Text>
                             <View style={styles.circle}>
                               <Text style={{ fontWeight: "bold" }}>
-                                {parseInt(analyze.foodCarbohydrate)}
+                                {parseInt(
+                                  images.tempFood.slice(-1)[0].foodCarbohydrate
+                                )}
                               </Text>
                               <Text style={{ fontSize: 10 }}>mg</Text>
                             </View>
@@ -488,7 +503,9 @@ const FoodWrite = () => {
                             <Text>단백질</Text>
                             <View style={styles.circle}>
                               <Text style={{ fontWeight: "bold" }}>
-                                {parseInt(analyze.foodProtein)}
+                                {parseInt(
+                                  images.tempFood.slice(-1)[0].foodProtein
+                                )}
                               </Text>
                               <Text style={{ fontSize: 10 }}>mg</Text>
                             </View>
@@ -499,7 +516,7 @@ const FoodWrite = () => {
                             <Text>지방</Text>
                             <View style={styles.circle}>
                               <Text style={{ fontWeight: "bold" }}>
-                                {parseInt(analyze.foodFat)}
+                                {parseInt(images.tempFood.slice(-1)[0].foodFat)}
                               </Text>
                               <Text style={{ fontSize: 10 }}>mg</Text>
                             </View>
@@ -511,7 +528,10 @@ const FoodWrite = () => {
                             justifyContent: "space-around",
                           }}
                         >
-                          <ButtonHalfCompo buttonName="섭취량 변경"></ButtonHalfCompo>
+                          <ButtonHalfCompo
+                            buttonName="섭취량 변경"
+                            onPressButton={() => setModalVisible2(true)}
+                          ></ButtonHalfCompo>
                           <ButtonHalfCompo
                             buttonName="검색하기"
                             onPressButton={() =>
@@ -595,10 +615,19 @@ const FoodWrite = () => {
                       <View style={{ alignItems: "center", marginRight: 20 }}>
                         <Text>칼로리</Text>
                         <View style={styles.circle}>
-                          <Text style={{ fontWeight: "bold" }}>
+                          <Text style={{ fontWeight: "bold", fontSize: 12 }}>
                             {parseInt(
                               images[current][images[current].length - 1]
                                 .foodKcal
+                            ) ? (
+                              <Text>
+                                {parseInt(
+                                  images[current][images[current].length - 1]
+                                    .foodKcal
+                                )}
+                              </Text>
+                            ) : (
+                              <Text>0</Text>
                             )}
                           </Text>
                           <Text style={{ fontSize: 10 }}>kcal</Text>
@@ -607,10 +636,19 @@ const FoodWrite = () => {
                       <View style={{ alignItems: "center" }}>
                         <Text>나트륨</Text>
                         <View style={styles.circle}>
-                          <Text style={{ fontWeight: "bold" }}>
+                          <Text style={{ fontWeight: "bold", fontSize: 12 }}>
                             {parseInt(
                               images[current][images[current].length - 1]
                                 .foodNatrium
+                            ) ? (
+                              <Text>
+                                {parseInt(
+                                  images[current][images[current].length - 1]
+                                    .foodNatrium
+                                )}
+                              </Text>
+                            ) : (
+                              <Text>0</Text>
                             )}
                           </Text>
                           <Text style={{ fontSize: 10 }}>mg</Text>
@@ -619,10 +657,19 @@ const FoodWrite = () => {
                       <View style={{ alignItems: "center", marginLeft: 20 }}>
                         <Text>당류</Text>
                         <View style={styles.circle}>
-                          <Text style={{ fontWeight: "bold" }}>
+                          <Text style={{ fontWeight: "bold", fontSize: 12 }}>
                             {parseInt(
                               images[current][images[current].length - 1]
                                 .foodSugars
+                            ) ? (
+                              <Text>
+                                {parseInt(
+                                  images[current][images[current].length - 1]
+                                    .foodSugars
+                                )}
+                              </Text>
+                            ) : (
+                              <Text>0</Text>
                             )}
                           </Text>
                           <Text style={{ fontSize: 10 }}>mg</Text>
@@ -639,10 +686,17 @@ const FoodWrite = () => {
                       <View style={{ alignItems: "center", marginRight: 20 }}>
                         <Text>탄수화물</Text>
                         <View style={styles.circle}>
-                          <Text style={{ fontWeight: "bold" }}>
-                            {parseInt(
-                              images[current][images[current].length - 1]
-                                .foodCarbohydrate
+                          <Text style={{ fontWeight: "bold", fontSize: 12 }}>
+                            {images[current][images[current].length - 1]
+                              .foodCarbohydrate ? (
+                              <Text>
+                                {parseInt(
+                                  images[current][images[current].length - 1]
+                                    .foodCarbohydrate
+                                )}
+                              </Text>
+                            ) : (
+                              <Text>0</Text>
                             )}
                           </Text>
                           <Text style={{ fontSize: 10 }}>mg</Text>
@@ -651,10 +705,19 @@ const FoodWrite = () => {
                       <View style={{ alignItems: "center" }}>
                         <Text>단백질</Text>
                         <View style={styles.circle}>
-                          <Text style={{ fontWeight: "bold" }}>
+                          <Text style={{ fontWeight: "bold", fontSize: 12 }}>
                             {parseInt(
                               images[current][images[current].length - 1]
                                 .foodProtein
+                            ) ? (
+                              <Text>
+                                {parseInt(
+                                  images[current][images[current].length - 1]
+                                    .foodProtein
+                                )}
+                              </Text>
+                            ) : (
+                              <Text>0</Text>
                             )}
                           </Text>
                           <Text style={{ fontSize: 10 }}>mg</Text>
@@ -663,10 +726,19 @@ const FoodWrite = () => {
                       <View style={{ alignItems: "center", marginLeft: 20 }}>
                         <Text>지방</Text>
                         <View style={styles.circle}>
-                          <Text style={{ fontWeight: "bold" }}>
+                          <Text style={{ fontWeight: "bold", fontSize: 12 }}>
                             {parseInt(
                               images[current][images[current].length - 1]
-                                .foodTransfat
+                                .foodFat
+                            ) ? (
+                              <Text>
+                                {parseInt(
+                                  images[current][images[current].length - 1]
+                                    .foodFat
+                                )}
+                              </Text>
+                            ) : (
+                              <Text>0</Text>
                             )}
                           </Text>
                           <Text style={{ fontSize: 10 }}>mg</Text>
@@ -680,20 +752,7 @@ const FoodWrite = () => {
               <Text>아무 사진도 없습니다.</Text>
             )}
           </>
-          {/* 
-          {image && (
-            <>
-              <ButtonCompoSearch
-                buttonName="검색하기"
-                onPressButton={() =>
-                  navigation.navigate("Stack", {
-                    screen: "FoodSearch",
-                    params: { current: current },
-                  })
-                }
-              ></ButtonCompoSearch>
-            </>
-          )} */}
+
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
@@ -703,65 +762,10 @@ const FoodWrite = () => {
               .slice(0)
               .reverse()
               .map((food, idx) => (
-                <Pressable onPress={() => console.log("o??")}>
-                  <View key={food.id}>
-                    <Image
-                      source={{ uri: food.imageurl }}
-                      style={{
-                        width: 50,
-                        height: 50,
-                        borderRadius: 10,
-                        margin: 3,
-                      }}
-                    ></Image>
-
-                    <TouchableOpacity
-                      onPress={() => {
-                        onDelete(idx);
-                      }}
-                    >
-                      <Text
-                        style={{
-                          textAlign: "center",
-                          fontSize: 11,
-                          backgroundColor: `tomato`,
-                          paddingHorizontal: 3,
-                          paddingVertical: 1.5,
-                          width: 30,
-                          left: 13,
-                          color: "white",
-                          fontFamily: "SeoulNamsanEB",
-                          borderRadius: 7,
-                        }}
-                      >
-                        삭제
-                      </Text>
-                      {/* <Plus
-                    style={{ marginRight: 5 }}
-                    onPress={() => {
-                      onDelete(idx);
-                    }}
-                    >
-                    <Text
-                    style={{
-                      fontSize: 30,
-                      color: "white",
-                    }}
-                    >
-                    -
-                    </Text>
-                  </Plus> */}
-                    </TouchableOpacity>
-                  </View>
-                </Pressable>
-              ))}
-            {images[current]
-              .slice(0)
-              .reverse()
-              .map((food, idx) => (
-                <View key={food.dietSeq}>
+                // <Pressable onPress={() => console.log("o??")}>
+                <View key={food.id}>
                   <Image
-                    source={{ uri: food.dietImg }}
+                    source={{ uri: food.imageurl }}
                     style={{
                       width: 50,
                       height: 50,
@@ -771,13 +775,8 @@ const FoodWrite = () => {
                   ></Image>
 
                   <TouchableOpacity
-                    style={{
-                      color: `${palette.orange}`,
-                      alignContent: "center",
-                      justifyContent: "center",
-                    }}
                     onPress={() => {
-                      onDeleteDB(food.dietSeq, idx);
+                      onDelete(idx);
                     }}
                   >
                     <Text
@@ -797,27 +796,63 @@ const FoodWrite = () => {
                       삭제
                     </Text>
                   </TouchableOpacity>
-                  {/* <Plus
-                    style={{ marginRight: 5 }}
-                    onPress={() => {
-                      onDeleteDB(food.dietSeq, idx);
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 30,
-                        color: "white",
-                      }}
-                    >
-                      -
-                    </Text>
-                  </Plus> */}
                 </View>
+                // </Pressable>
               ))}
+            {images[current].length > 0 && (
+              <>
+                {images[current]
+                  .slice(0)
+                  .reverse()
+                  .map((food, idx) => (
+                    <View key={food.dietSeq}>
+                      <Image
+                        source={{ uri: food.dietImg }}
+                        style={{
+                          width: 50,
+                          height: 50,
+                          borderRadius: 10,
+                          margin: 3,
+                        }}
+                      ></Image>
+
+                      <TouchableOpacity
+                        style={{
+                          color: `${palette.orange}`,
+                          alignContent: "center",
+                          justifyContent: "center",
+                        }}
+                        onPress={() => {
+                          onDeleteDB(food.dietSeq, idx);
+                        }}
+                      >
+                        <Text
+                          style={{
+                            textAlign: "center",
+                            fontSize: 11,
+                            backgroundColor: `tomato`,
+                            paddingHorizontal: 3,
+                            paddingVertical: 1.5,
+                            width: 30,
+                            left: 13,
+                            color: "white",
+                            fontFamily: "SeoulNamsanEB",
+                            borderRadius: 7,
+                          }}
+                        >
+                          삭제
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+              </>
+            )}
           </ScrollView>
           <PlusDiet
             onPress={() => {
               setModalVisible(true);
+
+              console.log(images);
             }}
           >
             <Text
@@ -952,6 +987,11 @@ const FoodWrite = () => {
         onCamera={onCamera}
         onGallery={onGallery}
       ></UploadMode>
+      <AmountMode
+        visible={modalVisible2}
+        onClose={() => setModalVisible2(false)}
+        setAmount={setAmount}
+      ></AmountMode>
     </>
   );
 };
