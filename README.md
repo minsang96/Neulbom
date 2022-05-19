@@ -41,10 +41,10 @@
 | ------ | ---- | -------- | ------------------------------ |
 | 남정현 | 팀장 | Frontend |                                |
 | 손형선 | 팀원 | Frontend |                                |
-| 유민상 | 팀원 | Backend  | DB 설계, API 구현, socket 통신 |
+| 유민상 | 팀원 | Backend  | DB 설계, API 구현, 웹 소켓 구현, AI 모델 적용 |
 | 정현정 | 팀원 | Frontend |                                |
-| 허은아 | 팀원 | Backend  | DB 설계, API 구현, AI API 구현 |
-| 황수진 | 팀원 | Backend  | DB 설계, API 구현, CI/CD       |
+| 허은아 | 팀원 | Backend  | DB 설계, API 구현, 웹 소켓 구현, AI 모델 적용 |
+| 황수진 | 팀원 | Backend  | DB 설계, API 구현, CI/CD, AI 모델 적용     |
 
 <br/>
 
