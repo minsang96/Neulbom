@@ -8,8 +8,8 @@ const Neulbom = () => {
   return (
     <ScrollView style={styles.background}>
       <View style={styles.box}>
+        <Text style={styles.title}>똑똑한 식단 관리 앱, 🌱늘봄{"\n"}</Text>
         <Text>
-          똑똑한 식단 관리 앱, 늘봄{"\n"}
           고혈압, 당뇨 등 만성 질환을 가진 분들의 건강 관리를 도와드립니다!
           {"\n"}
           혈당, 혈압을 주기적으로 기록하고, 음식 사진을 찍으면 알아서 영양

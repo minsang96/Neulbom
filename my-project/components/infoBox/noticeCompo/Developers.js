@@ -18,7 +18,7 @@ const Developers = () => {
             alignItems: "center",
           }}
         ></Image>
-        <Text>
+        <Text style={styles.title}>
           {"\n"}
           🌱늘봄을 만들 늘보미들🌱
         </Text>
