@@ -155,12 +155,12 @@ public class DietServiceImpl implements DietService {
 		HashMap<String, Object> result = new HashMap<>();
 		
 		Map<String, Object> total = new HashMap<>();
-		int totalKcal = 0;
-		int totalCarbohydrate = 0;
-		int totalProtein = 0;
-		int totalFat = 0;
-		int totalNatrium = 0;
-		int totalSugars = 0;
+		double totalKcal = 0;
+		double totalCarbohydrate = 0;
+		double totalProtein = 0;
+		double totalFat = 0;
+		double totalNatrium = 0;
+		double totalSugars = 0;
 
 		for (String t : time) {
 			JSONObject obj = new JSONObject();
@@ -176,7 +176,7 @@ public class DietServiceImpl implements DietService {
 			
 			JSONObject totalNutrients = new JSONObject();
 			for (int n = 0; n < nutrients.length; n++) {
-				totalNutrients.put(nutrients[n], (int) nsum[n]);
+				totalNutrients.put(nutrients[n], nsum[n]);
 			}
 			obj.put("total", totalNutrients);
 			obj.put("dietList", dietList.get(t));
