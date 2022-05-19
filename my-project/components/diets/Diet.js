@@ -27,6 +27,7 @@ const Box = styled.View`
 const Content = styled.Text`
   color: ${palette.navy};
   padding: 10px 15px;
+  font-family: SeoulNamsanEB;
 `;
 
 const Plus = styled.TouchableOpacity`
@@ -81,12 +82,11 @@ const Diet = ({ kind, current, kcal, meal, total_meal }) => {
         >
           {meal.length !== 0 ? (
             meal.map((food) => (
-              //<Box key={food.dietSeq}>
               <Image
+                key={food.dietSeq}
                 source={{ uri: food.dietImg }}
                 style={{ width: 55, height: 55, borderRadius: 10, margin: 3 }}
               ></Image>
-              //</Box>
             ))
           ) : (
             <View
@@ -94,7 +94,14 @@ const Diet = ({ kind, current, kcal, meal, total_meal }) => {
                 width: screenSize.width * 0.82,
               }}
             >
-              <Text style={{ textAlign: "center", fontSize: 16 }}>
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontSize: 16,
+                  color: `${palette.navy}`,
+                  fontFamily: "SeoulNamsanL",
+                }}
+              >
                 아직 등록된 식단이 없습니다.
               </Text>
             </View>
@@ -137,22 +144,27 @@ const styles = StyleSheet.create({
     width: screenSize.width * 0.8,
   },
   text: {
+    color: `${palette.navy}`,
     textAlign: "center",
     fontSize: 10,
+    fontFamily: "SeoulNamsanL",
   },
   numberText: {
+    color: `${palette.navy}`,
     textAlign: "center",
     fontSize: 12,
+    fontFamily: "SeoulNamsanEB",
   },
   whiteCircle: {
     backgroundColor: "white",
-    width: screenSize.width * 0.15,
-    height: screenSize.width * 0.15,
+    width: screenSize.width * 0.13,
+    height: screenSize.width * 0.13,
     justifyContent: "center",
     borderRadius: 50,
+    elevation: 5,
   },
   line: {
-    borderBottomColor: "black",
+    borderBottomColor: `${palette.green}`,
     borderBottomWidth: 1,
     marginVertical: 10,
   },

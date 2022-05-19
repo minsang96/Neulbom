@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import EncryptedStorage from "react-native-encrypted-storage";
 import axios from "axios";
 import userSlice from "../slices/user";
-import { LogBox } from 'react-native'
+import { LogBox } from "react-native";
 import { retrieveChatList } from "../api/retrieveChatList";
 import SockJS from "sockjs-client";
 import Stomp from 'stompjs'
@@ -27,11 +27,13 @@ function Root() {
   var ws = Stomp.over(sock);
   function connect() {
     // pub/sub event
-    ws.connect({}, function(frame) {
-        ws.subscribe(`/api/sub/user/${userInfo.userSeq}`, function(message) {
-            var recv = JSON.parse(message.body);
-            console.log('Root received msg: ', recv)
-            // ws.subscribe(`/api/sub/chat/room/${recv.senderSeq}with${userInfo.userSeq}`, function(message) {
+    ws.connect(
+      {},
+      function (frame) {
+        ws.subscribe(`/api/sub/user/${userInfo.userSeq}`, function (message) {
+          var recv = JSON.parse(message.body);
+          console.log("Root received msg: ", recv);
+          // ws.subscribe(`/api/sub/chat/room/${recv.senderSeq}with${userInfo.userSeq}`, function(message) {
 
             // })
             dispatch(chatSlice.actions.setSocketConnected(recv.senderSeq))
@@ -47,11 +49,12 @@ function Root() {
                 connect();
             },10*1000);
         }
-    });
+      }
+    );
   }
 
   useEffect(() => {
-    LogBox.ignoreLogs(['SerializableStateInvariantMiddleware took'])
+    LogBox.ignoreLogs(["SerializableStateInvariantMiddleware took"]);
     if (!accessToken) {
       const getUserSessionAndLogin = async () => {
         try {

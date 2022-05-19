@@ -12,6 +12,7 @@ import dietdailySlice from "../../slices/dietdaily";
 import moment from "moment";
 import AddTodayRecord from "../calendar/calendarTab/component/AddTodayRecord";
 import userSlice from "../../slices/user";
+import * as Font from "expo-font";
 
 const Box = styled.View`
   flex: 1;
@@ -49,6 +50,7 @@ const MainPage = ({ navigation: { navigate } }) => {
       console.log("diet/daily");
     }
   };
+
   useEffect(() => {
     getMyDiet();
   }, []);

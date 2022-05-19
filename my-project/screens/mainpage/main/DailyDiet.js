@@ -56,13 +56,15 @@ const DailyDiet = () => {
 
   return (
     <>
-      <Text style={{ fontSize: 18, marginTop: 10 }}>일일 영양 섭취량 🥗</Text>
+      <Text style={{ fontSize: 18, marginTop: 10, fontFamily: "SeoulNamsanB" }}>
+        일일 영양 섭취량 🥗
+      </Text>
       <View style={styles.Box2}>
         {loading ? (
-          <Text>Loading...</Text>
+          <Text style={{ fontFamily: "SeoulNamsanEB" }}>Loading...</Text>
         ) : (
           dietdaily.map((diet) => (
-            <View>
+            <View key={diet.id}>
               <View style={styles.flexDirection}>
                 <Text style={styles.title}>총 칼로리</Text>
                 <Text style={styles.content}>
@@ -144,7 +146,7 @@ const DailyDiet = () => {
                     // progress={diet.total.carbohydrate / recommend.carbohydrate}
                     progress={carbohydrateProgress}
                     animated={false}
-                    color="#FB8F67"
+                    color="#F8E16C"
                     borderColor="rgba(0, 122, 255, 0)"
                     unfilledColor="#E2E2E2"
                     height={10}
@@ -160,7 +162,7 @@ const DailyDiet = () => {
                     // progress={diet.total.protein / parseInt(recommend.protein)}
                     progress={proteinProgress}
                     animated={false}
-                    color="#FB8F67"
+                    color="#F8E16C"
                     borderColor="rgba(0, 122, 255, 0)"
                     unfilledColor="#E2E2E2"
                     height={10}
@@ -177,7 +179,7 @@ const DailyDiet = () => {
                     // progress={diet.total.fat / recommend.fat}
                     progress={fatProgress}
                     animated={false}
-                    color="#FB8F67"
+                    color="#F8E16C"
                     borderColor="rgba(0, 122, 255, 0)"
                     unfilledColor="#E2E2E2"
                     height={10}
@@ -208,18 +210,21 @@ const styles = StyleSheet.create({
   title: {
     marginLeft: screenSize.width * 0.01,
     marginBottom: screenSize.height * 0.01,
+    fontFamily: "SeoulNamsanB",
   },
   subTitle: {
     marginTop: screenSize.height * 0.01,
     marginLeft: screenSize.width * 0.01,
     marginBottom: screenSize.height * 0.01,
     fontSize: 12,
+    fontFamily: "SeoulNamsanB",
   },
   content: {
     marginLeft: screenSize.width * 0.01,
     marginBottom: screenSize.height * 0.01,
     color: "#7A7A7A",
     fontSize: 10,
+    fontFamily: "SeoulNamsanB",
   },
   Box2: {
     width: screenSize.width * 0.9,

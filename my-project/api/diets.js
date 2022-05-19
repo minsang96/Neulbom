@@ -64,24 +64,24 @@ export async function analyzeDiet(userSeq, file) {
     },
   });
   return response.data;
+  // return { message: "음식 분석 실패, 음식 검색을 이용하세요." };
 }
 
 // 식단 저장
 export async function recordDiet(diets) {
-  console.log("input", diets);
   const response = await client({
     method: "post",
     url: "/diet/record",
     data: diets,
-  }).then(console.log(diets));
+  });
   return response.data;
 }
 
-export async function uploadS3(file) {
+export async function uploadS3(file, userSeq) {
   const response = await client({
     method: "post",
     url: "/s3/upload",
-    params: { category: "Diet", userSeq: 1 },
+    params: { category: "Diet", userSeq: userSeq },
     data: file,
     headers: {
       "content-type": "multipart/form-data",
