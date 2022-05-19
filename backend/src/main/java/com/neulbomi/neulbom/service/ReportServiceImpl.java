@@ -344,17 +344,16 @@ public class ReportServiceImpl implements ReportService {
 		for (int i = 0; i < diet.size(); i++) {
 			Diet target = diet.get(i);
 			String fc = target.getFoodCode();
-			int intakeAmount = target.getDietAmount();
+			double intakeAmount = target.getDietAmount();
 			Food food = foodRepository.findFood(fc);
-			int foodAmount = food.getFoodAmount();
-			int pivot = intakeAmount / foodAmount;
+			double pivot = intakeAmount / food.getFoodAmount();
 			
-			foodKcal += (food.getFoodKcal() == null ? 0 : food.getFoodKcal()) * pivot;
+			foodKcal 		 += (food.getFoodKcal() == null ? 0 : food.getFoodKcal()) * pivot;
 			foodCarbohydrate += (food.getFoodCarbohydrate() == null ? 0 : food.getFoodCarbohydrate()) * pivot;
-			foodProtein = (food.getFoodProtein() == null ? 0 : food.getFoodProtein()) * pivot;
-			foodFat = (food.getFoodFat() == null ? 0 : food.getFoodFat()) * pivot;
-			foodSugars = (food.getFoodSugars() == null ? 0 : food.getFoodSugars())* pivot;
-			foodNatrium = (food.getFoodNatrium() == null ? 0 : food.getFoodNatrium()) * pivot;
+			foodProtein		 += (food.getFoodProtein() == null ? 0 : food.getFoodProtein()) * pivot;
+			foodFat			 += (food.getFoodFat() == null ? 0 : food.getFoodFat()) * pivot;
+			foodSugars		 += (food.getFoodSugars() == null ? 0 : food.getFoodSugars())* pivot;
+			foodNatrium += (food.getFoodNatrium() == null ? 0 : food.getFoodNatrium()) * pivot;
 		}
 		intake.put("kcal", foodKcal);
 		intake.put("carbohydrate", foodCarbohydrate);

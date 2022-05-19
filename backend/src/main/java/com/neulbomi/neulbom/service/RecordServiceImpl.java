@@ -129,9 +129,17 @@ public class RecordServiceImpl implements RecordService{
 		if(!codeCheck(bloodPressureDto.getBpCode()))
 			throw new WrongCommonCodeException();
 		
+		String code = bloodPressureDto.getBpCode();
+		if(code.equals("beforeBreakfast") || code.equals("afterBreakfast"))
+			code = "breakfast";
+		else if(code.equals("beforeLunch") || code.equals("afterLunch"))
+			code = "lunch";
+		else if(code.equals("beforeDinner") || code.equals("afterDinner"))
+			code = "dinner";
+		
 		bpRepository.save(BloodPressure.builder().
 				userSeq(bloodPressureDto.getUserSeq())
-				.bpCode(bloodPressureDto.getBpCode())
+				.bpCode(code)
 				.bpHigh(bloodPressureDto.getBpHigh())
 				.bpLow(bloodPressureDto.getBpLow())
 				.bpDate(bloodPressureDto.getBpDate())
