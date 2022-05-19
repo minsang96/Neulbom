@@ -9,6 +9,8 @@ const ChatList = () => {
   console.log('Page: ChatList')
   const dispatch = useDispatch();
   const chatList = useSelector((state) => state.chat.chatList);
+  const userInfo = useSelector((state) => state.user.userInfo);
+  const users = useSelector((state) => state.chat.users)
   async function clearStorage() {
     try {
         await EncryptedStorage.clear();
@@ -16,7 +18,7 @@ const ChatList = () => {
     } catch (error) {
         // There was an error on the native side
     }
-}
+  }
   async function deleteChatList() {
     try {
         await EncryptedStorage.removeItem("chat_list");
@@ -50,20 +52,39 @@ const ChatList = () => {
     LogBox.ignoreLogs(['Warning: Each child in a list should have a unique "key" prop.'])
   }, [])
 
-  return (
-    <ScrollView style={styles.container}>
-      {chatList && chatList.map((consultantSeq, index) => (
-        <ChatCard key={consultantSeq} consultantSeq={consultantSeq} />
-      ))}
-      <TouchableOpacity onPress={() => deleteChatList()}>
-        <Text>채팅목록삭제</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => clearStorage()}>
-        <Text>encrypted storage 다 비우기</Text>
-      </TouchableOpacity>
-    </ScrollView>
-  )
+  // 일반유저로 로그인 했을 시
+    if (userInfo.userType === '0') {
+      return (
+        <ScrollView style={styles.container}>
+          {chatList && chatList.map((consultantSeq, index) => {
+            return <ChatCard key={consultantSeq} consultantSeq={consultantSeq}/>
+          })}
+          <TouchableOpacity onPress={() => deleteChatList()}>
+            <Text>채팅목록삭제</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => clearStorage()}>
+            <Text>encrypted storage 다 비우기</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      )
+    }
+    else {
+      return (
+        <ScrollView style={styles.container}>
+          {users.map((user, index) => {
+            return <ChatCard key={user.userSeq} user={user} /> }
+          )}
+          <TouchableOpacity onPress={() => deleteChatList()}>
+            <Text>채팅목록삭제</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => clearStorage()}>
+            <Text>encrypted storage 다 비우기</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      )
+    }
 }
+
 
 export default ChatList;
 

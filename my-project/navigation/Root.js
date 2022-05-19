@@ -22,9 +22,14 @@ function Root() {
   const dispatch = useDispatch();
   const accessToken = useSelector((state) => state.user.accessToken);
   const userInfo = useSelector((state) => state.user.userInfo);
+  const chatList = useSelector((state) => state.chat.chatList);
 
   var sock = new SockJS('https://k6a104.p.ssafy.io/api/ws-stomp');
   var ws = Stomp.over(sock);
+  var reconnect = 0;
+  if (userInfo && userInfo.userType === 1) {
+    console.log('Root consultant chatList', chatList)
+  }
   function connect() {
     // pub/sub event
     ws.connect(
@@ -33,25 +38,51 @@ function Root() {
         ws.subscribe(`/api/sub/user/${userInfo.userSeq}`, function (message) {
           var recv = JSON.parse(message.body);
           console.log("Root received msg: ", recv);
-          // ws.subscribe(`/api/sub/chat/room/${recv.senderSeq}with${userInfo.userSeq}`, function(message) {
-
-            // })
-            dispatch(chatSlice.actions.setSocketConnected(recv.senderSeq))
+          // 또 소켓 연결
+          // connect2(recv)
+          // console.log('connect2')
+          storeChatList(recv)
+          retrieveChatList(dispatch)
+          dispatch(chatSlice.actions.setSocketConnected(recv.senderSeq))
         });
-    }, function(error) {
+        // 또 소켓 연결
+      }, function(error) {
         console.log('error:')
         console.log(error)
         if(reconnect++ <= 5) {
-            setTimeout(function() {
-                console.log("connection reconnect");
-                sock = new SockJS("https://k6a104.p.ssafy.io/api/ws-stomp");
-                ws = Stomp.over(sock);
-                connect();
-            },10*1000);
+          setTimeout(function() {
+            console.log("connection reconnect");
+            sock = new SockJS("https://k6a104.p.ssafy.io/api/ws-stomp");
+            ws = Stomp.over(sock);
+            connect();
+          },10*1000);
         }
       }
-    );
-  }
+      );
+    }
+  
+  async function storeChatList(recv) {
+    if (chatList.length > 0) {
+      await EncryptedStorage.setItem(
+        "chat_list",
+        JSON.stringify({
+          chatList: [...chatList, recv.userSeq]
+        })
+        )
+      } else {
+        await EncryptedStorage.setItem(
+          "chat_list",
+          JSON.stringify({
+            chatList: [recv.userSeq]
+          })
+          )
+          console.log('chatList was empty and one added')
+        }
+      }
+
+  // if (chatList.map(c => )) {
+
+  // }
 
   useEffect(() => {
     LogBox.ignoreLogs(["SerializableStateInvariantMiddleware took"]);
@@ -98,12 +129,12 @@ function Root() {
       console.log('root')
       retrieveChatList(dispatch)
     }
-    if (userInfo && userInfo.userType === '1') {
-      console.log('connect')
-      connect()
-    }
+    // if (userInfo && userInfo.userType === '1') {
+    //   console.log('connect')
+    //   connect()
+    // }
   }, []);
-  console.log('Root userInfo: ', userInfo)
+  // console.log('Root userInfo: ', userInfo)
 
   return (
     <Nav.Navigator screenOptions={{ headerShown: false }}>

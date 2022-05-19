@@ -34,17 +34,6 @@ const ChatRoom = (props) => {
       1 // 밀리초 간격으로 실행
     );
   }
-  const EnterRoom = async () => {
-    const room_name = 'halo'
-    let params = new URLSearchParams();
-    params.append("name", room_name);
-    await axios.get(`https://k6a104.p.ssafy.io/api/chat/room/enter/${userSeq}with${consultantSeq}`)
-    .then(
-      response => {
-        alert(response.data.name+"방 개설에 성공하였습니다.")
-      }
-    ).catch( response => { alert("채팅방 개설에 실패하였습니다."); console.log(response)} );
-  }
 
   // const consultantSeq = 3
   const consultantSeq = props.route.params.consultantSeq
@@ -56,11 +45,17 @@ const ChatRoom = (props) => {
   const curr = new Date()
   const utc = curr.getTime() + curr.getTimezoneOffset() *60 * 1000
   const kr_curr = new Date(utc + 9 * 60 * 60 * 1000)
-  const [chatting, isChatting] = useState(chat)
+  const userInfo = useSelector((state) => state.user.userInfo);
 
   function sendMessage() {
     try {
-      const data = {type:'TALK', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq, message: message, time: kr_curr}
+      let data
+      if (userInfo.userType === '0') {
+        data = {type:'TALK', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq, message: message, time: kr_curr}
+      }
+      else {
+        data = {type:'TALK', roomId: `${consultantSeq}with${userSeq}`, senderSeq: userSeq, message: message, time: kr_curr}
+      }
       if (message === '') {
         return;
       }
@@ -106,7 +101,6 @@ const ChatRoom = (props) => {
     }
   }
   function connect() {
-    // pub/sub event
     ws.connect({}, function(frame) {
         ws.subscribe(`/api/sub/chat/room/${userSeq}with${consultantSeq}`, function(message) {
             var recv = JSON.parse(message.body);
@@ -131,26 +125,7 @@ const ChatRoom = (props) => {
         }
     });
   }
-  // const storeChat = async () => {
-  //   dispatch(chatSlice.actions.setChat([consultantSeq, {type:'TALK', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq, message: message}]))
-  //   try {
-  //     if (chat[consultantSeq].length > 0) {
-  //       await EncryptedStorage.setItem(
-  //         `chatWith${consultantSeq}`,
-  //         JSON.stringify({chat: [...chat[consultantSeq], {type:'TALK', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq, message: message}]})
-  //         );
-  //       } else {
-  //         await EncryptedStorage.setItem(
-  //         `chatWith${consultantSeq}`,
-  //         JSON.stringify({chat: [{type:'TALK', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq, message: message}]})
-  //       );
-  //     }
-  //   } catch {
-      
-  //   } finally {
-  //     setMessage('')
-  //   }
-  // }
+
   useEffect(() => {
     loadChat()
     // EnterRoom()
@@ -158,7 +133,7 @@ const ChatRoom = (props) => {
       connect()
     }
   }, [])
-  console.log('state chat: ', chat[consultantSeq])
+  console.log(`${userSeq}'s state chat: `, chat[consultantSeq])
   
   let JsonChat;
   const loadChat = async () => {
@@ -186,36 +161,12 @@ const ChatRoom = (props) => {
       
     }
   }
-  console.log(new Date())
-  // const [messages, setMessages] = useState([]);
-  // useEffect(() => {
-  //   setMessages([
-  //     {
-  //       _id: 1,
-  //       text: 'Hello developer',
-  //       createdAt: kr_curr,
-  //       user: {
-  //         _id: 2,
-  //         name: 'React Native',
-  //         avatar: 'https://placeimg.com/140/140/any',
-  //       },
-  //     },
-  //   ])
-  // }, [])
-  // const onSend = ((messages = []) => {
-  //   setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
-  // })
+  // 채팅방을 나갔다 다시 들어올 시
+  // 전문가로 로그인했을 시에만 잘 작동함
   return (
-    // <GiftedChat
-    //   messages={messages}
-    //   onSend={messages => onSend(messages)}
-    //   user={{
-    //     _id: 1,
-    //   }}
-    // />
-    <KeyboardAvoidingView style={{backgroundColor: 'white', justifyContent: 'space-between', height: windowHeight, flex: 1}}>
-      <TouchableOpacity onPress={() => {deleteChat()}}><Text>대화 기록encrypted storage삭제</Text></TouchableOpacity>
-      <TouchableOpacity onPress={() => {dispatch(chatSlice.actions.clearChat())}}><Text>대화 기록 redux삭제</Text></TouchableOpacity>
+    <KeyboardAvoidingView style={{backgroundColor: 'white', justifyContent: 'space-between', height: windowHeight, flex: 1, paddingTop: '3%'}}>
+      {/* <TouchableOpacity onPress={() => {deleteChat()}}><Text>대화 기록encrypted storage삭제</Text></TouchableOpacity>
+      <TouchableOpacity onPress={() => {dispatch(chatSlice.actions.clearChat())}}><Text>대화 기록 redux삭제</Text></TouchableOpacity> */}
       <ScrollView>
         {Object.keys(chat).includes(String(consultantSeq)) && chat[String(consultantSeq)].map(message => {
           return (
@@ -223,23 +174,23 @@ const ChatRoom = (props) => {
                 {/* <Text style={message && message.senderSeq === userSeq ? {alignSelf: 'flex-end'} : {}}>{message && message.message}</Text> */}
                 {message && message.senderSeq === userSeq ? 
                 <View style={{flexDirection: 'row', width: '70%', alignSelf: 'flex-end', justifyContent: 'flex-end'}}>
-                  <Text style={{...styles.timeText, alignSelf: 'flex-end', marginRight: 10}}>{Number(message.time.slice(11,12)) < 13 ? message.time.slice(11,16)+' AM' : message.time.slice(11,16)+' PM'}</Text>
+                  <Text style={{...styles.timeText, alignSelf: 'flex-end', marginRight: 10, paddingBottom: 2}}>{Number(message.time.slice(11,13)) < 12 ? message.time.slice(11,16)+' AM' : Number(message.time.slice(11,13))-12+':'+message.time.slice(14,16)+' PM'}</Text>
                   <Text style={{...styles.textBox, alignSelf: 'flex-end'}}>{message && message.message}</Text>
                 </View> :
                 <View style={{flexDirection: 'row', width: '70%'}}>
                   <Text style={{...styles.textBox, backgroundColor: '#F8E16C', alignSelf: 'flex-start'}}>{message && message.message}</Text>
-                  {/* <Text style={{...styles.timeText, alignSelf: 'flex-end', marginLeft: 10}}>{Number(message.time.slice(11,12)) < 13 ? message.time.slice(11,16)+' AM' : message.time.slice(11,16)+' PM'}</Text> */}
+                  <Text style={{...styles.timeText, alignSelf: 'flex-end', marginLeft: 6, paddingBottom: 2}}>{Number(message.time.slice(11,13)) < 12 ? message.time.slice(11,16)+' AM' : Number(message.time.slice(11,13))-12+':'+message.time.slice(14,16)+' PM'}</Text>
                 </View>}
               </View>)
         })}
       </ScrollView>
-      <View style={{borderTopColor: 'black',borderTopWidth: 0.5, backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-between'}}>
+      <View style={{paddingRight: '1%',borderTopColor: 'rgba(23, 42, 58, 0.25)', borderTopWidth: 1, backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-between'}}>
         <TextInput
           value={message}
           style={{width: '90%'}}
           multiline={true}
           onChangeText={event => setMessage(event)}></TextInput>
-        <ButtonGreen2 buttonName='전송' padding={2} borderRadius={4} onPressButton={() => sendMessage()}></ButtonGreen2>
+        <ButtonGreen2 buttonName='전송' padding={2.5} borderRadius={4} onPressButton={() => sendMessage()}></ButtonGreen2>
         {/* <ButtonGreen2 buttonName='전송' onPressButton={() => storeChat()}></ButtonGreen2> */}
       </View>
     </KeyboardAvoidingView>

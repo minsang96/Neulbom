@@ -63,11 +63,12 @@ export default function ConsultantInfo(props) {
           // pub/sub event
           console.log('first time connect')
           ws.connect({}, function(frame) {
+            // redux로 자기자신 소켓 연결했는지 관리하고 안연결되어있으면
             ws.subscribe(`/api/sub/user/${userSeq}`, function(message) {
               var recv = JSON.parse(message.body);
               console.log('received msg: ', recv)
           });
-            ws.send("/pub/chat/message", {}, JSON.stringify({type:'CREATE', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq, recvSeq: consultantSeq, message: 'created'}));
+            ws.send("/pub/user", {}, JSON.stringify({type:'CREATE', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq, recvSeq: consultantSeq, message: 'created'}));
           }, function(error) {
               console.log('error:')
               console.log(error)
@@ -92,34 +93,13 @@ export default function ConsultantInfo(props) {
     LogBox.ignoreLogs(['Warning: Each child in a list should have a unique "key" prop.'])
   }, [])
 
-  // const userSeq = useSelector(state => state.user.userSeq)
-  // const toChatRoom = async () => {
-  //   const room_name = 'halo'
-  //   let params = new URLSearchParams();
-  //   params.append("name", room_name);
-  //   const findAllRoom = async () => {
-  //     try {
-  //       await axios.get('https://k6a104.p.ssafy.io/api/chat/rooms').then(response => { this.chatrooms = response.data; });
-  //     } catch(err) {
-  //       console.log(err)
-  //     }
-  //   }
-  //   await axios.get(`https://k6a104.p.ssafy.io/api/chat/room/enter/${String(userSeq)}`)
-  //   .then(
-  //     response => {
-  //       alert(response.data.name+"방 개설에 성공하였습니다.")
-  //       navigation.navigate("ChatRoom")
-  //     }
-  //   ).catch( response => { alert("채팅방 개설에 실패하였습니다."); console.log(response)} );
-  // }
-
   return (
     <ScrollView style={styles.scrollviewContainer}>
       <View style={{...styles.container, borderRadius: containerWidth*4/100}}>
         <Text style={styles.name}>{consultantInfo.expertName}</Text>
         <View style={{...styles.imgContainer}}>
           <Image
-            source={require('../../../components/chat/me_160x200.jpg')}
+            source={{uri: consultantInfo.expertImg}}
             style={{...styles.img, height: imgHeight, borderRadius: imgHeight*16/100}}
           >
           </Image>
@@ -129,13 +109,13 @@ export default function ConsultantInfo(props) {
           <Text style={styles.title}>자격 ✨</Text>
           <View style={styles.career}>
             <Text>  &#8226;  </Text>
-            <Text>{consultantInfo.expertCert}</Text>
+            <Text style={{ fontSize: 16 }}>{consultantInfo.expertCert}</Text>
           </View >
           <Text style={styles.title}>경력 📙</Text>
           {consultantInfo.expertCareer && consultantInfo.expertCareer.map(c => 
           <View style={styles.career}>
             <Text>  &#8226;  </Text>
-            <Text>{c.careerContent}</Text>
+            <Text style={{ fontSize: 15.5 }}>{c.careerContent}</Text>
           </View >
           )}
         </View>
@@ -156,7 +136,7 @@ const styles = StyleSheet.create({
   },
   container: {
     marginHorizontal: '6.5%',
-    marginTop: '8%',
+    marginTop: '7%',
     marginBottom: '4%',
     paddingHorizontal: '6%',
     flex: 1,
@@ -168,9 +148,9 @@ const styles = StyleSheet.create({
     elevation: 1
   },
   name: {
-    marginTop: '9.5%',
-    fontSize: 23,
-    fontWeight: '600',
+    marginTop: '10%',
+    fontSize: 25,
+    fontWeight: '700',
   },
   imgContainer: { 
     marginTop: '8%',
@@ -182,8 +162,10 @@ const styles = StyleSheet.create({
   intro: {
     marginTop: '8%',
     color: '#09BC8A',
-    fontSize: 17,
-    fontWeight: '600'
+    fontSize: 18,
+    fontWeight: '700',
+    textAlign: 'center',
+
   },
   contents: {
     marginTop: '0.5%',
@@ -193,10 +175,11 @@ const styles = StyleSheet.create({
   title: {
     marginTop: '5%',
     fontSize: 20,
+    fontWeight: '700'
   },
   career: {
-    marginTop: '1%',
+    marginTop: '1.5%',
     flexDirection: 'row',
-    paddingRight: '20%'
+    paddingRight: '20%',
   }
 })
