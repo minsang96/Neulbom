@@ -161,7 +161,7 @@ public class DietServiceImpl implements DietService {
 		int totalFat = 0;
 		int totalNatrium = 0;
 		int totalSugars = 0;
-		 
+
 		for (String t : time) {
 			JSONObject obj = new JSONObject();
 			
@@ -169,8 +169,8 @@ public class DietServiceImpl implements DietService {
 			double[] nsum = nutrientSum.get(t);
 			totalKcal += nsum[0];
 			totalCarbohydrate += nsum[1];
-			totalProtein += nsum[3];
-			totalFat += nsum[4];
+			totalProtein += nsum[2];
+			totalFat += nsum[3];
 			totalNatrium += nsum[4];
 			totalSugars += nsum[5];
 			
