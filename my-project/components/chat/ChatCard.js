@@ -21,7 +21,8 @@ export default function ChatCard(props) {
   let chatUser
   if (userInfo.userType === '0') {
     consultant = consultants.filter(c => c.userSeq === props.consultantSeq)[0]
-    // console.log(consultant)
+    console.log(props)
+    console.log(consultant)
   } else {
     chatUser = props.user
   }
@@ -34,7 +35,7 @@ export default function ChatCard(props) {
   if (userInfo.userType === '0') {
     return (
       <>
-      <TouchableOpacity
+      {consultant && <TouchableOpacity
         style={{...styles.card, borderRadius: cardWidth*4/100, height: cardHeight}}
         onPress={() => navigation.navigate("ChatRoom", {consultantName: consultant.expertName, consultantSeq: consultant.userSeq})}
       >
@@ -56,7 +57,7 @@ export default function ChatCard(props) {
           </View>}
           <Text numberOfLines={1} style={styles.chatContent}>{chat[String(consultant.userSeq)] !== undefined && chat[String(consultant.userSeq)][chat[String(consultant.userSeq)].length-1].message}</Text>
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity>}
       </>
     );
   }
