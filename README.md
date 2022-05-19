@@ -112,3 +112,5 @@
 3. [외부 서비스](./exec/늘봄_외부_서비스.pdf)
 
 ## **프로젝트 영상**
+
+[![유튜브](/uploads/dbfb8896351025e10cad5f32a473d60e/늘보미.png)](https://youtu.be/-SOdMgwts2I)
