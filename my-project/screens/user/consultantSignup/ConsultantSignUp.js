@@ -109,6 +109,7 @@ export default function ConsultantSignUp({ navigation: {navigate} } ) {
                 width={windowWidth*30/100}
                 buttonName='이메일 인증'
                 padding={8}
+                borderRadius={10}
               ></ButtonGreen2>
             </View>
           </View>
@@ -200,6 +201,7 @@ export default function ConsultantSignUp({ navigation: {navigate} } ) {
           width='100%'
           buttonName='늘봄 시작하기'
           padding={9.5}
+          borderRadius={10}
           onPressButton={() => signUp()}
         ></ButtonGreen2>
       <View style={styles.modalContainer}>

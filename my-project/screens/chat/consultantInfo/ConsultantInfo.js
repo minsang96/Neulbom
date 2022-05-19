@@ -31,10 +31,10 @@ export default function ConsultantInfo(props) {
   }
 
   const toChatRoom = async () => {
-    if (chatList.length > 0 && !chatList.includes(consultantSeq)) {
+    if (!chatList.includes(consultantSeq)) {
       console.log('new consultant')
       try {
-        if (chatList) {
+        if (chatList.length > 0) {
           await EncryptedStorage.setItem(
             "chat_list",
             JSON.stringify({
@@ -55,26 +55,27 @@ export default function ConsultantInfo(props) {
       } finally {
         console.log('chatList stored')
         retrieveChatList(dispatch)
-        var sock = new SockJS('https://k6a104.p.ssafy.io/api/ws-stomp');
-        var ws = Stomp.over(sock);
-        function connect() {
-          // pub/sub event
-          ws.connect({}, function(frame) {
-            ws.send("/pub/chat/message", {}, JSON.stringify({type:'CREATE', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq, recvSeq: consultantSeq}));
-          }, function(error) {
-              console.log('error:')
-              console.log(error)
-              if(reconnect++ <= 5) {
-                  setTimeout(function() {
-                      console.log("connection reconnect");
-                      sock = new SockJS("https://k6a104.p.ssafy.io/api/ws-stomp");
-                      ws = Stomp.over(sock);
-                      connect();
-                  },10*1000);
-              }
-          });
-        }
-        connect()
+        // var sock = new SockJS('https://k6a104.p.ssafy.io/api/ws-stomp');
+        // var ws = Stomp.over(sock);
+        // function connect() {
+        //   // pub/sub event
+        //   console.log('first time connect')
+        //   ws.connect({}, function(frame) {
+        //     ws.send("/pub/chat/message", {}, JSON.stringify({type:'CREATE', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq, recvSeq: consultantSeq, message: 'created'}));
+        //   }, function(error) {
+        //       console.log('error:')
+        //       console.log(error)
+        //       if(reconnect++ <= 5) {
+        //           setTimeout(function() {
+        //               console.log("connection reconnect");
+        //               sock = new SockJS("https://k6a104.p.ssafy.io/api/ws-stomp");
+        //               ws = Stomp.over(sock);
+        //               connect();
+        //           },10*1000);
+        //       }
+        //   });
+        // }
+        // connect()
       }
     }
     navigation.navigate("ChatRoom", {consultantName: consultantInfo.expertName, consultantSeq: consultantSeq})
@@ -136,6 +137,7 @@ export default function ConsultantInfo(props) {
           buttonName='상담하기'
           width='100%'
           padding={10}
+          borderRadius={10}
           onPressButton={() => toChatRoom()}></ButtonGreen2>
       </View>
     </ScrollView>
@@ -144,6 +146,7 @@ export default function ConsultantInfo(props) {
 const styles = StyleSheet.create({
   scrollviewContainer: {
     // paddingHorizontal: '9%',
+    backgroundColor: 'white'
   },
   container: {
     marginHorizontal: '6.5%',
@@ -152,34 +155,34 @@ const styles = StyleSheet.create({
     paddingHorizontal: '6%',
     flex: 1,
     alignItems: 'center',
-    borderWidth: 1.5,
+    borderWidth: 1,
     borderColor: '#172A3A',
-    paddingBottom: '1%'
+    paddingBottom: '2%',
     // borderRadius: 14,
-    // elevation: 10
+    elevation: 1
   },
   name: {
-    marginTop: '7.5%',
+    marginTop: '9.5%',
     fontSize: 23,
     fontWeight: '600',
   },
   imgContainer: { 
-    marginTop: '5%',
+    marginTop: '8%',
     width: '45%',
   },
   img: {
     width: '100%',
   },
   intro: {
-    marginTop: '7.5%',
+    marginTop: '8%',
     color: '#09BC8A',
     fontSize: 17,
     fontWeight: '600'
   },
   contents: {
-    // marginTop: '5%',
+    marginTop: '0.5%',
     alignSelf: 'flex-start',
-    marginBottom: '1%'
+    marginBottom: '2%'
   },
   title: {
     marginTop: '5%',

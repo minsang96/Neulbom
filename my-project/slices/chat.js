@@ -24,6 +24,7 @@ const chatSlice = createSlice({
       } else {
         state.chat[action.payload[0]] = [action.payload[1]]
       }
+      console.log('chat dispatched')
       console.log(state.chat)
     },
     setSocketConnected: (state, action) => {
@@ -32,7 +33,9 @@ const chatSlice = createSlice({
     setInitialChat: (state, action) => {
       state.chat[action.payload[0]] = action.payload[1]
     },
-    // set
+    clearChat: (state, action) => {
+      state.chat = {} 
+    }
   }
 });
 

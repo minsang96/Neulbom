@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
 
-// props로 buttonName, fontSize, fontWieht, onPressButton, padding, width를 받을 수 있다.
+// props로 buttonName, fontSize, fontWieht, onPressButton, padding, width, borderRadius를 받을 수 있다.
 const ButtonGreen2 = (props) => {
   return (
     <TouchableOpacity
@@ -11,7 +11,7 @@ const ButtonGreen2 = (props) => {
         marginVertical: 10,
         // marginHorizontal: 25,
         alignItems: "center",
-        borderRadius: 10,
+        borderRadius: props.borderRadius,
         width: props.width,
         elevation: props.elevation
       }}

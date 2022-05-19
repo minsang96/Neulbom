@@ -1,4 +1,4 @@
-import { View, Text, TextInput, ScrollView, Dimensions, TouchableOpacity, KeyboardAvoidingView, StyleSheet } from "react-native";
+import { View, Text, TextInput, ScrollView, Dimensions, TouchableOpacity, KeyboardAvoidingView, StyleSheet, useCallback } from "react-native";
 import React, { useEffect, useState } from 'react'
 import SockJS from "sockjs-client";
 import Stomp from 'stompjs'
@@ -7,10 +7,12 @@ import EncryptedStorage from "react-native-encrypted-storage";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import chatSlice from "../../../slices/chat";
+import { GiftedChat } from 'react-native-gifted-chat'
 
 const windowHeight = Dimensions.get('window').height*80/100
 
 const ChatRoom = (props) => {
+  console.log('-----------------------------------------------------------------------')
   console.log('Page: ChatRoom')
   const dispatch = useDispatch();
   var sock = new SockJS('https://k6a104.p.ssafy.io/api/ws-stomp');
@@ -51,12 +53,14 @@ const ChatRoom = (props) => {
   const socketConnected = useSelector((state) => state.chat.socketConnected);
   const [ message, setMessage ] = useState('');
   const chat = useSelector(state => state.chat.chat)
+  const curr = new Date()
+  const utc = curr.getTime() + curr.getTimezoneOffset() *60 * 1000
+  const kr_curr = new Date(utc + 9 * 60 * 60 * 1000)
+  const [chatting, isChatting] = useState(chat)
 
   function sendMessage() {
     try {
-      // send할 데이터
-      const data = {type:'TALK', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq, message: message}
-      // 빈문자열이면 리턴
+      const data = {type:'TALK', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq, message: message, time: kr_curr}
       if (message === '') {
         return;
       }
@@ -77,34 +81,39 @@ const ChatRoom = (props) => {
     }
   }
   
+  const storeChat = async (recv) => {
+    try {
+      console.log('store triedbads')
+      console.log(chat[consultantSeq])
+      if (chat[consultantSeq]) {
+        console.log('chat[consultantSeq].length > 0')
+        await EncryptedStorage.setItem(
+          `chatWith${consultantSeq}`,
+          JSON.stringify({chat: [...chat[consultantSeq], recv]})
+          );
+        } 
+      else {
+        console.log('!chat[consultantSeq]')
+        await EncryptedStorage.setItem(
+          `chatWith${consultantSeq}`,
+          JSON.stringify({chat: [recv]})
+        );
+      }
+    } catch(err) {
+      console.log(err)
+    } finally {
+      console.log('chat stored')
+    }
+  }
   function connect() {
     // pub/sub event
     ws.connect({}, function(frame) {
         ws.subscribe(`/api/sub/chat/room/${userSeq}with${consultantSeq}`, function(message) {
             var recv = JSON.parse(message.body);
             console.log('received msg: ', recv)
-            const storeChat = async () => {
-              try {
-                if (chat[consultantSeq].length > 0) {
-                  await EncryptedStorage.setItem(
-                    `chatWith${consultantSeq}`,
-                    JSON.stringify({chat: [...chat[consultantSeq], recv]})
-                    );
-                  } else {
-                    await EncryptedStorage.setItem(
-                      `chatWith${consultantSeq}`,
-                      JSON.stringify({chat: [recv]})
-                  );
-                }
-              } catch {
-                
-              } finally {
-                console.log('chat stored')
-              }
-            }
             if (recv.message) {
               dispatch(chatSlice.actions.setChat([consultantSeq, recv]))
-              storeChat()
+              storeChat(recv)
             }
         });
         ws.send("/pub/chat/message", {}, JSON.stringify({type:'ENTER', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq}));
@@ -149,11 +158,14 @@ const ChatRoom = (props) => {
       connect()
     }
   }, [])
-  console.log('state chat: ', chat)
+  console.log('state chat: ', chat[consultantSeq])
+  
+  let JsonChat;
   const loadChat = async () => {
+    console.log('loadChat')
     try {
       const chatFromStorage = await EncryptedStorage.getItem(`chatWith${consultantSeq}`)
-      let JsonChat;
+      console.log(chatFromStorage)
       if (chatFromStorage !== undefined && chatFromStorage !== null) {
         JsonChat = JSON.parse(chatFromStorage);
         console.log('JsonChat: ')
@@ -165,32 +177,68 @@ const ChatRoom = (props) => {
     }
   }
 
-  // async function deleteChat() {
-  //   try {
-  //     await EncryptedStorage.removeItem(`chatWith${consultantSeq}`);
-  //     console.log('deleted successfully')
+  async function deleteChat() {
+    try {
+      await EncryptedStorage.removeItem(`chatWith${consultantSeq}`);
+      console.log('deleted successfully')
 
-  //   } catch (error) {
+    } catch (error) {
       
-  //   }
-  // }
+    }
+  }
+  console.log(new Date())
+  // const [messages, setMessages] = useState([]);
+  // useEffect(() => {
+  //   setMessages([
+  //     {
+  //       _id: 1,
+  //       text: 'Hello developer',
+  //       createdAt: kr_curr,
+  //       user: {
+  //         _id: 2,
+  //         name: 'React Native',
+  //         avatar: 'https://placeimg.com/140/140/any',
+  //       },
+  //     },
+  //   ])
+  // }, [])
+  // const onSend = ((messages = []) => {
+  //   setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
+  // })
   return (
-    <KeyboardAvoidingView style={{justifyContent: 'space-between', height: windowHeight, flex: 1}}>
-      {/* <TouchableOpacity onPress={() => {deleteChat()}}><Text>대화 기록encrypted storage삭제</Text></TouchableOpacity> */}
+    // <GiftedChat
+    //   messages={messages}
+    //   onSend={messages => onSend(messages)}
+    //   user={{
+    //     _id: 1,
+    //   }}
+    // />
+    <KeyboardAvoidingView style={{backgroundColor: 'white', justifyContent: 'space-between', height: windowHeight, flex: 1}}>
+      <TouchableOpacity onPress={() => {deleteChat()}}><Text>대화 기록encrypted storage삭제</Text></TouchableOpacity>
+      <TouchableOpacity onPress={() => {dispatch(chatSlice.actions.clearChat())}}><Text>대화 기록 redux삭제</Text></TouchableOpacity>
       <ScrollView>
         {Object.keys(chat).includes(String(consultantSeq)) && chat[String(consultantSeq)].map(message => {
           return (
-            <View style={{borderWidth: 1}}>
-              <Text style={message && message.senderSeq === userSeq ? {alignSelf: 'flex-end'} : {}}>{message && message.message}</Text>
-            </View>)
+              <View>
+                {/* <Text style={message && message.senderSeq === userSeq ? {alignSelf: 'flex-end'} : {}}>{message && message.message}</Text> */}
+                {message && message.senderSeq === userSeq ? 
+                <View style={{width: '70%', alignSelf: 'flex-end', justifyContent: 'flex-end'}}>
+                  <Text style={{position: 'absolute'}}>{message.time}</Text>
+                  <Text style={{...styles.textBox, alignSelf: 'flex-end'}}>{message && message.message}</Text>
+                </View> :
+                <View style={{ width: '70%'}}>
+                  <Text style={{...styles.textBox, backgroundColor: '#F8E16C', alignSelf: 'flex-start'}}>{message && message.message}</Text>
+                </View>}
+              </View>)
         })}
       </ScrollView>
-      <View style={{backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-between'}}>
+      <View style={{borderTopColor: 'black',borderTopWidth: 0.5, backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-between'}}>
         <TextInput
           value={message}
           style={{width: '90%'}}
+          multiline={true}
           onChangeText={event => setMessage(event)}></TextInput>
-        <ButtonGreen2 buttonName='전송' onPressButton={() => sendMessage()}></ButtonGreen2>
+        <ButtonGreen2 buttonName='전송' padding={2} borderRadius={4} onPressButton={() => sendMessage()}></ButtonGreen2>
         {/* <ButtonGreen2 buttonName='전송' onPressButton={() => storeChat()}></ButtonGreen2> */}
       </View>
     </KeyboardAvoidingView>
@@ -200,8 +248,11 @@ const ChatRoom = (props) => {
 export default ChatRoom;
 
 const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: '3%',
-    paddingTop: '1.5%'
+  textBox: {
+    margin: 3,
+    marginRight: 10,
+    padding: 10,
+    backgroundColor: '#e2e2e2',
+    borderRadius: 8
   }
 })
