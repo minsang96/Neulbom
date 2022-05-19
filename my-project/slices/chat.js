@@ -5,7 +5,8 @@ const initialState = {
   chatList: [],
   chat: {},
   socketConnected: [],
-  isChatting: false,
+  // isChatting: false,
+  users: []
 }
 
 const chatSlice = createSlice({
@@ -35,6 +36,9 @@ const chatSlice = createSlice({
     },
     clearChat: (state, action) => {
       state.chat = {} 
+    },
+    setUsers: (state, action) => {
+      state.users.push({userSeq: action.payload[0], userInfo: action.payload[1]})
     }
   }
 });
