@@ -12,7 +12,7 @@ import userSlice from "../slices/user";
 import { LogBox } from "react-native";
 import { retrieveChatList } from "../api/retrieveChatList";
 import SockJS from "sockjs-client";
-import Stomp from 'stompjs'
+import Stomp from "stompjs";
 import chatSlice from "../slices/chat";
 // import SplashScreen from 'react-native-splash-screen';
 
@@ -24,11 +24,11 @@ function Root() {
   const userInfo = useSelector((state) => state.user.userInfo);
   const chatList = useSelector((state) => state.chat.chatList);
 
-  var sock = new SockJS('https://k6a104.p.ssafy.io/api/ws-stomp');
+  var sock = new SockJS("https://k6a104.p.ssafy.io/api/ws-stomp");
   var ws = Stomp.over(sock);
   var reconnect = 0;
   if (userInfo && userInfo.userType === 1) {
-    console.log('Root consultant chatList', chatList)
+    console.log("Root consultant chatList", chatList);
   }
   function connect() {
     // pub/sub event
@@ -41,44 +41,45 @@ function Root() {
           // 또 소켓 연결
           // connect2(recv)
           // console.log('connect2')
-          storeChatList(recv)
-          retrieveChatList(dispatch)
-          dispatch(chatSlice.actions.setSocketConnected(recv.senderSeq))
+          storeChatList(recv);
+          retrieveChatList(dispatch);
+          dispatch(chatSlice.actions.setSocketConnected(recv.senderSeq));
         });
         // 또 소켓 연결
-      }, function(error) {
-        console.log('error:')
-        console.log(error)
-        if(reconnect++ <= 5) {
-          setTimeout(function() {
+      },
+      function (error) {
+        console.log("error:");
+        console.log(error);
+        if (reconnect++ <= 5) {
+          setTimeout(function () {
             console.log("connection reconnect");
             sock = new SockJS("https://k6a104.p.ssafy.io/api/ws-stomp");
             ws = Stomp.over(sock);
             connect();
-          },10*1000);
+          }, 10 * 1000);
         }
       }
-      );
-    }
-  
+    );
+  }
+
   async function storeChatList(recv) {
     if (chatList.length > 0) {
       await EncryptedStorage.setItem(
         "chat_list",
         JSON.stringify({
-          chatList: [...chatList, recv.userSeq]
+          chatList: [...chatList, recv.userSeq],
         })
-        )
-      } else {
-        await EncryptedStorage.setItem(
-          "chat_list",
-          JSON.stringify({
-            chatList: [recv.userSeq]
-          })
-          )
-          console.log('chatList was empty and one added')
-        }
-      }
+      );
+    } else {
+      await EncryptedStorage.setItem(
+        "chat_list",
+        JSON.stringify({
+          chatList: [recv.userSeq],
+        })
+      );
+      console.log("chatList was empty and one added");
+    }
+  }
 
   // if (chatList.map(c => )) {
 
@@ -97,7 +98,7 @@ function Root() {
           let JsonSession;
           if (session !== undefined) {
             JsonSession = JSON.parse(session);
-            console.log(JsonSession)
+            console.log(JsonSession);
           }
           const res = await axios.post(
             "https://k6a104.p.ssafy.io/api/user/login",
@@ -106,7 +107,7 @@ function Root() {
               userPwd: JsonSession.password,
             }
           );
-          
+
           dispatch(userSlice.actions.login(res.data.data));
           try {
             const response = await axios.get(
@@ -126,8 +127,8 @@ function Root() {
         }
       };
       getUserSessionAndLogin();
-      console.log('root')
-      retrieveChatList(dispatch)
+      console.log("root");
+      retrieveChatList(dispatch);
     }
     // if (userInfo && userInfo.userType === '1') {
     //   console.log('connect')
