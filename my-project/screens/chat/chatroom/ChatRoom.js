@@ -116,7 +116,7 @@ const ChatRoom = (props) => {
               storeChat(recv)
             }
         });
-        ws.send("/pub/chat/message", {}, JSON.stringify({type:'ENTER', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq}));
+        ws.send("/pub/chat/message", {}, JSON.stringify({type:'ENTER', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq, recvSeq: consultantSeq}));
         dispatch(chatSlice.actions.setSocketConnected(consultantSeq))
     }, function(error) {
         console.log('error:')
@@ -222,12 +222,13 @@ const ChatRoom = (props) => {
               <View>
                 {/* <Text style={message && message.senderSeq === userSeq ? {alignSelf: 'flex-end'} : {}}>{message && message.message}</Text> */}
                 {message && message.senderSeq === userSeq ? 
-                <View style={{width: '70%', alignSelf: 'flex-end', justifyContent: 'flex-end'}}>
-                  <Text style={{position: 'absolute'}}>{message.time}</Text>
+                <View style={{flexDirection: 'row', width: '70%', alignSelf: 'flex-end', justifyContent: 'flex-end'}}>
+                  <Text style={{...styles.timeText, alignSelf: 'flex-end', marginRight: 10}}>{Number(message.time.slice(11,12)) < 13 ? message.time.slice(11,16)+' AM' : message.time.slice(11,16)+' PM'}</Text>
                   <Text style={{...styles.textBox, alignSelf: 'flex-end'}}>{message && message.message}</Text>
                 </View> :
-                <View style={{ width: '70%'}}>
+                <View style={{flexDirection: 'row', width: '70%'}}>
                   <Text style={{...styles.textBox, backgroundColor: '#F8E16C', alignSelf: 'flex-start'}}>{message && message.message}</Text>
+                  {/* <Text style={{...styles.timeText, alignSelf: 'flex-end', marginLeft: 10}}>{Number(message.time.slice(11,12)) < 13 ? message.time.slice(11,16)+' AM' : message.time.slice(11,16)+' PM'}</Text> */}
                 </View>}
               </View>)
         })}
@@ -254,5 +255,9 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#e2e2e2',
     borderRadius: 8
+  },
+  timeText: {
+    fontSize: 13,
+    color: '#172A3A'
   }
 })
