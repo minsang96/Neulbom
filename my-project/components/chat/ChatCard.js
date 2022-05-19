@@ -17,7 +17,7 @@ export default function ChatCard(props) {
   const imgWidth = windowHeight*9/100
   const consultants = useSelector(state => state.chat.consultants)
   const consultant = consultants.filter(c => c.userSeq === props.consultantSeq)[0]
-  // const consultant = [{expertName: '김의사', consultantSeq: 3, expertDesc: '실력좋은의사'}]
+  // const consultant = {expertName: '김의사', userSeq: 4, expertDesc: '실력좋은의사'}
   const chat = useSelector(state => state.chat.chat)
   // console.log(chat[String(consultant.userSeq)][chat[String(consultant.userSeq)].length-1])
   

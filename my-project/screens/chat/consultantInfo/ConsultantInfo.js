@@ -22,6 +22,7 @@ export default function ConsultantInfo(props) {
   const consultantSeq = props.route.params.userSeq
   const chatList = useSelector((state) => state.chat.chatList);
   const [ consultantInfo, setConsultantInfo ] = useState({});
+  const userSeq = useSelector((state) => state.user.userSeq);
   const getConsultantInfo = async () => {
     await axios.get('https://k6a104.p.ssafy.io/api/expert/detail', {
       params: {userSeq: consultantSeq}
@@ -55,27 +56,31 @@ export default function ConsultantInfo(props) {
       } finally {
         console.log('chatList stored')
         retrieveChatList(dispatch)
-        // var sock = new SockJS('https://k6a104.p.ssafy.io/api/ws-stomp');
-        // var ws = Stomp.over(sock);
-        // function connect() {
-        //   // pub/sub event
-        //   console.log('first time connect')
-        //   ws.connect({}, function(frame) {
-        //     ws.send("/pub/chat/message", {}, JSON.stringify({type:'CREATE', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq, recvSeq: consultantSeq, message: 'created'}));
-        //   }, function(error) {
-        //       console.log('error:')
-        //       console.log(error)
-        //       if(reconnect++ <= 5) {
-        //           setTimeout(function() {
-        //               console.log("connection reconnect");
-        //               sock = new SockJS("https://k6a104.p.ssafy.io/api/ws-stomp");
-        //               ws = Stomp.over(sock);
-        //               connect();
-        //           },10*1000);
-        //       }
-        //   });
-        // }
-        // connect()
+        var sock = new SockJS('https://k6a104.p.ssafy.io/api/ws-stomp');
+        var ws = Stomp.over(sock);
+        function connect() {
+          // pub/sub event
+          console.log('first time connect')
+          ws.connect({}, function(frame) {
+            ws.subscribe(`/api/sub/user/${userSeq}`, function(message) {
+              var recv = JSON.parse(message.body);
+              console.log('received msg: ', recv)
+          });
+            ws.send("/pub/chat/message", {}, JSON.stringify({type:'CREATE', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq, recvSeq: consultantSeq, message: 'created'}));
+          }, function(error) {
+              console.log('error:')
+              console.log(error)
+              if(reconnect++ <= 5) {
+                  setTimeout(function() {
+                      console.log("connection reconnect");
+                      sock = new SockJS("https://k6a104.p.ssafy.io/api/ws-stomp");
+                      ws = Stomp.over(sock);
+                      connect();
+                  },10*1000);
+              }
+          });
+        }
+        connect()
       }
     }
     navigation.navigate("ChatRoom", {consultantName: consultantInfo.expertName, consultantSeq: consultantSeq})
