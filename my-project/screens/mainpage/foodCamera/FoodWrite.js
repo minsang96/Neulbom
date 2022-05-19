@@ -703,40 +703,40 @@ const FoodWrite = () => {
               .slice(0)
               .reverse()
               .map((food, idx) => (
-                <Pressable onPress={() => console.log("o??")}>
-                  <View key={food.id}>
-                    <Image
-                      source={{ uri: food.imageurl }}
-                      style={{
-                        width: 50,
-                        height: 50,
-                        borderRadius: 10,
-                        margin: 3,
-                      }}
-                    ></Image>
+                // <Pressable onPress={() => console.log("o??")}>
+                <View key={food.id}>
+                  <Image
+                    source={{ uri: food.imageurl }}
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: 10,
+                      margin: 3,
+                    }}
+                  ></Image>
 
-                    <TouchableOpacity
-                      onPress={() => {
-                        onDelete(idx);
+                  <TouchableOpacity
+                    onPress={() => {
+                      onDelete(idx);
+                    }}
+                  >
+                    <Text
+                      style={{
+                        textAlign: "center",
+                        fontSize: 11,
+                        backgroundColor: `tomato`,
+                        paddingHorizontal: 3,
+                        paddingVertical: 1.5,
+                        width: 30,
+                        left: 13,
+                        color: "white",
+                        fontFamily: "SeoulNamsanEB",
+                        borderRadius: 7,
                       }}
                     >
-                      <Text
-                        style={{
-                          textAlign: "center",
-                          fontSize: 11,
-                          backgroundColor: `tomato`,
-                          paddingHorizontal: 3,
-                          paddingVertical: 1.5,
-                          width: 30,
-                          left: 13,
-                          color: "white",
-                          fontFamily: "SeoulNamsanEB",
-                          borderRadius: 7,
-                        }}
-                      >
-                        삭제
-                      </Text>
-                      {/* <Plus
+                      삭제
+                    </Text>
+                    {/* <Plus
                     style={{ marginRight: 5 }}
                     onPress={() => {
                       onDelete(idx);
@@ -751,9 +751,9 @@ const FoodWrite = () => {
                     -
                     </Text>
                   </Plus> */}
-                    </TouchableOpacity>
-                  </View>
-                </Pressable>
+                  </TouchableOpacity>
+                </View>
+                // </Pressable>
               ))}
             {images[current]
               .slice(0)
