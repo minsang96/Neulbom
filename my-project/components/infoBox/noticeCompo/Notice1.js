@@ -48,10 +48,10 @@ const Notice1 = () => {
             있어요!
           </Text>
           <Image
-            source={require("../../assets/images/mainpage1.jpeg")}
+            source={require("../../assets/images/foodAnalyze.png")}
             style={{
               width: screenSize.width * 0.78,
-              height: 380,
+              height: 540,
               justifyContent: "center",
               alignItems: "center",
               marginBottom: 30,
@@ -102,10 +102,10 @@ const Notice1 = () => {
             전문가 상담을 이용해보세요
           </Text>
           <Image
-            source={require("../../assets/images/mainpage1.jpeg")}
+            source={require("../../assets/images/expertList.png")}
             style={{
               width: screenSize.width * 0.78,
-              height: 380,
+              height: 520,
               justifyContent: "center",
               alignItems: "center",
               marginBottom: 30,
@@ -119,10 +119,10 @@ const Notice1 = () => {
             믿고 상담할 수 있겠죠?
           </Text>
           <Image
-            source={require("../../assets/images/mainpage1.jpeg")}
+            source={require("../../assets/images/expertDesc.jpg")}
             style={{
               width: screenSize.width * 0.78,
-              height: 380,
+              height: 480,
               justifyContent: "center",
               alignItems: "center",
               marginBottom: 30,
