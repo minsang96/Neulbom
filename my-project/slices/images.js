@@ -114,17 +114,13 @@ const imagesSlice = createSlice({
     remove_lunch: (state, action) => {
       return {
         ...state,
-        lunch: state.breakfast.filter(
-          (food) => food.dietSeq !== action.payload
-        ),
+        lunch: state.lunch.filter((food) => food.dietSeq !== action.payload),
       };
     },
     remove_dinner: (state, action) => {
       return {
         ...state,
-        dinner: state.breakfast.filter(
-          (food) => food.dietSeq !== action.payload
-        ),
+        dinner: state.dinner.filter((food) => food.dietSeq !== action.payload),
       };
     },
   },

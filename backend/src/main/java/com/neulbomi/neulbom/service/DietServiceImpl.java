@@ -28,6 +28,7 @@ import com.neulbomi.neulbom.entity.Other;
 import com.neulbomi.neulbom.entity.User;
 import com.neulbomi.neulbom.exception.FailAnalyzeFoodException;
 import com.neulbomi.neulbom.exception.NotExistsUserException;
+import com.neulbomi.neulbom.exception.NotJPGException;
 import com.neulbomi.neulbom.repository.DietRepository;
 import com.neulbomi.neulbom.repository.FoodRepository;
 import com.neulbomi.neulbom.repository.MemberRepository;
@@ -155,13 +156,13 @@ public class DietServiceImpl implements DietService {
 		HashMap<String, Object> result = new HashMap<>();
 		
 		Map<String, Object> total = new HashMap<>();
-		int totalKcal = 0;
-		int totalCarbohydrate = 0;
-		int totalProtein = 0;
-		int totalFat = 0;
-		int totalNatrium = 0;
-		int totalSugars = 0;
-		 
+		double totalKcal = 0;
+		double totalCarbohydrate = 0;
+		double totalProtein = 0;
+		double totalFat = 0;
+		double totalNatrium = 0;
+		double totalSugars = 0;
+
 		for (String t : time) {
 			JSONObject obj = new JSONObject();
 			
@@ -169,14 +170,14 @@ public class DietServiceImpl implements DietService {
 			double[] nsum = nutrientSum.get(t);
 			totalKcal += nsum[0];
 			totalCarbohydrate += nsum[1];
-			totalProtein += nsum[3];
-			totalFat += nsum[4];
+			totalProtein += nsum[2];
+			totalFat += nsum[3];
 			totalNatrium += nsum[4];
 			totalSugars += nsum[5];
 			
 			JSONObject totalNutrients = new JSONObject();
 			for (int n = 0; n < nutrients.length; n++) {
-				totalNutrients.put(nutrients[n], (int) nsum[n]);
+				totalNutrients.put(nutrients[n], nsum[n]);
 			}
 			obj.put("total", totalNutrients);
 			obj.put("dietList", dietList.get(t));
@@ -321,6 +322,9 @@ public class DietServiceImpl implements DietService {
 				map.add("user_img", new MultipartInputStreamFileResource(file.getInputStream(), file.getOriginalFilename()));
 				// 최근 Spring 버전을 쓴다면 map.add("files", file.getResource()); 로 변경
 			}
+			System.out.println(file.getOriginalFilename());
+			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().length()-3);
+			if(!ext.equals("jpg") && !ext.equals("JPG")) throw new NotJPGException();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -336,7 +340,7 @@ public class DietServiceImpl implements DietService {
 		HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(map, headers);
 		response = REST_TEMPLATE.postForObject(url, requestEntity, JsonNode.class);
 		
-		// 분석한 음식 코드
+		// 분석한 음식 코드		
 		String code = response.get("code").asText();
 		double quantity = response.get("quantity").asDouble();
 		

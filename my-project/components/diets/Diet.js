@@ -111,23 +111,31 @@ const Diet = ({ kind, current, kcal, meal, total_meal }) => {
         <View style={styles.box}>
           <View style={styles.whiteCircle}>
             <Text style={styles.text}>탄수화물</Text>
-            <Text style={styles.numberText}>{total_meal.carbohydrate}g</Text>
+            <Text style={styles.numberText}>
+              {parseInt(total_meal.carbohydrate)}g
+            </Text>
           </View>
           <View style={styles.whiteCircle}>
             <Text style={styles.text}>단백질</Text>
-            <Text style={styles.numberText}>{total_meal.protein}g</Text>
+            <Text style={styles.numberText}>
+              {parseInt(total_meal.protein)}g
+            </Text>
           </View>
           <View style={styles.whiteCircle}>
             <Text style={styles.text}>지방</Text>
-            <Text style={styles.numberText}>{total_meal.fat}g</Text>
+            <Text style={styles.numberText}>{parseInt(total_meal.fat)}g</Text>
           </View>
           <View style={styles.whiteCircle}>
             <Text style={styles.text}>나트륨</Text>
-            <Text style={styles.numberText}>{total_meal.natrium}mg</Text>
+            <Text style={styles.numberText}>
+              {parseInt(total_meal.natrium)}mg
+            </Text>
           </View>
           <View style={styles.whiteCircle}>
             <Text style={styles.text}>당</Text>
-            <Text style={styles.numberText}>{total_meal.sugars}g</Text>
+            <Text style={styles.numberText}>
+              {parseInt(total_meal.sugars)}g
+            </Text>
           </View>
         </View>
       </Box>

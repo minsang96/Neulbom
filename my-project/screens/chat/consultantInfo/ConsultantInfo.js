@@ -1,62 +1,71 @@
-import { View, Text, Image, ScrollView, StyleSheet, Dimensions, LogBox } from 'react-native';
-import ButtonGreen2 from '../../../components/button/ButtonGreen2';
-import { useNavigation } from '@react-navigation/native';
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Dimensions,
+  LogBox,
+} from "react-native";
+import ButtonGreen2 from "../../../components/button/ButtonGreen2";
+import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import EncryptedStorage from "react-native-encrypted-storage";
-import { useEffect, useState } from 'react';
-import { retrieveChatList } from '../../../api/retrieveChatList';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import { retrieveChatList } from "../../../api/retrieveChatList";
+import axios from "axios";
 import SockJS from "sockjs-client";
-import Stomp from 'stompjs'
+import Stomp from "stompjs";
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 export default function ConsultantInfo(props) {
-  console.log('Page: ConsultantInfo')
+  console.log("Page: ConsultantInfo");
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const imgHeight = windowHeight*24/100
-  const containerWidth = windowWidth*94/100
-  const containerHiehgt = windowHeight*71.5/100
-  const consultantSeq = props.route.params.userSeq
+  const imgHeight = (windowHeight * 24) / 100;
+  const containerWidth = (windowWidth * 94) / 100;
+  const containerHiehgt = (windowHeight * 71.5) / 100;
+  const consultantSeq = props.route.params.userSeq;
   const chatList = useSelector((state) => state.chat.chatList);
-  const [ consultantInfo, setConsultantInfo ] = useState({});
+  const [consultantInfo, setConsultantInfo] = useState({});
   const userSeq = useSelector((state) => state.user.userSeq);
   const getConsultantInfo = async () => {
-    await axios.get('https://k6a104.p.ssafy.io/api/expert/detail', {
-      params: {userSeq: consultantSeq}
-    }).then(res=> {
-      setConsultantInfo(res.data.data)
-    })
-  }
+    await axios
+      .get("https://k6a104.p.ssafy.io/api/expert/detail", {
+        params: { userSeq: consultantSeq },
+      })
+      .then((res) => {
+        setConsultantInfo(res.data.data);
+      });
+  };
 
   const toChatRoom = async () => {
     if (!chatList.includes(consultantSeq)) {
-      console.log('new consultant')
+      console.log("new consultant");
       try {
         if (chatList.length > 0) {
           await EncryptedStorage.setItem(
             "chat_list",
             JSON.stringify({
-              chatList: [...chatList, consultantSeq]
+              chatList: [...chatList, consultantSeq],
             })
-          )
+          );
         } else {
           await EncryptedStorage.setItem(
             "chat_list",
             JSON.stringify({
-              chatList: [consultantSeq]
+              chatList: [consultantSeq],
             })
-          )
-          console.log('chatList was empty and one added')
+          );
+          console.log("chatList was empty and one added");
         }
       } catch (error) {
-        
       } finally {
-        console.log('chatList stored')
-        retrieveChatList(dispatch)
-        var sock = new SockJS('https://k6a104.p.ssafy.io/api/ws-stomp');
+        console.log("chatList stored");
+        retrieveChatList(dispatch);
+        var sock = new SockJS("https://k6a104.p.ssafy.io/api/ws-stomp");
         var ws = Stomp.over(sock);
         var reconnect = 0;
         function connect() {
@@ -80,24 +89,35 @@ export default function ConsultantInfo(props) {
                       connect();
                   },10*1000);
               }
-          });
+            }
+          );
         }
-        connect()
+        connect();
       }
     }
-    navigation.navigate("ChatRoom", {consultantName: consultantInfo.expertName, consultantSeq: consultantSeq})
-  }
+    navigation.navigate("ChatRoom", {
+      consultantName: consultantInfo.expertName,
+      consultantSeq: consultantSeq,
+    });
+  };
 
   useEffect(() => {
-    getConsultantInfo()
-    LogBox.ignoreLogs(['Warning: Each child in a list should have a unique "key" prop.'])
-  }, [])
+    getConsultantInfo();
+    LogBox.ignoreLogs([
+      'Warning: Each child in a list should have a unique "key" prop.',
+    ]);
+  }, []);
 
   return (
     <ScrollView style={styles.scrollviewContainer}>
-      <View style={{...styles.container, borderRadius: containerWidth*4/100}}>
+      <View
+        style={{
+          ...styles.container,
+          borderRadius: (containerWidth * 4) / 100,
+        }}
+      >
         <Text style={styles.name}>{consultantInfo.expertName}</Text>
-        <View style={{...styles.imgContainer}}>
+        <View style={{ ...styles.imgContainer }}>
           <Image
             source={{uri: consultantInfo.expertImg}}
             style={{...styles.img, height: imgHeight, borderRadius: imgHeight*16/100}}
@@ -119,20 +139,22 @@ export default function ConsultantInfo(props) {
           </View >
           )}
         </View>
-        <ButtonGreen2 
-          buttonName='상담하기'
-          width='100%'
+        <ButtonGreen2
+          buttonName="상담하기"
+          width="100%"
           padding={10}
           borderRadius={10}
-          onPressButton={() => toChatRoom()}></ButtonGreen2>
+          onPressButton={() => toChatRoom()}
+        ></ButtonGreen2>
       </View>
     </ScrollView>
-)}
+  );
+}
 
 const styles = StyleSheet.create({
   scrollviewContainer: {
     // paddingHorizontal: '9%',
-    backgroundColor: 'white'
+    backgroundColor: "white",
   },
   container: {
     marginHorizontal: '6.5%',
@@ -140,24 +162,24 @@ const styles = StyleSheet.create({
     marginBottom: '4%',
     paddingHorizontal: '6%',
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     borderWidth: 1,
-    borderColor: '#172A3A',
-    paddingBottom: '2%',
+    borderColor: "#172A3A",
+    paddingBottom: "2%",
     // borderRadius: 14,
-    elevation: 1
+    elevation: 1,
   },
   name: {
     marginTop: '10%',
     fontSize: 25,
     fontWeight: '700',
   },
-  imgContainer: { 
-    marginTop: '8%',
-    width: '45%',
+  imgContainer: {
+    marginTop: "8%",
+    width: "45%",
   },
   img: {
-    width: '100%',
+    width: "100%",
   },
   intro: {
     marginTop: '8%',
@@ -168,12 +190,12 @@ const styles = StyleSheet.create({
 
   },
   contents: {
-    marginTop: '0.5%',
-    alignSelf: 'flex-start',
-    marginBottom: '2%'
+    marginTop: "0.5%",
+    alignSelf: "flex-start",
+    marginBottom: "2%",
   },
   title: {
-    marginTop: '5%',
+    marginTop: "5%",
     fontSize: 20,
     fontWeight: '700'
   },
