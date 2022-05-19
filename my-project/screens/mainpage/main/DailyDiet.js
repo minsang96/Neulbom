@@ -68,7 +68,7 @@ const DailyDiet = () => {
               <View style={styles.flexDirection}>
                 <Text style={styles.title}>총 칼로리</Text>
                 <Text style={styles.content}>
-                  {diet.total.kcal}kcal / {recommend.kcal}kcal
+                  {parseInt(diet.total.kcal)}kcal / {recommend.kcal}kcal
                 </Text>
               </View>
               <View
@@ -99,7 +99,7 @@ const DailyDiet = () => {
                   <View style={styles.flexDirection}>
                     <Text style={styles.subTitle}>나트륨</Text>
                     <Text style={styles.content}>
-                      {diet.total.natrium}mg / {recommend.natrium}mg
+                      {parseInt(diet.total.natrium)}mg / {recommend.natrium}mg
                     </Text>
                   </View>
                   <Progress.Bar
@@ -117,7 +117,8 @@ const DailyDiet = () => {
                   <View style={[styles.flexDirection]}>
                     <Text style={styles.subTitle}>당</Text>
                     <Text style={styles.content}>
-                      {diet.total.sugars}g / {parseInt(recommend.sugars)}g
+                      {parseInt(diet.total.sugars)}g /{" "}
+                      {parseInt(recommend.sugars)}g
                     </Text>
                   </View>
                   <Progress.Bar
@@ -153,7 +154,8 @@ const DailyDiet = () => {
                     width={screenSize.width * 0.25}
                   />
                   <Text style={styles.content}>
-                    {diet.total.carbohydrate}g / {recommend.carbohydrate}g
+                    {parseInt(diet.total.carbohydrate)}g /{" "}
+                    {recommend.carbohydrate}g
                   </Text>
                 </View>
                 <View>
@@ -169,7 +171,8 @@ const DailyDiet = () => {
                     width={screenSize.width * 0.25}
                   />
                   <Text style={styles.content}>
-                    {diet.total.protein}g / {parseInt(recommend.protein)}g
+                    {parseInt(diet.total.protein)}g /{" "}
+                    {parseInt(recommend.protein)}g
                   </Text>
                 </View>
                 <View>
@@ -186,7 +189,7 @@ const DailyDiet = () => {
                     width={screenSize.width * 0.25}
                   />
                   <Text style={styles.content}>
-                    {diet.total.fat}g / {parseInt(recommend.fat)}g
+                    {parseInt(diet.total.fat)}g / {parseInt(recommend.fat)}g
                   </Text>
                 </View>
               </View>

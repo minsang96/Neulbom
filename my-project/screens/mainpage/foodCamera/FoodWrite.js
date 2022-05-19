@@ -25,6 +25,7 @@ import {
 import moment from "moment";
 import { Dimensions } from "react-native";
 import ButtonHalfCompo from "../../../components/button/ButtonHalfCompo";
+import ButtonCompoSearch from "../../../components/button/ButtonCompoSearch";
 
 const screenSize = Dimensions.get("screen");
 
@@ -291,7 +292,7 @@ const FoodWrite = () => {
         <View>
           <>
             {image ? (
-              <>
+              <View style={styles.foodInfo}>
                 {/* <Text>이미지 있음</Text> */}
                 <View
                   style={{
@@ -309,29 +310,200 @@ const FoodWrite = () => {
                   <Text>Loading...</Text>
                 ) : recognize ? (
                   <>
-                    <Text>{analyze.foodName}</Text>
-                    <Text>
-                      {analyze.foodAmount}g({analyze.quantity}인분)
-                    </Text>
-                    <View>
-                      <ButtonCompo buttonName="섭취량 변경"></ButtonCompo>
+                    <View
+                      style={{
+                        flex: 1,
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Pressable onPress={() => console.log("o?")}></Pressable>
+                      <Text style={styles.foodTitle}>{analyze.foodName}</Text>
+                      <Text>
+                        {analyze.foodAmount}g({analyze.quantity}인분)
+                      </Text>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-around",
+                        }}
+                      >
+                        <ButtonHalfCompo buttonName="섭취량 변경"></ButtonHalfCompo>
+                        <ButtonHalfCompo
+                          buttonName="검색하기"
+                          onPressButton={() =>
+                            navigation.navigate("Stack", {
+                              screen: "FoodSearch",
+                              params: { current: current },
+                            })
+                          }
+                        ></ButtonHalfCompo>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          marginTop: 10,
+                        }}
+                      >
+                        <View style={{ alignItems: "center", marginRight: 20 }}>
+                          <Text>칼로리</Text>
+                          <View style={styles.circle}>
+                            <Text style={{ fontWeight: "bold" }}>
+                              {parseInt(analyze.foodKcal)}
+                            </Text>
+                            <Text style={{ fontSize: 10 }}>kcal</Text>
+                          </View>
+                        </View>
+                        <View style={{ alignItems: "center" }}>
+                          <Text>나트륨</Text>
+                          <View style={styles.circle}>
+                            <Text style={{ fontWeight: "bold" }}>
+                              {parseInt(analyze.foodNatrium)}
+                            </Text>
+                            <Text style={{ fontSize: 10 }}>mg</Text>
+                          </View>
+                        </View>
+                        <View style={{ alignItems: "center", marginLeft: 20 }}>
+                          <Text>당류</Text>
+                          <View style={styles.circle}>
+                            <Text style={{ fontWeight: "bold" }}>
+                              {parseInt(analyze.foodSugars)}
+                            </Text>
+                            <Text style={{ fontSize: 10 }}>mg</Text>
+                          </View>
+                        </View>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          marginTop: 10,
+                        }}
+                      >
+                        <View style={{ alignItems: "center", marginRight: 20 }}>
+                          <Text>탄수화물</Text>
+                          <View style={styles.circle}>
+                            <Text style={{ fontWeight: "bold" }}>
+                              {parseInt(analyze.foodCarbohydrate)}
+                            </Text>
+                            <Text style={{ fontSize: 10 }}>mg</Text>
+                          </View>
+                        </View>
+                        <View style={{ alignItems: "center" }}>
+                          <Text>단백질</Text>
+                          <View style={styles.circle}>
+                            <Text style={{ fontWeight: "bold" }}>
+                              {parseInt(analyze.foodProtein)}
+                            </Text>
+                            <Text style={{ fontSize: 10 }}>mg</Text>
+                          </View>
+                        </View>
+                        <View style={{ alignItems: "center", marginLeft: 20 }}>
+                          <Text>지방</Text>
+                          <View style={styles.circle}>
+                            <Text style={{ fontWeight: "bold" }}>
+                              {parseInt(analyze.foodFat)}
+                            </Text>
+                            <Text style={{ fontSize: 10 }}>mg</Text>
+                          </View>
+                        </View>
+                      </View>
                     </View>
-                    <Text>칼로리 {analyze.foodKcal} kcal</Text>
-                    <Text>나트륨 {analyze.foodNatrium} mg</Text>
-                    <Text>당류 {analyze.foodSugars} mg</Text>
-                    <Text>탄수화물 {analyze.foodCarbohydrate} g</Text>
-                    <Text>단백질 {analyze.foodProtein} g</Text>
-                    <Text>지방 {analyze.foodFat} g</Text>
                   </>
                 ) : (
                   <>
                     {/* <Text>이미지 있고 인식 실패</Text> */}
                     {images.tempFood.length > 0 ? (
                       <View style={styles.foodInfo}>
-                        <View>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
                           <Text>{images.tempFood.slice(-1)[0].foodName}</Text>
                           {/* <Text>{images.add.slice(-1)[0].food.foodAmount}</Text> */}
                           <Text>(1인분)</Text>
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            marginTop: 10,
+                          }}
+                        >
+                          <View
+                            style={{ alignItems: "center", marginRight: 20 }}
+                          >
+                            <Text>칼로리</Text>
+                            <View style={styles.circle}>
+                              <Text style={{ fontWeight: "bold" }}>
+                                {parseInt(analyze.foodKcal)}
+                              </Text>
+                              <Text style={{ fontSize: 10 }}>kcal</Text>
+                            </View>
+                          </View>
+                          <View style={{ alignItems: "center" }}>
+                            <Text>나트륨</Text>
+                            <View style={styles.circle}>
+                              <Text style={{ fontWeight: "bold" }}>
+                                {parseInt(analyze.foodNatrium)}
+                              </Text>
+                              <Text style={{ fontSize: 10 }}>mg</Text>
+                            </View>
+                          </View>
+                          <View
+                            style={{ alignItems: "center", marginLeft: 20 }}
+                          >
+                            <Text>당류</Text>
+                            <View style={styles.circle}>
+                              <Text style={{ fontWeight: "bold" }}>
+                                {parseInt(analyze.foodSugars)}
+                              </Text>
+                              <Text style={{ fontSize: 10 }}>mg</Text>
+                            </View>
+                          </View>
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            marginTop: 10,
+                          }}
+                        >
+                          <View
+                            style={{ alignItems: "center", marginRight: 20 }}
+                          >
+                            <Text>탄수화물</Text>
+                            <View style={styles.circle}>
+                              <Text style={{ fontWeight: "bold" }}>
+                                {parseInt(analyze.foodCarbohydrate)}
+                              </Text>
+                              <Text style={{ fontSize: 10 }}>mg</Text>
+                            </View>
+                          </View>
+                          <View style={{ alignItems: "center" }}>
+                            <Text>단백질</Text>
+                            <View style={styles.circle}>
+                              <Text style={{ fontWeight: "bold" }}>
+                                {parseInt(analyze.foodProtein)}
+                              </Text>
+                              <Text style={{ fontSize: 10 }}>mg</Text>
+                            </View>
+                          </View>
+                          <View
+                            style={{ alignItems: "center", marginLeft: 20 }}
+                          >
+                            <Text>지방</Text>
+                            <View style={styles.circle}>
+                              <Text style={{ fontWeight: "bold" }}>
+                                {parseInt(analyze.foodFat)}
+                              </Text>
+                              <Text style={{ fontSize: 10 }}>mg</Text>
+                            </View>
+                          </View>
                         </View>
                         <View
                           style={{
@@ -352,18 +524,29 @@ const FoodWrite = () => {
                         </View>
                       </View>
                     ) : (
-                      <View style={styles.foodInfo}>
-                        <Text style={{ color: `${palette.navy}` }}>
-                          음식을 인식할 수 없습니다 😥
-                        </Text>
-                        <Text style={{ color: `${palette.navy}` }}>
-                          아래 검색하기 버튼을 눌러 음식 정보를 저장하세요!
-                        </Text>
-                      </View>
+                      <>
+                        <View style={styles.foodInfo}>
+                          <Text style={{ color: `${palette.navy}` }}>
+                            음식을 인식할 수 없습니다 😥
+                          </Text>
+                          <Text style={{ color: `${palette.navy}` }}>
+                            아래 검색하기 버튼을 눌러 음식 정보를 저장하세요!
+                          </Text>
+                        </View>
+                        <ButtonCompoSearch
+                          buttonName="검색하기"
+                          onPressButton={() =>
+                            navigation.navigate("Stack", {
+                              screen: "FoodSearch",
+                              params: { current: current },
+                            })
+                          }
+                        ></ButtonCompoSearch>
+                      </>
                     )}
                   </>
                 )}
-              </>
+              </View>
             ) : !data ? (
               <>
                 {/* <Text>이미지 없고 데이터 없음</Text>
@@ -413,10 +596,10 @@ const FoodWrite = () => {
                         <Text>칼로리</Text>
                         <View style={styles.circle}>
                           <Text style={{ fontWeight: "bold" }}>
-                            {
+                            {parseInt(
                               images[current][images[current].length - 1]
                                 .foodKcal
-                            }
+                            )}
                           </Text>
                           <Text style={{ fontSize: 10 }}>kcal</Text>
                         </View>
@@ -425,10 +608,10 @@ const FoodWrite = () => {
                         <Text>나트륨</Text>
                         <View style={styles.circle}>
                           <Text style={{ fontWeight: "bold" }}>
-                            {
+                            {parseInt(
                               images[current][images[current].length - 1]
                                 .foodNatrium
-                            }
+                            )}
                           </Text>
                           <Text style={{ fontSize: 10 }}>mg</Text>
                         </View>
@@ -437,10 +620,10 @@ const FoodWrite = () => {
                         <Text>당류</Text>
                         <View style={styles.circle}>
                           <Text style={{ fontWeight: "bold" }}>
-                            {
+                            {parseInt(
                               images[current][images[current].length - 1]
                                 .foodSugars
-                            }
+                            )}
                           </Text>
                           <Text style={{ fontSize: 10 }}>mg</Text>
                         </View>
@@ -457,10 +640,10 @@ const FoodWrite = () => {
                         <Text>탄수화물</Text>
                         <View style={styles.circle}>
                           <Text style={{ fontWeight: "bold" }}>
-                            {
+                            {parseInt(
                               images[current][images[current].length - 1]
                                 .foodCarbohydrate
-                            }
+                            )}
                           </Text>
                           <Text style={{ fontSize: 10 }}>mg</Text>
                         </View>
@@ -469,10 +652,10 @@ const FoodWrite = () => {
                         <Text>단백질</Text>
                         <View style={styles.circle}>
                           <Text style={{ fontWeight: "bold" }}>
-                            {
+                            {parseInt(
                               images[current][images[current].length - 1]
                                 .foodProtein
-                            }
+                            )}
                           </Text>
                           <Text style={{ fontSize: 10 }}>mg</Text>
                         </View>
@@ -481,10 +664,10 @@ const FoodWrite = () => {
                         <Text>지방</Text>
                         <View style={styles.circle}>
                           <Text style={{ fontWeight: "bold" }}>
-                            {
+                            {parseInt(
                               images[current][images[current].length - 1]
                                 .foodTransfat
-                            }
+                            )}
                           </Text>
                           <Text style={{ fontSize: 10 }}>mg</Text>
                         </View>
@@ -497,10 +680,10 @@ const FoodWrite = () => {
               <Text>아무 사진도 없습니다.</Text>
             )}
           </>
-
+          {/* 
           {image && (
             <>
-              <ButtonCompo
+              <ButtonCompoSearch
                 buttonName="검색하기"
                 onPressButton={() =>
                   navigation.navigate("Stack", {
@@ -508,9 +691,9 @@ const FoodWrite = () => {
                     params: { current: current },
                   })
                 }
-              ></ButtonCompo>
+              ></ButtonCompoSearch>
             </>
-          )}
+          )} */}
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
@@ -537,7 +720,20 @@ const FoodWrite = () => {
                         onDelete(idx);
                       }}
                     >
-                      <Text style={{ textAlign: "center", fontSize: 12 }}>
+                      <Text
+                        style={{
+                          textAlign: "center",
+                          fontSize: 11,
+                          backgroundColor: `tomato`,
+                          paddingHorizontal: 3,
+                          paddingVertical: 1.5,
+                          width: 30,
+                          left: 13,
+                          color: "white",
+                          fontFamily: "SeoulNamsanEB",
+                          borderRadius: 7,
+                        }}
+                      >
                         삭제
                       </Text>
                       {/* <Plus
@@ -624,7 +820,15 @@ const FoodWrite = () => {
               setModalVisible(true);
             }}
           >
-            <Text style={{ color: "white", fontSize: 30 }}>+</Text>
+            <Text
+              style={{
+                color: "white",
+                fontSize: 30,
+                marginTop: 4,
+              }}
+            >
+              +
+            </Text>
           </PlusDiet>
         </View>
         <View style={styles.foodInfo}>
@@ -672,7 +876,7 @@ const FoodWrite = () => {
                     fontSize: 12,
                   }}
                 >
-                  {images[`total_${current}`].kcal}
+                  {parseInt(images[`total_${current}`].kcal)}
                 </Text>
                 <Text style={{ color: `${palette.navy}`, fontSize: 12 }}>
                   kcal
@@ -701,7 +905,7 @@ const FoodWrite = () => {
                     fontSize: 12,
                   }}
                 >
-                  {images[`total_${current}`].natrium}
+                  {parseInt(images[`total_${current}`].natrium)}
                 </Text>
                 <Text style={{ color: `${palette.navy}`, fontSize: 12 }}>
                   mg
@@ -730,7 +934,7 @@ const FoodWrite = () => {
                     fontSize: 12,
                   }}
                 >
-                  {images[`total_${current}`].sugars}
+                  {parseInt(images[`total_${current}`].sugars)}
                 </Text>
                 <Text style={{ fontSize: 12 }}>g</Text>
               </View>
