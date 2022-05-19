@@ -37,7 +37,7 @@ export default function ChatCard(props) {
           <Text style={{...styles.introContent, fontSize: 13}}>#{consultant.expertDesc}</Text>
         </View>
         <Text style={styles.date}>오늘 PM 6:30</Text>
-        <Text style={styles.chatContent}>{chat[String(consultant.userSeq)] !== undefined && chat[String(consultant.userSeq)][chat[String(consultant.userSeq)].length-1].message}</Text>
+        <Text numberOfLines={1} style={styles.chatContent}>{chat[String(consultant.userSeq)] !== undefined && chat[String(consultant.userSeq)][chat[String(consultant.userSeq)].length-1].message}</Text>
         {/* <Text style={styles.chatContent}>치킨 드시면 안됩니다.</Text> */}
       </View>
     </TouchableOpacity>

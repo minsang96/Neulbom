@@ -33,7 +33,6 @@ export default function UserLogin({ navigation: { navigate } }) {
         userEmail: user.email,
         userPwd: user.password,
       });
-      console.log(res)
       dispatch(userSlice.actions.login(res.data.data));
       await EncryptedStorage.setItem(
         "user_session",
@@ -42,9 +41,6 @@ export default function UserLogin({ navigation: { navigate } }) {
           password: user.password,
         })
       );
-      console.log(res.data.data.accessToken);
-      console.log(res.data.data.userSeq);
-      // getUserInfo()
       const userType = res.data.data.userType;
       if (userType == 0) {
         try {
@@ -121,6 +117,7 @@ export default function UserLogin({ navigation: { navigate } }) {
           buttonName="로그인"
           fontSize={15}
           padding={9.5}
+          borderRadius={10}
         ></ButtonGreen2>
       </View>
       <ButtonGray

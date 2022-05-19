@@ -9,7 +9,14 @@ const ChatList = () => {
   console.log('Page: ChatList')
   const dispatch = useDispatch();
   const chatList = useSelector((state) => state.chat.chatList);
-  const chat = useSelector(state => state.chat.chat)
+  async function clearStorage() {
+    try {
+        await EncryptedStorage.clear();
+        // Congrats! You've just cleared the device storage!
+    } catch (error) {
+        // There was an error on the native side
+    }
+}
   async function deleteChatList() {
     try {
         await EncryptedStorage.removeItem("chat_list");
@@ -21,6 +28,7 @@ const ChatList = () => {
   }
   console.log('chatList: ', chatList)
   const loadChats = async () => {
+    console.log('load chat')
     chatList && chatList.map(async(consultantSeq) => {
       try {
         const chatFromStorage = await EncryptedStorage.getItem(`chatWith${consultantSeq}`)
@@ -50,6 +58,9 @@ const ChatList = () => {
       <TouchableOpacity onPress={() => deleteChatList()}>
         <Text>채팅목록삭제</Text>
       </TouchableOpacity>
+      <TouchableOpacity onPress={() => clearStorage()}>
+        <Text>encrypted storage 다 비우기</Text>
+      </TouchableOpacity>
     </ScrollView>
   )
 }
@@ -59,6 +70,7 @@ export default ChatList;
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: '3%',
-    paddingTop: '1.5%'
+    paddingTop: '3.5%',
+    backgroundColor: 'white'
   }
 })

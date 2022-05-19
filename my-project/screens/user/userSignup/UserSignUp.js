@@ -130,6 +130,7 @@ export default function UserSignUp({ navigation: {navigate} } ) {
                 width={windowWidth*30/100}
                 buttonName='이메일 인증'
                 padding={8}
+                borderRadius={10}
                 onPressButton={() => {emailVerify(info.email)}}
               ></ButtonGreen2>
             </View>
@@ -239,6 +240,7 @@ export default function UserSignUp({ navigation: {navigate} } ) {
           width='100%'
           buttonName='늘봄 시작하기'
           padding={9.5}
+          borderRadius={10}
           onPressButton={() => signUp()}
         ></ButtonGreen2>
       </View>

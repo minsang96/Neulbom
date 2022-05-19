@@ -13,6 +13,7 @@ import { LogBox } from 'react-native'
 import { retrieveChatList } from "../api/retrieveChatList";
 import SockJS from "sockjs-client";
 import Stomp from 'stompjs'
+import chatSlice from "../slices/chat";
 // import SplashScreen from 'react-native-splash-screen';
 
 const Nav = createNativeStackNavigator();
@@ -21,6 +22,7 @@ function Root() {
   const dispatch = useDispatch();
   const accessToken = useSelector((state) => state.user.accessToken);
   const userInfo = useSelector((state) => state.user.userInfo);
+
   var sock = new SockJS('https://k6a104.p.ssafy.io/api/ws-stomp');
   var ws = Stomp.over(sock);
   function connect() {
@@ -32,9 +34,8 @@ function Root() {
             // ws.subscribe(`/api/sub/chat/room/${recv.senderSeq}with${userInfo.userSeq}`, function(message) {
 
             // })
+            dispatch(chatSlice.actions.setSocketConnected(recv.senderSeq))
         });
-        ws.send("/pub/chat/message", {}, JSON.stringify({type:'ENTER', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq}));
-        dispatch(chatSlice.actions.setSocketConnected(recv.senderSeq))
     }, function(error) {
         console.log('error:')
         console.log(error)
@@ -62,6 +63,7 @@ function Root() {
           let JsonSession;
           if (session !== undefined) {
             JsonSession = JSON.parse(session);
+            console.log(JsonSession)
           }
           const res = await axios.post(
             "https://k6a104.p.ssafy.io/api/user/login",
@@ -70,6 +72,7 @@ function Root() {
               userPwd: JsonSession.password,
             }
           );
+          
           dispatch(userSlice.actions.login(res.data.data));
           try {
             const response = await axios.get(
@@ -91,11 +94,13 @@ function Root() {
       getUserSessionAndLogin();
       console.log('root')
       retrieveChatList(dispatch)
-      if (userInfo.userType === 1) {
-        connect()
-      }
+    }
+    if (userInfo && userInfo.userType === '1') {
+      console.log('connect')
+      connect()
     }
   }, []);
+  console.log('Root userInfo: ', userInfo)
 
   return (
     <Nav.Navigator screenOptions={{ headerShown: false }}>
