@@ -28,6 +28,7 @@ import com.neulbomi.neulbom.entity.Other;
 import com.neulbomi.neulbom.entity.User;
 import com.neulbomi.neulbom.exception.FailAnalyzeFoodException;
 import com.neulbomi.neulbom.exception.NotExistsUserException;
+import com.neulbomi.neulbom.exception.NotJPGException;
 import com.neulbomi.neulbom.repository.DietRepository;
 import com.neulbomi.neulbom.repository.FoodRepository;
 import com.neulbomi.neulbom.repository.MemberRepository;
@@ -321,6 +322,9 @@ public class DietServiceImpl implements DietService {
 				map.add("user_img", new MultipartInputStreamFileResource(file.getInputStream(), file.getOriginalFilename()));
 				// 최근 Spring 버전을 쓴다면 map.add("files", file.getResource()); 로 변경
 			}
+			System.out.println(file.getOriginalFilename());
+			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().length()-3);
+			if(!ext.equals("jpg") && !ext.equals("JPG")) throw new NotJPGException();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -336,7 +340,7 @@ public class DietServiceImpl implements DietService {
 		HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(map, headers);
 		response = REST_TEMPLATE.postForObject(url, requestEntity, JsonNode.class);
 		
-		// 분석한 음식 코드
+		// 분석한 음식 코드		
 		String code = response.get("code").asText();
 		double quantity = response.get("quantity").asDouble();
 		

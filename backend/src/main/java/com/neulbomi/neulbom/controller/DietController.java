@@ -25,6 +25,7 @@ import com.neulbomi.neulbom.exception.EmptyFileException;
 import com.neulbomi.neulbom.exception.FailAnalyzeFoodException;
 import com.neulbomi.neulbom.exception.FileUploadFailedException;
 import com.neulbomi.neulbom.exception.NotExistsUserException;
+import com.neulbomi.neulbom.exception.NotJPGException;
 import com.neulbomi.neulbom.repository.ExpertRepository;
 import com.neulbomi.neulbom.response.AdvancedResponseBody;
 import com.neulbomi.neulbom.response.BaseResponseBody;
@@ -167,6 +168,8 @@ public class DietController {
 		} catch (HttpStatusCodeException e) {
 			HttpStatus errorHttpStatus = HttpStatus.valueOf(e.getStatusCode().value());
 			return ResponseEntity.status(errorHttpStatus).body(BaseResponseBody.of(errorHttpStatus.value(), "요청 실패"));
+		} catch (NotJPGException e) {
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "jpg파일이 아닙니다."));
 		} catch(Exception e) {
 			return ResponseEntity.status(500).body(BaseResponseBody.of(500, "서버 오류"));
 		}
