@@ -72,7 +72,6 @@ const FoodSearch = () => {
   const onSelect = async (food) => {
     setTempFood(food);
     if (tempFood.length > 0 || food !== tempFood) {
-      console.log(food);
       dispatch(imagesSlice.actions.addFood(food));
       dispatch(imagesSlice.actions.add({ food, current, kcal }));
     }

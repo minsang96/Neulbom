@@ -773,7 +773,6 @@ const FoodWrite = () => {
                       margin: 3,
                     }}
                   ></Image>
-
                   <TouchableOpacity
                     onPress={() => {
                       onDelete(idx);
@@ -806,43 +805,64 @@ const FoodWrite = () => {
                   .reverse()
                   .map((food, idx) => (
                     <View key={food.dietSeq}>
-                      <Image
-                        source={{ uri: food.dietImg }}
-                        style={{
-                          width: 50,
-                          height: 50,
-                          borderRadius: 10,
-                          margin: 3,
-                        }}
-                      ></Image>
-
-                      <TouchableOpacity
-                        style={{
-                          color: `${palette.orange}`,
-                          alignContent: "center",
-                          justifyContent: "center",
-                        }}
-                        onPress={() => {
-                          onDeleteDB(food.dietSeq, idx);
-                        }}
-                      >
-                        <Text
+                      <Pressable style={{ width: 60, alignItems: "center" }}>
+                        <Image
+                          source={{ uri: food.dietImg }}
                           style={{
-                            textAlign: "center",
-                            fontSize: 11,
-                            backgroundColor: `tomato`,
-                            paddingHorizontal: 3,
-                            paddingVertical: 1.5,
-                            width: 30,
-                            left: 13,
-                            color: "white",
-                            fontFamily: "SeoulNamsanEB",
-                            borderRadius: 7,
+                            width: 50,
+                            height: 50,
+                            borderRadius: 10,
+                            marginHorizontal: 10,
+                          }}
+                        ></Image>
+                        <TouchableOpacity
+                          style={{
+                            color: `${palette.orange}`,
+                            alignItems: "center",
+                            alignContent: "center",
+                            justifyContent: "center",
+                            paddingTop: 2,
+                          }}
+                          onPress={() => {
+                            onDeleteDB(food.dietSeq, idx);
                           }}
                         >
-                          삭제
+                          <Text
+                            style={{
+                              textAlign: "center",
+                              fontSize: 11,
+                              backgroundColor: `tomato`,
+                              paddingHorizontal: 3,
+                              paddingVertical: 1.5,
+                              width: 30,
+                              color: "white",
+                              fontFamily: "SeoulNamsanEB",
+                              borderRadius: 7,
+                            }}
+                          >
+                            삭제
+                          </Text>
+                        </TouchableOpacity>
+                        <Text
+                          style={{
+                            fontSize: 10,
+                            textAlign: "center",
+                            fontFamily: "SeoulNamsanL",
+                            paddingTop: 3,
+                          }}
+                        >
+                          {food.foodName}
                         </Text>
-                      </TouchableOpacity>
+                        <Text
+                          style={{
+                            fontSize: 8,
+                            textAlign: "center",
+                            fontFamily: "SeoulNamsanEB",
+                          }}
+                        >
+                          {food.foodKcal} kcal
+                        </Text>
+                      </Pressable>
                     </View>
                   ))}
               </>
