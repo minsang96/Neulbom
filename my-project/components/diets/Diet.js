@@ -60,7 +60,9 @@ const Diet = ({ kind, current, kcal, meal, total_meal }) => {
       <Box>
         <Column>
           <Content style={{ flex: 1, fontSize: 18 }}>{kind}</Content>
-          <Content style={{ color: `${palette.green}` }}>{kcal} kcal</Content>
+          <Content style={{ color: `${palette.green}` }}>
+            {parseInt(kcal)} kcal
+          </Content>
 
           <Plus onPress={getMealDetail}>
             <Ionicons name="add" color="white" size={30} />
@@ -154,13 +156,13 @@ const styles = StyleSheet.create({
   text: {
     color: `${palette.navy}`,
     textAlign: "center",
-    fontSize: 10,
+    fontSize: 9,
     fontFamily: "SeoulNamsanL",
   },
   numberText: {
     color: `${palette.navy}`,
     textAlign: "center",
-    fontSize: 12,
+    fontSize: 11,
     fontFamily: "SeoulNamsanEB",
   },
   whiteCircle: {

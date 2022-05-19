@@ -59,16 +59,6 @@ const MainPage = ({ navigation: { navigate } }) => {
     getMyDiet();
   }, [urls]);
 
-  const reduxTest = () => {
-    dispatch(imagesSlice.actions.add("yayaya"));
-    console.log("testing");
-  };
-
-  const reduxIn = useCallback(async () => {
-    console.log(dietdaily);
-    console.log("ip");
-  });
-
   return (
     <Container style={{ backgroundColor: "white" }}>
       <Box>

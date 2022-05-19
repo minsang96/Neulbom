@@ -12,6 +12,7 @@ import imagesSlice from "../../../slices/images";
 const View = styled.View``;
 const Text = styled.Text`
   color: ${(props) => props.color || `${palette.navy}`};
+  font-family: SeoulNamsanL;
 `;
 
 const Plus = styled.TouchableOpacity`
@@ -40,6 +41,7 @@ const FoodSearch = () => {
   const [loading, setLoading] = useState(true);
   const [foods, setFoods] = useState([]);
   const [tempFood, setTempFood] = useState([]);
+
   const navigate = useNavigation();
   const current = useNavigationState((state) => state.routes[0].params.current);
 
@@ -79,18 +81,29 @@ const FoodSearch = () => {
 
   return (
     <View>
-      <Text>검색하기</Text>
       <TextInput
         placeholder="검색하기"
         value={foodName}
         onChangeText={onChangeFoodName}
         onSubmitEditing={onSearch}
+        style={{
+          marginTop: 10,
+          marginHorizontal: 20,
+          marginBottom: 10,
+        }}
       />
 
       <Line></Line>
 
       {loading ? (
-        <Text>검색어를 입력해주세요!</Text>
+        <Text
+          style={{
+            marginTop: 10,
+            textAlign: "center",
+          }}
+        >
+          검색어를 입력해주세요!
+        </Text>
       ) : (
         foods.map((food) => (
           <ActionButtons
@@ -108,11 +121,6 @@ const FoodSearch = () => {
           </ActionButtons>
         ))
       )}
-      {/* <ButtonCompo
-        style={{ backgroundColor: `${palette.green}` }}
-        buttonName="선택한 음식 추가"
-        onPressButton={onSelect}
-      ></ButtonCompo> */}
     </View>
   );
 };
