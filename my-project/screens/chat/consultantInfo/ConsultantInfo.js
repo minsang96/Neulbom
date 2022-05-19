@@ -58,6 +58,7 @@ export default function ConsultantInfo(props) {
         retrieveChatList(dispatch)
         var sock = new SockJS('https://k6a104.p.ssafy.io/api/ws-stomp');
         var ws = Stomp.over(sock);
+        var reconnect = 0;
         function connect() {
           // pub/sub event
           console.log('first time connect')
