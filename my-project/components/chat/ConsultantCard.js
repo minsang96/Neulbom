@@ -15,12 +15,12 @@ function ConsultantCard(props) {
       onPress={() => navigation.navigate("ConsultantInfo", consultantInfo)}
     >
       <Image
-        source={require('./me_160x200.jpg')}
+        source={{uri: consultantInfo.expertImg}}
         style={{...styles.img ,width: imgWidth, height: imgWidth}}
       >
       </Image>
-      <Text>{consultantInfo.expertName}</Text>
-      <Text>#{consultantInfo.expertDesc}</Text>
+      <Text style={{fontSize: 19, fontWeight: '700', margin: '1%'}}>{consultantInfo.expertName}</Text>
+      <Text style={{textAlign: 'center', width: '85%', fontSize: 14.5, lineHeight: 20}}>#{consultantInfo.expertDesc}</Text>
     </TouchableOpacity>
 )}
 
