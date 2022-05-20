@@ -18,6 +18,7 @@ const Dinner = () => {
       ) : (
         <Diet
           kind="저녁"
+          current="dinner"
           kcal={total_dinner.kcal}
           meal={dinner}
           total_meal={total_dinner}

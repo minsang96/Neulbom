@@ -8,6 +8,7 @@ const initialState = {
   total_lunch: [],
   dinner: [],
   total_dinner: [],
+  recommend: [],
 };
 
 const dietdailySlice = createSlice({
@@ -22,6 +23,11 @@ const dietdailySlice = createSlice({
       state.total_lunch = action.payload.lunch.total;
       state.dinner = action.payload.dinner.dietList;
       state.total_dinner = action.payload.dinner.total;
+      console.log(state);
+    },
+
+    set_recommend: (state, action) => {
+      state.recommend = action.payload.recommend;
     },
 
     set_total: (state, action) => {

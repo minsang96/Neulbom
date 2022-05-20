@@ -1,7 +1,6 @@
 import React from "react";
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
 
-// 사용 예시 screen/calendar/calendarTab/CalendarTab
 const ButtonCompo = (props) => {
   return (
     <TouchableOpacity

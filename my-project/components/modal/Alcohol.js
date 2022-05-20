@@ -6,12 +6,21 @@ import ButtonCompo from "../button/ButtonCompo";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
+import { addOtherRecodeFunction } from "../../api/recode";
+import { useSelector } from "react-redux";
 
 const Alcohol = (props) => {
-  const [isDate, setIsDate] = useState(new Date());
-  const [isTime, setIsTime] = useState(new Date());
+  const now = new Date();
+  const utcNow = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
+  const koreaTimeDiff = 9 * 60 * 60 * 1000;
+  const koreaNow = new Date(utcNow + koreaTimeDiff);
+  const [isDate, setIsDate] = useState(format(koreaNow, "yyyy-MM-dd"));
+  const [isTime, setIsTime] = useState(
+    koreaNow.toTimeString().split(" ")[0].slice(0, 5)
+  );
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
+  const userSeq = useSelector((state) => state.user.userSeq);
 
   // 날짜 관련 함수
   const showDatePicker = () => {
@@ -21,8 +30,7 @@ const Alcohol = (props) => {
     setDatePickerVisibility(false);
   };
   const handleConfirm = (date) => {
-    // console.log(date);
-    setIsDate(date);
+    setIsDate(format(date, "yyyy-MM-dd"));
     hideDatePicker();
   };
 
@@ -34,9 +42,22 @@ const Alcohol = (props) => {
     setTimePickerVisibility(false);
   };
   const handleTimeConfirm = (time) => {
-    // console.log(time);
-    setIsTime(time);
-    hideTimePicker();
+    setIsTime(time.toTimeString().split(" ")[0].slice(0, 5));
+    showTimePicker();
+  };
+
+  const addAlcoholRecodeFunction = () => {
+    const otherDto = {
+      code: "alcohol",
+      otherDate: isDate,
+      otherTime: isTime,
+      userSeq: userSeq,
+    };
+    try {
+      addOtherRecodeFunction(otherDto);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -79,9 +100,7 @@ const Alcohol = (props) => {
         <Text style={styles.subtitleText}>음주 시간</Text>
         <Text style={styles.dateTime}>
           <Pressable onPress={showTimePicker}>
-            <Text style={styles.dateTimeText}>
-              {format(new Date(isTime), "a p", { locale: ko })}
-            </Text>
+            <Text style={styles.dateTimeText}>{isTime}</Text>
           </Pressable>
         </Text>
         <DateTimePickerModal
@@ -94,6 +113,7 @@ const Alcohol = (props) => {
           buttonName="음주 등록하기"
           onPressButton={() => {
             props.onPressAlcoholButton();
+            addAlcoholRecodeFunction();
           }}
         ></ButtonCompo>
       </View>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import ButtonCompo from "../../../components/button/ButtonCompo";
-import AlarmSetting from "../../../components/infoBox/AlarmSetting";
+import BpAlarmSetting from "../../../components/infoBox/BpAlarmSetting";
+import BsAlarmSetting from "../../../components/infoBox/BsAlarmSetting";
 import InfoMyDisease from "../../../components/infoBox/InfoMyDisease";
 import InfoMyself from "../../../components/infoBox/InfoMyself";
 import Intake from "../../../components/infoBox/Intake";
@@ -15,34 +16,48 @@ import SelectBox from "../../../components/infoBox/SelectBox";
 import Infomation from "../../../components/infoBox/Infomation";
 import { useNavigation } from "@react-navigation/native";
 import { Dimensions } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import userSlice from "../../../slices/user";
 
 const screenSize = Dimensions.get("screen");
 
 const UserMypage = (props) => {
+  const userInfo = useSelector((state) => state.user.userInfo);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const logout = () => {
+    async function removeUserSession() {
+      try {
+        await EncryptedStorage.removeItem("user_session");
+      } catch (error) {
+        console.log(error.code);
+      }
+    }
+    dispatch(userSlice.actions.logout());
+    removeUserSession();
+  };
+
+  useEffect(() => {}, [userInfo]);
+
   return (
     <ScrollView style={styles.background}>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("MypageUpdate"), props.onClick();
-        }}
-      >
-        <Text>수정하기</Text>
-      </TouchableOpacity>
-
       <Text style={styles.title}>내 소개 😊</Text>
       <InfoMyself styles={styles} update={props.update}></InfoMyself>
       <Text style={styles.title}>권장 섭취량 ✨</Text>
       <Intake styles={styles}></Intake>
       <Text style={styles.title}>건강 수치 ✨</Text>
       <SelectBox styles={styles}></SelectBox>
-      <Text style={styles.title}>알림 설정 ✨</Text>
-      <AlarmSetting styles={styles}></AlarmSetting>
+      {/* <Text style={styles.title}>알림 설정 ✨</Text>
+      <BpAlarmSetting styles={styles}></BpAlarmSetting>
+      <BsAlarmSetting styles={styles}></BsAlarmSetting> */}
       <Text style={styles.title}>질병 소개 ✨</Text>
       <InfoMyDisease styles={styles}></InfoMyDisease>
       <Text style={styles.title}>이용 안내 ✨</Text>
       <Infomation styles={styles}></Infomation>
-      <ButtonCompo buttonName="로그아웃"></ButtonCompo>
+      <ButtonCompo
+        onPressButton={() => logout()}
+        buttonName="로그아웃"
+      ></ButtonCompo>
     </ScrollView>
   );
 };
@@ -51,7 +66,6 @@ export default UserMypage;
 
 const styles = StyleSheet.create({
   background: {
-    // backgroundColor: "white",
     paddingHorizontal: 20,
   },
   box: {
@@ -80,12 +94,12 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginRight: screenSize.width * 0.05,
   },
-  userName: { fontSize: 20, marginBottom: 5 },
+  userName: { fontSize: 18, marginBottom: 5 },
   flexDirectionRow: {
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: screenSize.height * 0.01,
-    justifyContent: "center",
+    paddingLeft: screenSize.width * 0.04,
   },
   userInfo: {
     flexDirection: "row",

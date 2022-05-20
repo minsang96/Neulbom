@@ -16,6 +16,7 @@ import com.neulbomi.neulbom.entity.Member;
 import com.neulbomi.neulbom.entity.Setting;
 import com.neulbomi.neulbom.entity.User;
 import com.neulbomi.neulbom.exception.ExistsUserEmailException;
+import com.neulbomi.neulbom.exception.NotExistsExpertException;
 import com.neulbomi.neulbom.exception.NotExistsSettingException;
 import com.neulbomi.neulbom.exception.NotExistsUserException;
 import com.neulbomi.neulbom.repository.MemberRepository;
@@ -154,6 +155,9 @@ public class MemberServiceImpl implements MemberService {
 		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
 		Optional<List<Setting>> list = settingRepository.findByDelYnAndUserSeq("n", userSeq);
 		
+		User userMember = userRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsExpertException());
+		
+		result.put("userType", userMember.getUserType());
 		result.put("memberNickname", member.getMemberNickname());
 		result.put("memberImg", member.getMemberImg());
 		result.put("memberHeight", member.getMemberHeight());
@@ -162,11 +166,17 @@ public class MemberServiceImpl implements MemberService {
 		result.put("memberGender", member.getMemberGender());
 		result.put("memberDesc", member.getMemberDesc());
 		result.put("memberKcal", member.getMemberKcal());
+		result.put("memberNatrium", 2000);
+		result.put("memberSugar", (member.getMemberKcal()*0.1)/4);
 		result.put("memberEmail", member.getRegEmail());
 		
-		ArrayList<String> codelist = new ArrayList<>();
+		Map<String, Object> codelist = new HashMap<>();
 		for(Setting setting : list.get()) {
-			codelist.add(setting.getCode());
+			codelist.put(setting.getCode(), true);
+		}
+		
+		for(String s : settings) {
+			if(codelist.get(s)==null) codelist.put(s, false);
 		}
 		
 		result.put("setting", codelist);

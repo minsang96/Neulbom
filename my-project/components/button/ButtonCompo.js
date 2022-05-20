@@ -1,6 +1,8 @@
 import React from "react";
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Dimensions } from "react-native";
 
+const screenSize = Dimensions.get("screen");
 // 사용 예시 screen/calendar/calendarTab/CalendarTab
 const ButtonCompo = (props) => {
   return (
@@ -12,10 +14,15 @@ const ButtonCompo = (props) => {
         // marginHorizontal: 25,
         alignItems: "center",
         borderRadius: 10,
+        minWidth: screenSize.width * 0.9,
       }}
       onPress={props.onPressButton}
     >
-      <Text style={{ color: "white", fontSize: 20 }}>{props.buttonName}</Text>
+      <Text
+        style={{ color: "white", fontSize: 20, fontFamily: "SeoulNamsanEB" }}
+      >
+        {props.buttonName}
+      </Text>
     </TouchableOpacity>
   );
 };

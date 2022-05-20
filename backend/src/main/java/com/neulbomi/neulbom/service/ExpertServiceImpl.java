@@ -59,6 +59,7 @@ public class ExpertServiceImpl implements ExpertService {
 				.regEmail(expertJoinDto.getEmail())
 				.modDt(now)
 				.modEmail(expertJoinDto.getEmail())
+				.delYn("n")
 				.build());
 		
 		// userSeq 사용하기 위해서 가져오기
@@ -75,6 +76,7 @@ public class ExpertServiceImpl implements ExpertService {
 				.regEmail(user.getUserEmail())
 				.modDt(now)
 				.modEmail(user.getUserEmail())
+				.delYn("n")
 				.build());
 		
 		// 경력 저장
@@ -86,6 +88,7 @@ public class ExpertServiceImpl implements ExpertService {
 					.regEmail(user.getUserEmail())
 					.modDt(now)
 					.modEmail(user.getUserEmail())
+					.delYn("n")
 					.build());
 		}
 	}
@@ -144,6 +147,7 @@ public class ExpertServiceImpl implements ExpertService {
 		
 		Map<String, Object> info =new HashMap<>();
 		info.put("userSeq", expert.getUserSeq());
+		info.put("userType", userExpert.getUserType());
 		info.put("userEmail", userExpert.getUserEmail());
 		info.put("expertName", expert.getExpertName());
 		info.put("expertImg", expert.getExpertImg());
@@ -191,6 +195,7 @@ public class ExpertServiceImpl implements ExpertService {
 					.regEmail(userExpert.getUserEmail())
 					.modDt(now)
 					.modEmail(userExpert.getUserEmail())
+					.delYn("n")
 					.build());
 		}
 	}

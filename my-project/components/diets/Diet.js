@@ -1,38 +1,40 @@
 import React, { useState, useEffect } from "react";
-import { View, Image, Text } from "react-native";
+import { View, Image, Text, StyleSheet, ScrollView } from "react-native";
 import styled from "styled-components/native";
 import palette from "../palette";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, NavigationContext } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import { useDispatch, useSelector } from "react-redux";
 import imagesSlice from "../../slices/images";
+import UploadMode from "../modal/UploadMode";
+import { Dimensions } from "react-native";
+
+const screenSize = Dimensions.get("screen");
 
 const Column = styled.View`
   flex-direction: row;
-  width: 80%;
+  width: 90%;
 `;
 
 const Box = styled.View`
-  flex: 1;
-  align-items: center;
   margin: 10px 20px;
   background-color: ${palette.gray};
   padding: 10px 15px;
-  margin-top: 20px;
   border-radius: 10px;
 `;
 
 const Content = styled.Text`
   color: ${palette.navy};
   padding: 10px 15px;
+  font-family: SeoulNamsanEB;
 `;
 
 const Plus = styled.TouchableOpacity`
   position: absolute;
   justify-content: center;
   align-items: center;
-  left: 270px;
+  left: ${screenSize.width * 0.75};
   height: 30px;
   width: 30px;
   background-color: ${palette.green};
@@ -40,46 +42,29 @@ const Plus = styled.TouchableOpacity`
   elevation: 5;
 `;
 
-const Diet = ({ kind, kcal, meal, total_meal }) => {
+const Diet = ({ kind, current, kcal, meal, total_meal }) => {
   const navigation = useNavigation();
   const [image, setImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
-
   const getMealDetail = async () => {
-    navigation.navigate("Stack", { screen: "FoodWrite" });
-  };
-
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
+    console.log("getMealDetail");
+    navigation.navigate("Stack", {
+      screen: "FoodWrite",
+      params: { current: current },
     });
-    console.log(result);
-
-    if (!result.cancelled) {
-      setImage(result.uri);
-      dispatch(imagesSlice.actions.add(result.uri));
-    }
-    navigation.navigate("Stack", { screen: "FoodWrite" });
   };
 
   return (
     <>
       <Box>
         <Column>
-          <Content style={{ flex: 1 }}>{kind}</Content>
-          <Content style={{ color: `${palette.green}` }}>{kcal} kcal</Content>
-          {/* <Plus onPress={pickImage}> */}
+          <Content style={{ flex: 1, fontSize: 18 }}>{kind}</Content>
+          <Content style={{ color: `${palette.green}` }}>
+            {parseInt(kcal)} kcal
+          </Content>
+
           <Plus onPress={getMealDetail}>
-            {/* <Plus
-            onPress={() => {
-              setModalVisible(true);
-            }}
-          > */}
             <Ionicons name="add" color="white" size={30} />
           </Plus>
         </Column>
@@ -90,23 +75,107 @@ const Diet = ({ kind, kcal, meal, total_meal }) => {
             <Image source={{ uri: image }} style={{ width: 20, height: 20 }} />
           )}
         </View>
-        {meal.map((food) => (
-          <Box key={food.dietSeq}>
-            <Text>{food.foodName}</Text>
-            <Image
-              source={{ uri: food.dietImg }}
-              style={{ width: 55, height: 55 }}
-            ></Image>
-          </Box>
-        ))}
-        <Content>탄수화물 {total_meal.carbohydrate}g</Content>
-        <Content>단백질 {total_meal.protein}g</Content>
-        <Content>지방 {total_meal.fat}g</Content>
-        <Content>나트륨 {total_meal.natrium}mg</Content>
-        <Content>당 {total_meal.sugars}mg</Content>
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={{
+            flexDirection: "row",
+          }}
+        >
+          {meal.length !== 0 ? (
+            meal.map((food) => (
+              <Image
+                key={food.dietSeq}
+                source={{ uri: food.dietImg }}
+                style={{ width: 55, height: 55, borderRadius: 10, margin: 3 }}
+              ></Image>
+            ))
+          ) : (
+            <View
+              style={{
+                width: screenSize.width * 0.82,
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontSize: 16,
+                  color: `${palette.navy}`,
+                  fontFamily: "SeoulNamsanL",
+                }}
+              >
+                아직 등록된 식단이 없습니다.
+              </Text>
+            </View>
+          )}
+        </ScrollView>
+        <View style={styles.line} />
+        <View style={styles.box}>
+          <View style={styles.whiteCircle}>
+            <Text style={styles.text}>탄수화물</Text>
+            <Text style={styles.numberText}>
+              {parseInt(total_meal.carbohydrate)}g
+            </Text>
+          </View>
+          <View style={styles.whiteCircle}>
+            <Text style={styles.text}>단백질</Text>
+            <Text style={styles.numberText}>
+              {parseInt(total_meal.protein)}g
+            </Text>
+          </View>
+          <View style={styles.whiteCircle}>
+            <Text style={styles.text}>지방</Text>
+            <Text style={styles.numberText}>{parseInt(total_meal.fat)}g</Text>
+          </View>
+          <View style={styles.whiteCircle}>
+            <Text style={styles.text}>나트륨</Text>
+            <Text style={styles.numberText}>
+              {parseInt(total_meal.natrium)}mg
+            </Text>
+          </View>
+          <View style={styles.whiteCircle}>
+            <Text style={styles.text}>당</Text>
+            <Text style={styles.numberText}>
+              {parseInt(total_meal.sugars)}g
+            </Text>
+          </View>
+        </View>
       </Box>
     </>
   );
 };
 
 export default Diet;
+
+const styles = StyleSheet.create({
+  box: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: screenSize.width * 0.8,
+  },
+  text: {
+    color: `${palette.navy}`,
+    textAlign: "center",
+    fontSize: 9,
+    fontFamily: "SeoulNamsanL",
+  },
+  numberText: {
+    color: `${palette.navy}`,
+    textAlign: "center",
+    fontSize: 11,
+    fontFamily: "SeoulNamsanEB",
+  },
+  whiteCircle: {
+    backgroundColor: "white",
+    width: screenSize.width * 0.13,
+    height: screenSize.width * 0.13,
+    justifyContent: "center",
+    borderRadius: 50,
+    elevation: 5,
+  },
+  line: {
+    borderBottomColor: `${palette.green}`,
+    borderBottomWidth: 1,
+    marginVertical: 10,
+  },
+});

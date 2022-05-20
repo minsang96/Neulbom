@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Modal, Text } from "react-native";
+import { useDispatch } from "react-redux";
 import styled from "styled-components/native";
 
 const ModalContainer = styled.Pressable`
@@ -23,7 +24,7 @@ const ActionButtons = styled.Pressable`
   background-color: white;
 `;
 
-function UploadMode({ visible, onClose, onCamera }) {
+function UploadMode({ visible, onClose, onCamera, onGallery }) {
   return (
     <Modal
       visible={visible}
@@ -42,7 +43,13 @@ function UploadMode({ visible, onClose, onCamera }) {
           >
             <Text>카메라로 촬영하기</Text>
           </ActionButtons>
-          <ActionButtons android_ripple={{ color: "#eee" }}>
+          <ActionButtons
+            android_ripple={{ color: "#eee" }}
+            onPress={() => {
+              onGallery();
+              onClose();
+            }}
+          >
             <Text>사진 선택하기</Text>
           </ActionButtons>
         </WhiteBox>

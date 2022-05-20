@@ -12,12 +12,14 @@ import com.neulbomi.neulbom.entity.BloodSugar;
 import com.neulbomi.neulbom.entity.Diet;
 import com.neulbomi.neulbom.entity.Food;
 import com.neulbomi.neulbom.entity.Member;
+import com.neulbomi.neulbom.entity.Other;
 import com.neulbomi.neulbom.exception.NotExistsUserException;
 import com.neulbomi.neulbom.repository.BloodPressureRepository;
 import com.neulbomi.neulbom.repository.BloodSugarRepository;
 import com.neulbomi.neulbom.repository.DietRepository;
 import com.neulbomi.neulbom.repository.FoodRepository;
 import com.neulbomi.neulbom.repository.MemberRepository;
+import com.neulbomi.neulbom.repository.OtherRepository;
 import com.neulbomi.neulbom.util.DateUtils;
 
 @Service
@@ -37,6 +39,9 @@ public class ReportServiceImpl implements ReportService {
 
 	@Autowired
 	FoodRepository foodRepository;
+	
+	@Autowired
+	OtherRepository otherRepository;
 	
 	DateUtils dateUtils;
 	
@@ -101,6 +106,28 @@ public class ReportServiceImpl implements ReportService {
 		result.put("recommend", calcRecNutrient(userSeq, "daily"));
 		result.put("intake", calcIntakeNutrient(userSeq, date, "", "daily"));
 		
+		return result;
+	}
+	
+	// 기타 기록
+	@Override
+	public Map<String, Object> readDailyOther(int userSeq, String date) {
+		// 유저 시퀀스로 정보를 못찾을경우 예외처리
+		Member member = memberRepository.findByDelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
+		
+		Map<String, Object> result = new HashMap<>();
+		List<Other> other = otherRepository.findUserOther(userSeq, date, date);
+		
+		// 초기 값 설정
+		result.put("coffee", "n");
+		result.put("alcohol", "n");
+		result.put("exercise", "n");
+
+		if (other.size() != 0) {
+			for (int i = 0; i < other.size(); i++) {
+				result.put(other.get(i).getCode(), "y");
+			}
+		}
 		return result;
 	}
 
@@ -172,14 +199,14 @@ public class ReportServiceImpl implements ReportService {
 		List<String> days = dateUtils.getDaysOfWeek(date, 2);
 		String startDate = days.get(0);
 		String endDate = days.get(1);
-		result.put("this", calcKcal(userSeq, startDate, endDate, mode));
+		result.put("this", (int) calcKcal(userSeq, startDate, endDate, mode) / 7);
 		
 		// 저번주 섭취 칼로리
 		String last = dateUtils.returnLastDate(date, -7);
 		days = dateUtils.getDaysOfWeek(last, 2);
 		startDate = days.get(0);
 		endDate = days.get(1);
-		result.put("last", calcKcal(userSeq, startDate, endDate, mode));
+		result.put("last", (int) calcKcal(userSeq, startDate, endDate, mode) / 7);
 
 		return result;
 	}
@@ -208,12 +235,12 @@ public class ReportServiceImpl implements ReportService {
 		Map<String, Object> obj = new HashMap<>();
 		
 		// 초기 값 설정
-		obj.put("beforeBreakfast", "-");
-		obj.put("afterBreakfast", "-");
-		obj.put("beforeLunch", "-");
-		obj.put("afterLunch", "-");
-		obj.put("beforeDinner", "-");
-		obj.put("afterDinner", "-");
+		obj.put("beforeBreakfast", 0);
+		obj.put("afterBreakfast", 0);
+		obj.put("beforeLunch", 0);
+		obj.put("afterLunch", 0);
+		obj.put("beforeDinner", 0);
+		obj.put("afterDinner", 0);
 
 		if (bs.size() != 0) {
 			for (int i = 0; i < bs.size(); i++) {
@@ -230,8 +257,8 @@ public class ReportServiceImpl implements ReportService {
 
 		// 초기 값 설정
 		Map<String, Object> level = new HashMap<>();
-		level.put("BpHigh", "-");
-		level.put("BpLow", "-");
+		level.put("BpHigh", 0);
+		level.put("BpLow", 0);
 		obj.put("breakfast", level);
 		obj.put("lunch", level);
 		obj.put("dinner", level);
@@ -317,17 +344,16 @@ public class ReportServiceImpl implements ReportService {
 		for (int i = 0; i < diet.size(); i++) {
 			Diet target = diet.get(i);
 			String fc = target.getFoodCode();
-			int intakeAmount = target.getDietAmount();
+			double intakeAmount = target.getDietAmount();
 			Food food = foodRepository.findFood(fc);
-			int foodAmount = food.getFoodAmount();
-			int pivot = intakeAmount / foodAmount;
+			double pivot = intakeAmount / food.getFoodAmount();
 			
-			foodKcal += (food.getFoodKcal() == null ? 0 : food.getFoodKcal()) * pivot;
+			foodKcal 		 += (food.getFoodKcal() == null ? 0 : food.getFoodKcal()) * pivot;
 			foodCarbohydrate += (food.getFoodCarbohydrate() == null ? 0 : food.getFoodCarbohydrate()) * pivot;
-			foodProtein = (food.getFoodProtein() == null ? 0 : food.getFoodProtein()) * pivot;
-			foodFat = (food.getFoodFat() == null ? 0 : food.getFoodFat()) * pivot;
-			foodSugars = (food.getFoodSugars() == null ? 0 : food.getFoodSugars())* pivot;
-			foodNatrium = (food.getFoodNatrium() == null ? 0 : food.getFoodNatrium()) * pivot;
+			foodProtein		 += (food.getFoodProtein() == null ? 0 : food.getFoodProtein()) * pivot;
+			foodFat			 += (food.getFoodFat() == null ? 0 : food.getFoodFat()) * pivot;
+			foodSugars		 += (food.getFoodSugars() == null ? 0 : food.getFoodSugars())* pivot;
+			foodNatrium += (food.getFoodNatrium() == null ? 0 : food.getFoodNatrium()) * pivot;
 		}
 		intake.put("kcal", foodKcal);
 		intake.put("carbohydrate", foodCarbohydrate);

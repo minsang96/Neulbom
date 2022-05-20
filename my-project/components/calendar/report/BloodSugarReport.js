@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 import {
   Table,
@@ -8,34 +8,23 @@ import {
   Col,
 } from "react-native-table-component";
 import { Dimensions } from "react-native";
-import { useSelector } from "react-redux";
 
 const screenSize = Dimensions.get("screen");
 
 const BloodSugarReport = (props) => {
-  const [loading, setLoading] = useState(true);
-  const todayBloodSugar = useSelector(
-    (state) => state.dailyReport.todayBloodSugar
-  );
-  const yesterdayBloodSugar = useSelector(
-    (state) => state.dailyReport.yesterdayBloodSugar
-  );
-
-  useEffect(() => {
-    setLoading(false);
-  }, [todayBloodSugar]);
-
-  // 계산 잘하기
-  const beforeEat = 130 - 120;
-
-  const element = () => {
+  const element = (before, after) => {
     return (
-      <View style={styles.btn}>
-        <Text style={styles.btnText}>▲{beforeEat}</Text>
+      <View style={{ alignItems: "center" }}>
+        {before - after === 0 ? (
+          <Text style={styles.btnText}>0</Text>
+        ) : before > after ? (
+          <Text style={styles.btnDownText}>▼{before - after}</Text>
+        ) : (
+          <Text style={styles.btnUpText}>▲{after - before}</Text>
+        )}
       </View>
     );
   };
-
   const timeText = (idx) => {
     if (idx === 0) {
       return <Text style={styles.timeText}>아침</Text>;
@@ -47,94 +36,152 @@ const BloodSugarReport = (props) => {
   };
 
   const tableHead = ["식전", "식후"];
-  const tableData = [
-    ["어제", 120, "-"],
-    ["오늘", 130, "-"],
-    [" ", element(), "-"],
+  const tableData1 = [
+    [
+      "어제",
+      props.yesterdayBloodSugar.beforeBreakfast,
+      props.yesterdayBloodSugar.afterBreakfast,
+    ],
+    [
+      "오늘",
+      props.todayBloodSugar.beforeBreakfast,
+      props.todayBloodSugar.afterBreakfast,
+    ],
+    [
+      " ",
+      element(
+        props.yesterdayBloodSugar.beforeBreakfast,
+        props.todayBloodSugar.beforeBreakfast
+      ),
+      element(
+        props.yesterdayBloodSugar.afterBreakfast,
+        props.todayBloodSugar.afterBreakfast
+      ),
+    ],
+  ];
+  const tableData2 = [
+    [
+      "어제",
+      props.yesterdayBloodSugar.beforeLunch,
+      props.yesterdayBloodSugar.afterLunch,
+    ],
+    [
+      "오늘",
+      props.todayBloodSugar.beforeLunch,
+      props.todayBloodSugar.afterLunch,
+    ],
+    [
+      " ",
+      element(
+        props.yesterdayBloodSugar.beforeLunch,
+        props.todayBloodSugar.beforeLunch
+      ),
+      element(
+        props.yesterdayBloodSugar.afterLunch,
+        props.todayBloodSugar.afterLunch
+      ),
+    ],
+  ];
+  const tableData3 = [
+    [
+      "어제",
+      props.yesterdayBloodSugar.beforeDinner,
+      props.yesterdayBloodSugar.afterDinner,
+    ],
+    [
+      "오늘",
+      props.todayBloodSugar.beforeDinner,
+      props.todayBloodSugar.afterDinner,
+    ],
+    [
+      " ",
+      element(
+        props.yesterdayBloodSugar.beforeDinner,
+        props.todayBloodSugar.beforeDinner
+      ),
+      element(
+        props.yesterdayBloodSugar.afterDinner,
+        props.todayBloodSugar.afterDinner
+      ),
+    ],
   ];
 
   return (
-    <>
-      {loading ? (
-        <View></View>
-      ) : (
-        <View style={props.styles.box}>
-          <Text style={props.styles.title}>최근 혈당값 추세</Text>
-          <Text style={props.styles.subTitle}>
-            전날에 비해 얼마나 좋아졌을까요?
-          </Text>
-          {/* 아침 */}
-          <View style={styles.mainView}>
-            <Table style={{ flexDirection: "row" }}>
-              <TableWrapper style={{ width: 80 }}>
-                <Cell data={timeText(0)} style={styles.singleHead} />
-                <TableWrapper style={{ flexDirection: "row" }}>
-                  <Col
-                    data={tableHead}
-                    style={styles.title}
-                    heightArr={[30, 30, 30, 30]}
-                    textStyle={styles.titleText}
-                  ></Col>
-                </TableWrapper>
-              </TableWrapper>
-              <TableWrapper style={{ flex: 1 }}>
-                <Cols
-                  data={tableData}
-                  heightArr={[30, 30, 30]}
-                  textStyle={styles.text}
-                />
-              </TableWrapper>
-            </Table>
-          </View>
-          {/* 점심 */}
-          <View style={styles.mainView}>
-            <Table style={{ flexDirection: "row" }}>
-              <TableWrapper style={{ width: 80 }}>
-                <Cell data={timeText(1)} style={styles.singleHead} />
-                <TableWrapper style={{ flexDirection: "row" }}>
-                  <Col
-                    data={tableHead}
-                    style={styles.title}
-                    heightArr={[30, 30, 30, 30]}
-                    textStyle={styles.titleText}
-                  ></Col>
-                </TableWrapper>
-              </TableWrapper>
-              <TableWrapper style={{ flex: 1 }}>
-                <Cols
-                  data={tableData}
-                  heightArr={[30, 30, 30]}
-                  textStyle={styles.text}
-                />
-              </TableWrapper>
-            </Table>
-          </View>
-          {/* 저녁 */}
-          <View style={styles.mainView}>
-            <Table style={{ flexDirection: "row" }}>
-              <TableWrapper style={{ width: 80 }}>
-                <Cell data={timeText(2)} style={styles.singleHead} />
-                <TableWrapper style={{ flexDirection: "row" }}>
-                  <Col
-                    data={tableHead}
-                    style={styles.title}
-                    heightArr={[30, 30, 30, 30]}
-                    textStyle={styles.titleText}
-                  ></Col>
-                </TableWrapper>
-              </TableWrapper>
-              <TableWrapper style={{ flex: 1 }}>
-                <Cols
-                  data={tableData}
-                  heightArr={[30, 30, 30]}
-                  textStyle={styles.text}
-                />
-              </TableWrapper>
-            </Table>
-          </View>
-        </View>
-      )}
-    </>
+    <View style={props.styles.box}>
+      <Text style={props.styles.title}>최근 혈당값 추세</Text>
+      <Text style={props.styles.subTitle}>
+        전날에 비해 얼마나 좋아졌을까요?
+      </Text>
+      {/* 아침 */}
+      <View style={styles.mainView}>
+        <Table style={{ flexDirection: "row" }}>
+          <TableWrapper style={{ width: 80 }}>
+            <Cell data={timeText(0)} style={styles.singleHead} />
+            <TableWrapper style={{ flexDirection: "row" }}>
+              <Col
+                data={tableHead}
+                style={styles.title}
+                heightArr={[30, 30, 30, 30]}
+                textStyle={styles.titleText}
+              ></Col>
+            </TableWrapper>
+          </TableWrapper>
+          <TableWrapper style={{ flex: 1 }}>
+            <Cols
+              data={tableData1}
+              heightArr={[30, 30, 30]}
+              textStyle={styles.text}
+            />
+          </TableWrapper>
+        </Table>
+      </View>
+      {/* 점심 */}
+      <View style={styles.mainView}>
+        <Table style={{ flexDirection: "row" }}>
+          <TableWrapper style={{ width: 80 }}>
+            <Cell data={timeText(1)} style={styles.singleHead} />
+            <TableWrapper style={{ flexDirection: "row" }}>
+              <Col
+                data={tableHead}
+                style={styles.title}
+                heightArr={[30, 30, 30, 30]}
+                textStyle={styles.titleText}
+              ></Col>
+            </TableWrapper>
+          </TableWrapper>
+          <TableWrapper style={{ flex: 1 }}>
+            <Cols
+              data={tableData2}
+              heightArr={[30, 30, 30]}
+              textStyle={styles.text}
+            />
+          </TableWrapper>
+        </Table>
+      </View>
+      {/* 저녁 */}
+      <View style={styles.mainView}>
+        <Table style={{ flexDirection: "row" }}>
+          <TableWrapper style={{ width: 80 }}>
+            <Cell data={timeText(2)} style={styles.singleHead} />
+            <TableWrapper style={{ flexDirection: "row" }}>
+              <Col
+                data={tableHead}
+                style={styles.title}
+                heightArr={[30, 30, 30, 30]}
+                textStyle={styles.titleText}
+              ></Col>
+            </TableWrapper>
+          </TableWrapper>
+          <TableWrapper style={{ flex: 1 }}>
+            <Cols
+              data={tableData3}
+              heightArr={[30, 30, 30]}
+              textStyle={styles.text}
+            />
+          </TableWrapper>
+        </Table>
+      </View>
+    </View>
   );
 };
 
@@ -151,12 +198,30 @@ const styles = StyleSheet.create({
   },
   titleText: { textAlign: "center" },
   text: { margin: 6, textAlign: "center" },
-  btn: {
+  btnUpText: {
+    textAlign: "center",
+    color: "red",
+    textAlign: "center",
     backgroundColor: "rgba(255,0,0,0.2)",
     borderRadius: 30,
-    marginHorizontal: screenSize.width * 0.03,
+    width: 60,
   },
-  btnText: { textAlign: "center", color: "red" },
+  btnDownText: {
+    textAlign: "center",
+    color: "blue",
+    textAlign: "center",
+    backgroundColor: "rgba(0,56,255,0.2)",
+    borderRadius: 30,
+    width: 60,
+  },
+  btnText: {
+    textAlign: "center",
+    color: "black",
+    textAlign: "center",
+    backgroundColor: "rgba(0,0,0,0.2)",
+    borderRadius: 30,
+    width: 60,
+  },
   timeText: {
     color: "white",
     fontWeight: "bold",
