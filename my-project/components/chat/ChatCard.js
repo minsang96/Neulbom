@@ -79,7 +79,7 @@ export default function ChatCard(props) {
                         chat[String(consultant.userSeq)].length - 1
                       ].message}
                   </Text>
-                  <Text style={styles.date}>
+                  {/* <Text style={styles.date}>
                     {chat[String(consultant.userSeq)][
                       chat[String(consultant.userSeq)].length - 1
                     ].time.slice(11, 13) < 12
@@ -97,7 +97,7 @@ export default function ChatCard(props) {
                           chat[String(consultant.userSeq)].length - 1
                         ].time.slice(14, 16) +
                         " PM"}
-                  </Text>
+                  </Text> */}
                 </View>
               )}
             </View>
@@ -137,7 +137,7 @@ export default function ChatCard(props) {
                   chat[String(chatUser.userSeq)].length - 1
                 ].message}
             </Text>
-            <Text style={styles.date}>오늘 PM 6:30</Text>
+            {/* <Text style={styles.date}>오늘 PM 6:30</Text> */}
           </View>
         </TouchableOpacity>
       </>

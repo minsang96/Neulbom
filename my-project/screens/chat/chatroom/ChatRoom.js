@@ -52,23 +52,34 @@ const ChatRoom = (props) => {
   const userSeq = useSelector((state) => state.user.userSeq);
   // const userSeq = 23;
   const socketConnected = useSelector((state) => state.chat.socketConnected);
-  const [ message, setMessage ] = useState('');
-  const chat = useSelector(state => state.chat.chat)
-  const curr = new Date()
-  const utc = curr.getTime() + curr.getTimezoneOffset() *60 * 1000
-  const kr_curr = new Date(utc + 9 * 60 * 60 * 1000)
+  const [message, setMessage] = useState("");
+  const chat = useSelector((state) => state.chat.chat);
+  const curr = new Date();
+  const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
+  const kr_curr = new Date(utc + 9 * 60 * 60 * 1000);
   const userInfo = useSelector((state) => state.user.userInfo);
 
   function sendMessage() {
     try {
-      let data
-      if (userInfo.userType === '0') {
-        data = {type:'TALK', roomId: `${userSeq}with${consultantSeq}`, senderSeq: userSeq, message: message, time: kr_curr}
+      let data;
+      if (userInfo.userType === "0") {
+        data = {
+          type: "TALK",
+          roomId: `${userSeq}with${consultantSeq}`,
+          senderSeq: userSeq,
+          message: message,
+          time: kr_curr,
+        };
+      } else {
+        data = {
+          type: "TALK",
+          roomId: `${consultantSeq}with${userSeq}`,
+          senderSeq: userSeq,
+          message: message,
+          time: kr_curr,
+        };
       }
-      else {
-        data = {type:'TALK', roomId: `${consultantSeq}with${userSeq}`, senderSeq: userSeq, message: message, time: kr_curr}
-      }
-      if (message === '') {
+      if (message === "") {
         return;
       }
       // 로딩 중
@@ -120,8 +131,12 @@ const ChatRoom = (props) => {
     }
   };
   function connect() {
-    ws.connect({}, function(frame) {
-        ws.subscribe(`/api/sub/chat/room/${userSeq}with${consultantSeq}`, function(message) {
+    ws.connect(
+      {},
+      function (frame) {
+        ws.subscribe(
+          `/api/sub/chat/room/${userSeq}with${consultantSeq}`,
+          function (message) {
             var recv = JSON.parse(message.body);
             console.log("received msg: ", recv);
             if (recv.message) {
@@ -163,9 +178,9 @@ const ChatRoom = (props) => {
     if (!socketConnected.includes(consultantSeq)) {
       connect();
     }
-  }, [])
-  console.log(`${userSeq}'s state chat: `, chat[consultantSeq])
-  
+  }, []);
+  console.log(`${userSeq}'s state chat: `, chat[consultantSeq]);
+
   let JsonChat;
   const loadChat = async () => {
     console.log("loadChat");
@@ -194,7 +209,15 @@ const ChatRoom = (props) => {
   // 채팅방을 나갔다 다시 들어올 시
   // 전문가로 로그인했을 시에만 잘 작동함
   return (
-    <KeyboardAvoidingView style={{backgroundColor: 'white', justifyContent: 'space-between', height: windowHeight, flex: 1, paddingTop: '3%'}}>
+    <KeyboardAvoidingView
+      style={{
+        backgroundColor: "white",
+        justifyContent: "space-between",
+        height: windowHeight,
+        flex: 1,
+        paddingTop: "3%",
+      }}
+    >
       {/* <TouchableOpacity onPress={() => {deleteChat()}}><Text>대화 기록encrypted storage삭제</Text></TouchableOpacity>
       <TouchableOpacity onPress={() => {dispatch(chatSlice.actions.clearChat())}}><Text>대화 기록 redux삭제</Text></TouchableOpacity> */}
       <ScrollView>
@@ -203,25 +226,60 @@ const ChatRoom = (props) => {
             return (
               <View>
                 {/* <Text style={message && message.senderSeq === userSeq ? {alignSelf: 'flex-end'} : {}}>{message && message.message}</Text> */}
-                {message && message.senderSeq === userSeq ? 
-                <View style={{flexDirection: 'row', width: '70%', alignSelf: 'flex-end', justifyContent: 'flex-end'}}>
-                  <Text style={{...styles.timeText, alignSelf: 'flex-end', marginRight: 10, paddingBottom: 2}}>{Number(message.time.slice(11,13)) < 12 ? message.time.slice(11,16)+' AM' : Number(message.time.slice(11,13))-12+':'+message.time.slice(14,16)+' PM'}</Text>
-                  <Text style={{...styles.textBox, alignSelf: 'flex-end'}}>{message && message.message}</Text>
-                </View> :
-                <View style={{flexDirection: 'row', width: '70%'}}>
-                  <Text style={{...styles.textBox, backgroundColor: '#F8E16C', alignSelf: 'flex-start'}}>{message && message.message}</Text>
-                  <Text style={{...styles.timeText, alignSelf: 'flex-end', marginLeft: 6, paddingBottom: 2}}>{Number(message.time.slice(11,13)) < 12 ? message.time.slice(11,16)+' AM' : Number(message.time.slice(11,13))-12+':'+message.time.slice(14,16)+' PM'}</Text>
-                </View>}
-              </View>)
-        })}
+                {message && message.senderSeq === userSeq ? (
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      width: "70%",
+                      alignSelf: "flex-end",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    {/* <Text style={{...styles.timeText, alignSelf: 'flex-end', marginRight: 10, paddingBottom: 2}}>{Number(message.time.slice(11,13)) < 12 ? message.time.slice(11,16)+' AM' : Number(message.time.slice(11,13))-12+':'+message.time.slice(14,16)+' PM'}</Text> */}
+                    <Text style={{ ...styles.textBox, alignSelf: "flex-end" }}>
+                      {message && message.message}
+                    </Text>
+                  </View>
+                ) : (
+                  <View style={{ flexDirection: "row", width: "70%" }}>
+                    <Text
+                      style={{
+                        ...styles.textBox,
+                        backgroundColor: "#F8E16C",
+                        alignSelf: "flex-start",
+                      }}
+                    >
+                      {message && message.message}
+                    </Text>
+                    {/* <Text style={{...styles.timeText, alignSelf: 'flex-end', marginLeft: 6, paddingBottom: 2}}>{Number(message.time.slice(11,13)) < 12 ? message.time.slice(11,16)+' AM' : Number(message.time.slice(11,13))-12+':'+message.time.slice(14,16)+' PM'}</Text> */}
+                  </View>
+                )}
+              </View>
+            );
+          })}
       </ScrollView>
-      <View style={{paddingRight: '1%',borderTopColor: 'rgba(23, 42, 58, 0.25)', borderTopWidth: 1, backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-between'}}>
+      <View
+        style={{
+          paddingRight: "1%",
+          borderTopColor: "rgba(23, 42, 58, 0.25)",
+          borderTopWidth: 1,
+          backgroundColor: "white",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
         <TextInput
           value={message}
           style={{ width: "90%" }}
           multiline={true}
-          onChangeText={event => setMessage(event)}></TextInput>
-        <ButtonGreen2 buttonName='전송' padding={2.5} borderRadius={4} onPressButton={() => sendMessage()}></ButtonGreen2>
+          onChangeText={(event) => setMessage(event)}
+        ></TextInput>
+        <ButtonGreen2
+          buttonName="전송"
+          padding={2.5}
+          borderRadius={4}
+          onPressButton={() => sendMessage()}
+        ></ButtonGreen2>
         {/* <ButtonGreen2 buttonName='전송' onPressButton={() => storeChat()}></ButtonGreen2> */}
       </View>
     </KeyboardAvoidingView>

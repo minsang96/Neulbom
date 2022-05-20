@@ -199,14 +199,14 @@ public class ReportServiceImpl implements ReportService {
 		List<String> days = dateUtils.getDaysOfWeek(date, 2);
 		String startDate = days.get(0);
 		String endDate = days.get(1);
-		result.put("this", calcKcal(userSeq, startDate, endDate, mode));
+		result.put("this", (int) calcKcal(userSeq, startDate, endDate, mode) / 7);
 		
 		// 저번주 섭취 칼로리
 		String last = dateUtils.returnLastDate(date, -7);
 		days = dateUtils.getDaysOfWeek(last, 2);
 		startDate = days.get(0);
 		endDate = days.get(1);
-		result.put("last", calcKcal(userSeq, startDate, endDate, mode));
+		result.put("last", (int) calcKcal(userSeq, startDate, endDate, mode) / 7);
 
 		return result;
 	}
