@@ -16,6 +16,7 @@ opencv-python>=4.5.5.64
 psutil
 pandas
 seaborn
+sklearn
 
 # coco ----------------------------------------
 # pycocotools>=2.0
