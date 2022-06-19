@@ -59,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOrigin("https://k6a104.p.ssafy.io");
+        configuration.addAllowedOrigin("https://neulbom_url");
         configuration.addAllowedOrigin("http://localhost");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");

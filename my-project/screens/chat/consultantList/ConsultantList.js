@@ -17,7 +17,7 @@ const ConsultantList = () => {
   console.log('Redux ChatList:', chatList)
   const getConsultantList = async() => {
     try {
-      const res = await axios.get('https://k6a104.p.ssafy.io/api/consulting/expert')
+      const res = await axios.get('https://neulbom_url/api/consulting/expert')
       // console.log(res.data.data)
       dispatch(chatSlice.actions.setConsultants(res.data.data))
     } catch(error) {
@@ -34,7 +34,7 @@ const ConsultantList = () => {
     getConsultantList()
   }, [])
 
-  var sock = new SockJS('https://k6a104.p.ssafy.io/api/ws-stomp');
+  var sock = new SockJS('https://neulbom_url/api/ws-stomp');
   var ws = Stomp.over(sock);
   var reconnect = 0;
   const userInfo = useSelector((state) => state.user.userInfo);
@@ -60,7 +60,7 @@ const ConsultantList = () => {
         if(reconnect++ <= 5) {
           setTimeout(function() {
             console.log("connection reconnect");
-            sock = new SockJS("https://k6a104.p.ssafy.io/api/ws-stomp");
+            sock = new SockJS("https://neulbom_url/api/ws-stomp");
             ws = Stomp.over(sock);
             connect();
           },10*1000);
@@ -90,7 +90,7 @@ const ConsultantList = () => {
       if(reconnect++ <= 5) {
           setTimeout(function() {
               console.log("connection reconnect");
-              sock = new SockJS("https://k6a104.p.ssafy.io/api/ws-stomp");
+              sock = new SockJS("https://neulbom_url/api/ws-stomp");
               ws = Stomp.over(sock);
               connect();
           },10*1000);
@@ -127,7 +127,7 @@ const ConsultantList = () => {
     chatList.map(async(userSeq) => {
       try {
         const response = await axios.get(
-          "https://k6a104.p.ssafy.io/api/member/chat",
+          "https://neulbom_url/api/member/chat",
           {
             params: { userSeq: Number(userSeq) },
           }

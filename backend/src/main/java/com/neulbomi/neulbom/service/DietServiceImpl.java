@@ -336,7 +336,7 @@ public class DietServiceImpl implements DietService {
 		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 		
 		// 요청 보내기
-		String url = "http://k6a104.p.ssafy.io:5000/cf";
+		String url = "http://neulbom_url:5000/cf";
 		HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(map, headers);
 		response = REST_TEMPLATE.postForObject(url, requestEntity, JsonNode.class);
 		

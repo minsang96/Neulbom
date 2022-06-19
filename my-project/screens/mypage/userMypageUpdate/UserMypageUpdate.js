@@ -51,7 +51,7 @@ const UserMypageUpdate = (props) => {
     };
 
     try {
-      await axios.post("https://k6a104.p.ssafy.io/api/member/modify", data, {
+      await axios.post("https://neulbom_url/api/member/modify", data, {
         headers: {
           Authorization: accessToken,
         },

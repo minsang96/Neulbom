@@ -24,7 +24,7 @@ function Root() {
   const userInfo = useSelector((state) => state.user.userInfo);
   const chatList = useSelector((state) => state.chat.chatList);
 
-  var sock = new SockJS("https://k6a104.p.ssafy.io/api/ws-stomp");
+  var sock = new SockJS("https://neulbom_url/api/ws-stomp");
   var ws = Stomp.over(sock);
   var reconnect = 0;
   if (userInfo && userInfo.userType === 1) {
@@ -53,7 +53,7 @@ function Root() {
         if (reconnect++ <= 5) {
           setTimeout(function () {
             console.log("connection reconnect");
-            sock = new SockJS("https://k6a104.p.ssafy.io/api/ws-stomp");
+            sock = new SockJS("https://neulbom_url/api/ws-stomp");
             ws = Stomp.over(sock);
             connect();
           }, 10 * 1000);
@@ -101,7 +101,7 @@ function Root() {
             console.log(JsonSession);
           }
           const res = await axios.post(
-            "https://k6a104.p.ssafy.io/api/user/login",
+            "https://neulbom_url/api/user/login",
             {
               userEmail: JsonSession.email,
               userPwd: JsonSession.password,
@@ -111,7 +111,7 @@ function Root() {
           dispatch(userSlice.actions.login(res.data.data));
           try {
             const response = await axios.get(
-              "https://k6a104.p.ssafy.io/api/member/info",
+              "https://neulbom_url/api/member/info",
               {
                 headers: { Authorization: res.data.data.accessToken },
                 params: { userSeq: res.data.data.userSeq },

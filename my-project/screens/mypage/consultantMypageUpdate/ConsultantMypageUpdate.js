@@ -44,7 +44,7 @@ const ConsultantMypageUpdate = (props) => {
     };
 
     try {
-      await axios.post("https://k6a104.p.ssafy.io/api/expert/modify", data, {
+      await axios.post("https://neulbom_url/api/expert/modify", data, {
         headers: {
           Authorization: accessToken,
         },

@@ -33,7 +33,7 @@ export default function ConsultantInfo(props) {
   const userSeq = useSelector((state) => state.user.userSeq);
   const getConsultantInfo = async () => {
     await axios
-      .get("https://k6a104.p.ssafy.io/api/expert/detail", {
+      .get("https://neulbom_url/api/expert/detail", {
         params: { userSeq: consultantSeq },
       })
       .then((res) => {
@@ -65,7 +65,7 @@ export default function ConsultantInfo(props) {
       } finally {
         console.log("chatList stored");
         retrieveChatList(dispatch);
-        var sock = new SockJS("https://k6a104.p.ssafy.io/api/ws-stomp");
+        var sock = new SockJS("https://neulbom_url/api/ws-stomp");
         var ws = Stomp.over(sock);
         var reconnect = 0;
         function connect() {
@@ -97,7 +97,7 @@ export default function ConsultantInfo(props) {
               if (reconnect++ <= 5) {
                 setTimeout(function () {
                   console.log("connection reconnect");
-                  sock = new SockJS("https://k6a104.p.ssafy.io/api/ws-stomp");
+                  sock = new SockJS("https://neulbom_url/api/ws-stomp");
                   ws = Stomp.over(sock);
                   connect();
                 }, 10 * 1000);

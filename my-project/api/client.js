@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const baseURL = __DEV__
-  ? "https://k6a104.p.ssafy.io/api"
-  : "https://k6a104.p.ssafy.io/api";
+  ? "https://neulbom_url/api"
+  : "https://neulbom_url/api";
 
 const client = axios.create({
   baseURL,

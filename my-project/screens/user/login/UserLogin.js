@@ -29,7 +29,7 @@ export default function UserLogin({ navigation: { navigate } }) {
       return Alert.alert("알림", "비밀번호를 입력해주세요.");
     }
     try {
-      const res = await axios.post("https://k6a104.p.ssafy.io/api/user/login", {
+      const res = await axios.post("https://neulbom_url/api/user/login", {
         userEmail: user.email,
         userPwd: user.password,
       });
@@ -45,7 +45,7 @@ export default function UserLogin({ navigation: { navigate } }) {
       if (userType == 0) {
         try {
           const response = await axios.get(
-            "https://k6a104.p.ssafy.io/api/member/info",
+            "https://neulbom_url/api/member/info",
             {
               headers: { Authorization: res.data.data.accessToken },
               params: { userSeq: res.data.data.userSeq },
@@ -58,7 +58,7 @@ export default function UserLogin({ navigation: { navigate } }) {
       } else if (userType == 1) {
         try {
           const response = await axios.get(
-            "https://k6a104.p.ssafy.io/api/expert/info",
+            "https://neulbom_url/api/expert/info",
             {
               headers: { Authorization: res.data.data.accessToken },
               params: { userSeq: res.data.data.userSeq },

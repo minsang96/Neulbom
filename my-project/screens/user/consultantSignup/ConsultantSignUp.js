@@ -74,7 +74,7 @@ export default function ConsultantSignUp({ navigation: { navigate } }) {
       return Alert.alert("알림", "자격 증명서를 입력해주세요.");
     }
     axios
-      .post("https://k6a104.p.ssafy.io/api/expert/join", {
+      .post("https://neulbom_url/api/expert/join", {
         career: info.career, // []로
         desc: info.intro,
         email: info.email,

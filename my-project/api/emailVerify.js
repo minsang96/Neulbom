@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export function emailVerify(email) {
   // email검증
-  axios.get('https://k6a104.p.ssafy.io/api/member/email/certified', {
+  axios.get('https://neulbom_url/api/member/email/certified', {
     params: { email: email }
   }).then(res => {
     console.log(res)

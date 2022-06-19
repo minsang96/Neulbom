@@ -86,7 +86,7 @@ export default function UserSignUp({ navigation: { navigate } }) {
       return Alert.alert("알림", "출생연도를 확인해주세요.");
     }
     axios
-      .post("https://k6a104.p.ssafy.io/api/member/join", {
+      .post("https://neulbom_url/api/member/join", {
         type: 0,
         email: info.email,
         pwd: info.password,
