@@ -11,4 +11,4 @@
 
 ---
 
-<div align="center"><img src ="/uploads/493b38d1818c8b1963e6ec11d23befd5/branch.png" alt="branch" width="60%"></div>
+<div align="center"><img src ="../pic/branch.png" alt="branch" width="60%"></div>

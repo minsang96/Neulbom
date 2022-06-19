@@ -69,4 +69,4 @@
 
 ---
 
-<div align="center"><img src ="/uploads/3d5a8efe1ace857f8c6a6926616f9e44/git.png" alt="git" width="30%"></div>
+<div align="center"><img src ="../pic/git.png" alt="git" width="30%"></div>

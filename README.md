@@ -1,7 +1,7 @@
 # 늘봄
 
 <br/>
-<div align="center"> <img src ="/uploads/9a18dafc22aac15d65e61d85fba76514/늘봄.png" alt="늘봄" width="10%"></div>
+<div align="center"> <img src ="./pic/neulbom.png" alt="늘봄" width="10%"></div>
 <div align="center">늘 봄처럼 활기차고 새롭게 살자, <b>늘봄</b></div>
 <br/>
 
@@ -34,7 +34,7 @@
 <b>NEULBOM, 늘 봄처럼 활기차고 새롭게 살자</b>
 
 ### - 팀원 소개
-<div align="center"> <img src ="/uploads/a3217b8d63300dab5f47df0170658035/늘보미.png" alt="늘보미" width="50%"></div>
+<div align="center"> <img src ="./pic/neulbomi.png" alt="늘보미" width="50%"></div>
 
 
 | 이름   | 직책 | 역할     | 담당                           |
@@ -73,20 +73,21 @@
 ### 3️⃣ 기술 스택
 
 <br>
-<img src ="/uploads/b1df36d94cdd894d461c3c4fa51c86fd/아키텍쳐.jpg" alt="아키텍쳐" width="60%">
+<img src ="./pic/architecture.jpg" alt="아키텍쳐" width="60%">
 <br>
 
 - `FrontEnd` :<img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white"> 
-<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white"> <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=Firebase&logoColor=white"><br>
-- `BackEnd` : <img src="https://img.shields.io/badge/Springboot
--6DB33F?style=for-the-badge&logo=Springboot
-&logoColor=white"> 
-<img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white"> <img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=Flask&logoColor=white"> <img src="https://img.shields.io/badge/Amazon AWS-232F3E?style=for-the-badge&logo=Amazon AWS&logoColor=white"><br>
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white">
+<img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=Firebase&logoColor=white"><br>
+- `BackEnd` : <img src="https://img.shields.io/badge/Springboot-6DB33F?style=for-the-badge&logo=Springboot&logoColor=white"> 
+<img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white">
+<img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=Flask&logoColor=white">
+<img src="https://img.shields.io/badge/Amazon AWS-232F3E?style=for-the-badge&logo=Amazon AWS&logoColor=white"><br>
 
-- `DevOps` : <img src="https://img.shields.io/badge/GitLab
--FC6D26?style=for-the-badge&logo=GitLab
-&logoColor=white"> 
-<img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white"> <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white"> <img src="https://img.shields.io/badge/Jira Software-0052CC?style=for-the-badge&logo=Jira Software&logoColor=white"><br>
+- `DevOps` : <img src="https://img.shields.io/badge/GitLab-FC6D26?style=for-the-badge&logo=GitLab&logoColor=white"> 
+<img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white">
+<img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white">
+<img src="https://img.shields.io/badge/Jira Software-0052CC?style=for-the-badge&logo=Jira Software&logoColor=white"><br>
 
 
 ### 4️⃣ AI 모델
@@ -113,4 +114,4 @@
 
 ## **프로젝트 영상**
 
-[![유튜브](/uploads/dbfb8896351025e10cad5f32a473d60e/늘보미.png)](https://youtu.be/-SOdMgwts2I)
+[![유튜브](./pic/neulbomi.png)](https://youtu.be/-SOdMgwts2I)
